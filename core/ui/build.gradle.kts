@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -14,17 +13,11 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
-    
+
+    iosArm64()
+    iosSimulatorArm64()
+
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -43,14 +36,10 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        iosMain.dependencies {
-
-        }
     }
-}
-
+}//com.zzz.core.ui
 android {
-    namespace = "com.zzz.placement"
+    namespace = "com.zzz.core.ui"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -79,4 +68,3 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-
