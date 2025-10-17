@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
                         imageUrl = "https://es.web.img3.acsta.net/pictures/23/06/02/12/12/3866876.jpg",
                         size = 300.dp
                     )
+
                 }
             }
 
