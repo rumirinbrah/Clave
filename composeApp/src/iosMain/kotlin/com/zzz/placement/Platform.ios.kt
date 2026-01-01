@@ -1,5 +1,6 @@
 package com.zzz.placement
 
+import platform.NetworkExtension.NWPath
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {

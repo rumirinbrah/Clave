@@ -42,6 +42,9 @@ kotlin {
             //-----core--------
             implementation(libs.ktor.client.core)
 
+            //----network-----
+            implementation(libs.connectivity.core)
+            implementation(libs.connectivity.device)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -64,8 +67,12 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        release {
+            this.isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt") ,
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
