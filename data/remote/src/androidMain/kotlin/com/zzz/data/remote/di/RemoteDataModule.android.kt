@@ -1,0 +1,16 @@
+package com.zzz.data.remote.di
+
+import android.os.Build
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
+import org.koin.core.module.Module
+import org.koin.dsl.module
+
+actual val engineModule: Module
+    get() = module {
+        single<HttpClientEngine> {
+            OkHttp.create()
+        }
+    }
+
+
