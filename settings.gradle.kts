@@ -30,5 +30,7 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":core:ui")
+include(":core:util")
 include(":feature:auth")
 include(":feature:job")
+include(":data:remote")

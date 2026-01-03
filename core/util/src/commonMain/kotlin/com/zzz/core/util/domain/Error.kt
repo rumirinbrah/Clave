@@ -1,4 +1,4 @@
-package com.zzz.core.ui.domain
+package com.zzz.core.util.domain
 
 /**
  * Marker interface

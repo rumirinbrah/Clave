@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
                     val isConnected = remember {
                         scope.launch {
                             connectivity.isConnected.collect {
-
                             }
                         }
                     }

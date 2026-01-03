@@ -1,4 +1,5 @@
-package com.zzz.core.ui.domain
+package com.zzz.core.util.domain
+
 
 
 typealias DomainError = Error
