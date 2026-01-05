@@ -1,4 +1,4 @@
-package com.zzz.data.remote.data.auth.dto.login
+package com.zzz.data.remote.domain.auth.dto
 
 import com.zzz.data.remote.domain.model.TokenPair
 

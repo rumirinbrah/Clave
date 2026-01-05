@@ -1,4 +1,4 @@
-package com.zzz.data.remote.data.auth.dto.create
+package com.zzz.data.remote.domain.auth.dto
 
 /**
  * When successful, OTP will be sent

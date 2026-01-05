@@ -1,4 +1,4 @@
-package com.zzz.data.remote.data.auth.dto.create
+package com.zzz.data.remote.domain.auth.dto
 
 import kotlinx.serialization.Serializable
 

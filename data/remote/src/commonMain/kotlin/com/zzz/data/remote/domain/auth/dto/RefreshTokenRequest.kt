@@ -1,0 +1,10 @@
+package com.zzz.data.remote.domain.auth.dto
+
+/**
+ * If even refresh token is expired, Unathorized status will be returned.
+ *
+ * @author zyzz
+*/
+data class RefreshTokenRequest(
+    val refreshToken : String
+)
