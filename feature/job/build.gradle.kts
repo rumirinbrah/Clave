@@ -34,6 +34,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation(project(":core:ui"))
+            implementation(project(":data:remote"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
