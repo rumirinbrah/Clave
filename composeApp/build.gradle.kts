@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation(project(":core:ui"))
+            implementation(projects.feature.job)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

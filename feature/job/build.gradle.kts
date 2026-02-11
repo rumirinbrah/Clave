@@ -32,6 +32,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(project(":core:ui"))
+            implementation(project(":data:remote"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -78,4 +81,7 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    implementation(compose.material)
+    implementation(compose.materialIconsExtended)
+
 }
