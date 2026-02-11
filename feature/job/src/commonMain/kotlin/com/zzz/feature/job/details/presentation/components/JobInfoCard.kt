@@ -1,4 +1,4 @@
-package com.zzz.feature.job
+package com.zzz.feature.job.details.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
