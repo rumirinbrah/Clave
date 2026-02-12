@@ -48,6 +48,7 @@ kotlin {
 
             implementation(project(":core:ui"))
             implementation(projects.feature.job)
+            implementation(projects.feature.auth)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
