@@ -10,6 +10,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import org.jetbrains.compose.resources.DrawableResource
 
 /**
  * For rendering resource image files
@@ -21,7 +22,7 @@ import coil3.request.crossfade
 @Composable
 fun ImageComponent(
     modifier: Modifier = Modifier ,
-    imageRes : Int ,
+    imageRes : DrawableResource ,
     contentDescription : String? = null ,
     contentScale : ContentScale = ContentScale.Fit ,
     size : Dp = 100.dp
