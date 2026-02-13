@@ -15,6 +15,7 @@ private fun TempPrev() {
             Modifier.fillMaxSize()
         ){
             UserProfilePageRoot()
+            
         }
     }
 }
