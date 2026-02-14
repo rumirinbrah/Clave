@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation(project(":core:ui"))
+            implementation(project(":feature:job"))
             implementation(projects.feature.job)
             implementation(projects.feature.auth)
         }
