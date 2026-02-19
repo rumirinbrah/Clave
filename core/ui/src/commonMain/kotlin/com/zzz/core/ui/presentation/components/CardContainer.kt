@@ -2,6 +2,7 @@ package com.zzz.core.ui.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,6 +11,7 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 
@@ -24,6 +26,7 @@ fun CardContainer(
     background : Color = MaterialTheme.colorScheme.surface,
     shadowColor : Color = MaterialTheme.colorScheme.onBackground,
     shape : Shape = MaterialTheme.shapes.large,
+    padding : Dp = 0.dp,
     content : @Composable ()->Unit
 ){
     Box(
@@ -39,6 +42,7 @@ fun CardContainer(
             )
             .clip(shape)
             .background(background)
+            .padding(padding)
     ){
         content()
     }
