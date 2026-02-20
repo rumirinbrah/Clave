@@ -72,3 +72,4 @@ val OutlineDark = Color(0xFF64748B)
 val OutlineVariantDark = Color(0xFF334155)
 
 val CardDark = Color(0xFF1E293B)
+val cardShinyBlue = Color(0xFF6073F8)
