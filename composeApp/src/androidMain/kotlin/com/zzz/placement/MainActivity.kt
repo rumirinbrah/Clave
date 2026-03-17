@@ -20,6 +20,7 @@ import com.zzz.core.ui.network.NetworkObserverCommon
 import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.core.ui.presentation.components.TestContainer
 import com.zzz.core.ui.theme.ClaveTheme
+import com.zzz.feature.job.home.presentation.JobHomePageRoot
 import com.zzz.feature.job.user.presentation.UserProfilePageRoot
 import com.zzz.feature.job.user.presentation.components.ProfileActionCard
 import com.zzz.placement.nav.BottomNavBar
@@ -52,22 +53,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     Text("HI")
-                    ImageComponent(
-                        imageUrl = "https://es.web.img3.acsta.net/pictures/23/06/02/12/12/3866876.jpg" ,
-                        size = 300.dp
-                    )
-//                    ProfileActionCard(
-//                        icon = 2,
-//                        actionText = "",
-//                        onClick = {}
-//                    )
-                    BottomNavBar(
-                        navController = rememberNavController() ,
-                        currentRoute = Screen.Home ,
-                        onRouteChange = {
-
-                        }
-                    )
+                    JobHomePageRoot()
                 }
             }
 

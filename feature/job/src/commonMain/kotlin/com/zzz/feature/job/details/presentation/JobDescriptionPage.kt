@@ -97,7 +97,7 @@ fun JobDescriptionPage(
                         contentAlignment = Alignment.Center
                     ) {
                         ImageComponent(
-                            imageUrl = jobPost.companyLogoUrl,
+                            imageUrl = jobPost.companyLogoUrl ?: "",
                             contentScale = ContentScale.Fit,
                             size = 60.dp
                         )
@@ -124,7 +124,7 @@ fun JobDescriptionPage(
                 JobInfoCard(
                     ctc = jobPost.ctc ,
                     jobType = jobPost.employmentType.name ,
-                    deadline = jobPost.lastDateToApply ,
+                    deadline = jobPost.lastDateToApply.toString() ,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .offset(y = 40.dp)

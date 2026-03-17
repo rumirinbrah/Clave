@@ -80,7 +80,6 @@ fun RecentJobItem(
                 painter = painterResource(Res.drawable.heart),
                 contentDescription = "Save/wishlist",
             )
-
         }
     }
 }

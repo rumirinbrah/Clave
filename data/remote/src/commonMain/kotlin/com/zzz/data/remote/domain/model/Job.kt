@@ -4,7 +4,7 @@ package com.zzz.data.remote.domain.model
 data class Job(
     val id: String,
     val companyName: String,
-    val companyLogoUrl: String,
+    val companyLogoUrl: String?,
     val role: String,
     val employmentType: EmploymentType,
     val location: String,
@@ -15,11 +15,12 @@ data class Job(
     val description: String,
     val requiredSkills: List<String> = emptyList(),
     val selectionProcess: String,
-    val lastDateToApply: String,
+    val lastDateToApply: Long,
     val applicationLink: String? = null,
     val isApplied: Boolean = false,
     val isBookmarked: Boolean = false,
-    val jobStatus: JobStatus = JobStatus.OPEN
+    val jobStatus: JobStatus = JobStatus.OPEN,
+    val lastUpdated : Long
 )
 
 
