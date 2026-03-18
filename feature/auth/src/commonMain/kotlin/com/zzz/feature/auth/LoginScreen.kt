@@ -29,13 +29,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zzz.core.ui.presentation.components.ClaveDefaults
 import com.zzz.core.ui.presentation.components.GradientButton
+import com.zzz.core.ui.presentation.components.NormalTextField
 import com.zzz.core.ui.presentation.components.RoundedInputField
+import com.zzz.core.ui.presentation.components.VerticalSpace
+import placementapp.feature.auth.generated.resources.Res
 
 @Composable
-fun LoginScreen() {
-
+fun LoginScreen(
+    onRegister : ()->Unit
+) {
+    //TODO("Make this a pager component. ie create a data class for holding the state & its corresponding page no. For Ex AuthTabItem("Student",0) & AuthTabItem("TPO",1)
+    //Then navigate to that page when the selected role changes
     var selectedRole by remember { mutableStateOf("Coordinator") }
+
+    //TODO(Move all the states to view model)
+    //TODO(Add functions to update the states in view model)
     var rollNo by remember { mutableStateOf("") }
     var mobileNo by remember { mutableStateOf("") }
 
@@ -43,12 +53,22 @@ fun LoginScreen() {
         modifier = Modifier
             .fillMaxSize()
 //            .background(Color(0xFFFDFDF9))
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = ClaveDefaults.CONTAINER_PADDING),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(40.dp))
+        //TODO("make use of utility for spacers defined in core ui. Ex VerticalSpace and HorizontalSpace")
+        VerticalSpace(40.dp)
 
+        //TODO(Use MaterialTheme.colors instead of hardcoding everywhere. Ex Color.White)
+        /* EX
+        Text(
+            text = "Using the app as",
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            fontWeight = FontWeight.Medium
+        )
+         */
         Box(
             modifier = Modifier
                 .size(80.dp)
@@ -63,7 +83,8 @@ fun LoginScreen() {
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        VerticalSpace(16.dp)
+
 
         Text(
             text = "WELCOME TO CLAVE",
@@ -71,40 +92,58 @@ fun LoginScreen() {
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        VerticalSpace(8.dp)
+
 
         Text(
             text = "Using the app as",
             fontSize = 14.sp,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
+            fontWeight = FontWeight.Medium
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        VerticalSpace(16.dp)
+
 
         RoleToggle(
             selected = selectedRole,
             onSelect = { selectedRole = it }
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        VerticalSpace(24.dp)
+
 
         // Roll No
-        RoundedInputField(
+//        RoundedInputField(
+//            value = rollNo,
+//            onValueChange = { rollNo = it },
+//            placeholder = "Enter your RollNo"
+//        )
+        NormalTextField(
             value = rollNo,
-            onValueChange = { rollNo = it },
+            onValueChange = {
+                rollNo = it
+            },
             placeholder = "Enter your RollNo"
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        VerticalSpace(16.dp)
 
         // Mobile No
-        RoundedInputField(
+//        RoundedInputField(
+//            value = mobileNo,
+//            onValueChange = { mobileNo = it },
+//            placeholder = "Enter your MobileNo"
+//        )
+        NormalTextField(
             value = mobileNo,
-            onValueChange = { mobileNo = it },
+            onValueChange = {
+                mobileNo = it
+            },
             placeholder = "Enter your MobileNo"
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        VerticalSpace(24.dp)
 
         Row {
             Text(text = "New User? ")
@@ -112,9 +151,13 @@ fun LoginScreen() {
                 text = "Register",
                 color = Color.Red,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable{
-
-                }
+                modifier = Modifier.clickable(
+                    onClick = {
+                        onRegister()
+                    },
+                    indication = null,
+                    interactionSource = null
+                )
             )
         }
 
@@ -130,7 +173,7 @@ fun LoginScreen() {
 }
 
 @Composable
-fun RoleToggle(
+internal fun RoleToggle(
     selected: String,
     onSelect: (String) -> Unit
 ) {
@@ -162,12 +205,13 @@ fun RoleToggle(
 }
 
 @Composable
-fun RoleItem(
+internal fun RoleItem(
     text: String,
     isSelected: Boolean,
     onClick: () -> Unit,
     width: Dp
 ) {
+    //TODO(Add material theme colors instead of hardcode)
     Box(
         modifier = Modifier
             .width(width)
