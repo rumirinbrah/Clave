@@ -33,6 +33,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            implementation(compose.components.resources)
+
             implementation(project(":core:ui"))
             implementation(project(":data:remote"))
         }

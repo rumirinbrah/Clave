@@ -43,10 +43,13 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.jetbrains.compose.navigation)
 
             implementation(project(":core:ui"))
+            implementation(project(":feature:job"))
             implementation(projects.feature.job)
             implementation(projects.feature.auth)
         }

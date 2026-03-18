@@ -18,8 +18,8 @@ import com.zzz.core.util.domain.Result
  * @author zyzz
  */
 suspend inline fun <reified T> safeNetworkCall(
-    crossinline block: () -> HttpResponse,
-    coroutineContext : CoroutineDispatcher = Dispatchers.IO
+    coroutineContext : CoroutineDispatcher = Dispatchers.IO,
+    crossinline block: suspend () -> HttpResponse,
 ) : Result<T , NetworkError> {
     return withContext(coroutineContext){
         val response = try {
@@ -36,3 +36,17 @@ suspend inline fun <reified T> safeNetworkCall(
         return@withContext responseToResult(response)
     }
 }
+
+inline fun constructUrl(block : ()->String) : String{
+    val route = block()
+    return when{
+        route.startsWith("/")->{
+            route
+        }
+        else ->{
+            "/$route"
+        }
+    }
+}
+
+

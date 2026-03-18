@@ -1,5 +1,4 @@
-package com.zzz.data.remote.data.student.resume.dto
-
+package com.zzz.data.remote.domain.student.resume.dto
 
 /**
  *
@@ -25,4 +24,3 @@ data class SaveResumeRequest(
     val achievements : String ,
     val studentId : String,
 )
-
