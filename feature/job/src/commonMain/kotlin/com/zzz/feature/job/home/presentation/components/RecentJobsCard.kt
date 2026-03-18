@@ -17,10 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.zzz.core.ui.presentation.components.CardContainer
 import com.zzz.core.ui.presentation.components.VerticalSpace
+import com.zzz.feature.job.home.presentation.viewmodel.JobHomeState
 
 @Composable
 fun RecentJobsCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state : JobHomeState
 ) {
     CardContainer(
         modifier.fillMaxWidth() ,
@@ -42,7 +44,9 @@ fun RecentJobsCard(
             }
             VerticalSpace()
 
-            JobProgressIndicator()
+            JobProgressIndicator(
+                state = state
+            )
             VerticalSpace()
         }
     }
@@ -50,7 +54,8 @@ fun RecentJobsCard(
 
 @Composable
 private fun JobProgressIndicator(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state : JobHomeState
 ) {
     Column(
         modifier.fillMaxWidth()
@@ -74,7 +79,7 @@ private fun JobProgressIndicator(
                         "Applied"
                     )
                     appendLine()
-                    append("8")
+                    append(state.applied)
                 } ,
                 style = MaterialTheme.typography.bodyMedium ,
                 color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
@@ -88,7 +93,7 @@ private fun JobProgressIndicator(
                         "Shortlisted"
                     )
                     appendLine()
-                    append("8")
+                    append(state.shortlisted)
                 } ,
                 style = MaterialTheme.typography.bodyMedium ,
                 color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
@@ -100,7 +105,7 @@ private fun JobProgressIndicator(
                         "Offers"
                     )
                     appendLine()
-                    append("0")
+                    append(state.offers)
                 } ,
                 style = MaterialTheme.typography.bodyMedium ,
                 color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
