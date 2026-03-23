@@ -59,7 +59,7 @@ fun RoundedInputField(
  */
 @Composable
 fun NormalTextField(
-    modifier: Modifier = Modifier ,
+    modifier: Modifier = Modifier.fillMaxWidth() ,
     value: String ,
     onValueChange: (String) -> Unit ,
     placeholder: String ,

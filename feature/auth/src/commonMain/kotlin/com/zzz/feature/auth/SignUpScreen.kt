@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,17 +22,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.GradientButton
-import com.zzz.core.ui.presentation.components.RoundedInputField
+import androidx.compose.foundation.pager.HorizontalPager
+import com.zzz.core.ui.presentation.components.NormalTextField
+import com.zzz.feature.auth.login.RoleToggle
+import com.zzz.feature.auth.login.authTabs
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    onLoginClick: () -> Unit
+) {
 
-    var selectedRole by remember { mutableStateOf("Coordinator") }
+    val pagerState = rememberPagerState { authTabs.size }
+
     var rollNo by remember { mutableStateOf("") }
     var mobileNo by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
@@ -48,14 +55,17 @@ fun SignUpScreen() {
         Box(
             modifier = Modifier
                 .size(80.dp)
-                .background(Color.White, RoundedCornerShape(20.dp)),
+                .background(
+                    MaterialTheme.colorScheme.surface,
+                    RoundedCornerShape(20.dp)
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "C",
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF1E6F73)
+                color = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -63,7 +73,7 @@ fun SignUpScreen() {
 
         Text(
             text = "WELCOME TO CLAVE",
-            fontSize = 22.sp,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
 
@@ -71,52 +81,92 @@ fun SignUpScreen() {
 
         Text(
             text = "Let's set you up!",
-            fontSize = 14.sp,
-            color = Color.Black
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         RoleToggle(
-            selected = selectedRole,
-            onSelect = { selectedRole = it }
+            pagerState = pagerState,
+            tabs = authTabs
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Name
-        RoundedInputField(
-            value = name,
-            onValueChange = { name = it },
-            placeholder = "Enter your Name"
-        )
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth(),
+            userScrollEnabled = false
+        ) { page ->
 
-        Spacer(modifier = Modifier.height(16.dp))
+            when (page) {
 
-        // Roll No
-        RoundedInputField(
-            value = rollNo,
-            onValueChange = { rollNo = it },
-            placeholder = "Enter your RollNo"
-        )
+                0 -> { // Student
+                    Column {
 
-        Spacer(modifier = Modifier.height(16.dp))
+                        NormalTextField(
+                            value = name,
+                            onValueChange = { name = it },
+                            placeholder = "Enter your Name"
+                        )
 
-        // Mobile No
-        RoundedInputField(
-            value = mobileNo,
-            onValueChange = { mobileNo = it },
-            placeholder = "Enter your MobileNo"
-        )
+                        Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(24.dp))
+                        NormalTextField(
+                            value = rollNo,
+                            onValueChange = { rollNo = it },
+                            placeholder = "Enter your RollNo"
+                        )
 
-        // Password
-        RoundedInputField(
-            value = password,
-            onValueChange = { password = it },
-            placeholder = "Enter your Password"
-        )
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        NormalTextField(
+                            value = mobileNo,
+                            onValueChange = { mobileNo = it },
+                            placeholder = "Enter your MobileNo"
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        NormalTextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            placeholder = "Enter your Password"
+                        )
+                    }
+                }
+
+                1 -> { // Coordinator
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        NormalTextField(
+                            value = name,
+                            onValueChange = { name = it },
+                            placeholder = "Enter your Name"
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        NormalTextField(
+                            value = mobileNo,
+                            onValueChange = { mobileNo = it },
+                            placeholder = "Enter your MobileNo"
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        NormalTextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            placeholder = "Enter your Password"
+                        )
+                    }
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -126,9 +176,7 @@ fun SignUpScreen() {
                 text = "Login",
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable{
-
-                }
+                modifier = Modifier.clickable { onLoginClick() }
             )
         }
 
