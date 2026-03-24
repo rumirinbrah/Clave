@@ -2,6 +2,7 @@ package com.zzz.feature.auth.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -112,7 +113,9 @@ fun LoginScreen(
             when (page) {
 
                 0 -> { // Student
-                    Column {
+                    Column (
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ){
 
                         NormalTextField(
                             value = uiState.rollNo,
@@ -120,12 +123,17 @@ fun LoginScreen(
                             placeholder = "Enter your Roll no"
                         )
 
-                        VerticalSpace(16.dp)
 
                         NormalTextField(
                             value = uiState.mobileNo,
                             onValueChange = { viewModel.onMobileNoChange(it) },
                             placeholder = "Enter your Mobile no"
+                        )
+
+                        NormalTextField(
+                            value = uiState.mobileNo,
+                            onValueChange = { viewModel.onPwdChange(it) },
+                            placeholder = "Enter password"
                         )
                     }
                 }
@@ -160,7 +168,10 @@ fun LoginScreen(
                 text = "Register",
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
+                modifier = Modifier.clickable(
+                    indication = null,
+                    interactionSource = null
+                ) {
                     onRegister()
                 }
             )

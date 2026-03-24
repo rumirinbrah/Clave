@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,6 +22,7 @@ import com.zzz.core.ui.network.NetworkObserverCommon
 import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.core.ui.presentation.components.TestContainer
 import com.zzz.core.ui.theme.ClaveTheme
+import com.zzz.feature.auth.login.LoginScreen
 import com.zzz.feature.job.user.presentation.UserProfilePageRoot
 import com.zzz.feature.job.user.presentation.components.ProfileActionCard
 import com.zzz.placement.nav.BottomNavBar
@@ -40,35 +43,18 @@ class MainActivity : ComponentActivity() {
         setContent {
 //            App()
             TestContainer {
-                Column {
-                    val scope = rememberCoroutineScope()
-                    val context = LocalContext.current
-                    val connectivity = remember { NetworkObserverCommon() }
-                    val isConnected = remember {
-                        scope.launch {
-                            connectivity.isConnected.collect {
-                            }
-                        }
+                Scaffold(
+                    Modifier.fillMaxSize()
+                ) {paddingValues ->
+                    Column(
+                        Modifier.padding(paddingValues)
+                    ) {
+                        LoginScreen(
+                            onRegister = {}
+                        )
                     }
-
-                    Text("HI")
-                    ImageComponent(
-                        imageUrl = "https://es.web.img3.acsta.net/pictures/23/06/02/12/12/3866876.jpg" ,
-                        size = 300.dp
-                    )
-//                    ProfileActionCard(
-//                        icon = 2,
-//                        actionText = "",
-//                        onClick = {}
-//                    )
-                    BottomNavBar(
-                        navController = rememberNavController() ,
-                        currentRoute = Screen.Home ,
-                        onRouteChange = {
-
-                        }
-                    )
                 }
+
             }
 
         }
