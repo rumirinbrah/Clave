@@ -1,5 +1,8 @@
 package com.zzz.data.remote.domain.student.social.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SocialLinksResponse(
     val id : String,
     val portfolio : String?,

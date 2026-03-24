@@ -1,7 +1,9 @@
 package com.zzz.data.remote.domain.student.education.dto
 
 import com.zzz.data.remote.domain.model.AggregateType
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class SaveEducationRequest(
     val degree: String ,
     val stream: String? = null ,

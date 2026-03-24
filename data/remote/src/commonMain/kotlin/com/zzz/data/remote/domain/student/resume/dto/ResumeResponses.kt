@@ -4,12 +4,14 @@ import com.zzz.data.remote.domain.student.education.dto.EducationResponse
 import com.zzz.data.remote.domain.student.experience.dto.ExperienceResponse
 import com.zzz.data.remote.domain.student.project.dto.ProjectResponse
 import com.zzz.data.remote.domain.student.social.dto.SocialLinksResponse
+import kotlinx.serialization.Serializable
 
 /**
  * Response
  *
  * @author zyzz
  */
+@Serializable
 data class ResumeResponse(
     val id : String,
     val bio : String,
@@ -24,6 +26,7 @@ data class ResumeResponse(
  *
  * @author zyzz
 */
+@Serializable
 data class EmbeddedResumeResponse(
     val resume : ResumeResponse ,
     val educations : List<EducationResponse> ,

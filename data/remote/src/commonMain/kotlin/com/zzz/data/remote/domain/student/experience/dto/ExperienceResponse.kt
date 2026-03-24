@@ -1,5 +1,8 @@
 package com.zzz.data.remote.domain.student.experience.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ExperienceResponse(
     val id : String,
     val companyName : String,

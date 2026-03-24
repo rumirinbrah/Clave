@@ -22,6 +22,7 @@ import com.zzz.core.ui.network.NetworkObserverCommon
 import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.core.ui.presentation.components.TestContainer
 import com.zzz.core.ui.theme.ClaveTheme
+import com.zzz.feature.auth.SignUpScreen
 import com.zzz.feature.auth.login.LoginScreen
 import com.zzz.feature.job.user.presentation.UserProfilePageRoot
 import com.zzz.feature.job.user.presentation.components.ProfileActionCard
@@ -49,9 +50,7 @@ class MainActivity : ComponentActivity() {
                     Column(
                         Modifier.padding(paddingValues)
                     ) {
-                        LoginScreen(
-                            onRegister = {}
-                        )
+                        SignUpScreen {  }
                     }
                 }
 

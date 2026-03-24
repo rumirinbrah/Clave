@@ -1,5 +1,7 @@
 package com.zzz.data.remote.domain.student.resume.dto
 
+import kotlinx.serialization.Serializable
+
 /**
  *
  * Same for update request
@@ -16,6 +18,7 @@ package com.zzz.data.remote.domain.student.resume.dto
  *
  * @author zyzz
  */
+@Serializable
 data class SaveResumeRequest(
     val bio : String ,
     val gender : String,
