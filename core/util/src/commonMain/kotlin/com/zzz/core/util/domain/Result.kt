@@ -26,3 +26,6 @@ inline fun <T , E : DomainError , R> Result<T , E>.map(map: (T) -> R): Result<R 
         is Result.Success -> Result.Success(map(data))
     }
 }
+
+
+

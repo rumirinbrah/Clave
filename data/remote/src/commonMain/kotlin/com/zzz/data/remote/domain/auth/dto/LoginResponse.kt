@@ -1,12 +1,14 @@
 package com.zzz.data.remote.domain.auth.dto
 
 import com.zzz.data.remote.domain.model.TokenPair
+import kotlinx.serialization.Serializable
 
 /**
  * @param verificationRequired If OTP verification is req. In such cases, redirect the user to enter OTP page or ask the user about verification again.
  *
  * @author zyzz
  */
+@Serializable
 data class LoginResponse(
     val verificationRequired : Boolean = false,
     val tokenPair : TokenPair?

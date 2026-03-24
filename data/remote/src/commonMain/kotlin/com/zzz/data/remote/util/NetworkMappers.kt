@@ -1,11 +1,13 @@
 package com.zzz.data.remote.util
 
+import com.zzz.core.util.domain.DomainError
 import com.zzz.core.util.domain.Error
 import com.zzz.data.remote.domain.NetworkError
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.domain.ApiResponse
 
 /**
  * Tries to map the HTTP response to the expected type T
@@ -22,29 +24,45 @@ suspend inline fun<reified T> responseToResult(
             try {
                 Result.Success(response.body<T>())
             } catch (_ : NoTransformationFoundException) {
-                Result.Error(NetworkError.SERIALIZATION_ERROR)
+                Result.Error(NetworkError.SerializationError)
             }
         }
         400->{
-            Result.Error(NetworkError.BAD_REQUEST)
+            Result.Error(NetworkError.BadRequest)
         }
         401->{
-            Result.Error(NetworkError.UNAUTHORIZED)
+            Result.Error(NetworkError.Unauthorized)
         }
         403->{
-            Result.Error(NetworkError.FORBIDDEN)
+            Result.Error(NetworkError.Forbidden)
         }
         404->{
-            Result.Error(NetworkError.NOT_FOUND)
+            Result.Error(NetworkError.NotFound)
         }
         in 400..499->{
-            Result.Error(NetworkError.CLIENT)
+            Result.Error(NetworkError.Client)
         }
         in 500..599->{
-            Result.Error(NetworkError.SERVER)
+            Result.Error(NetworkError.Server)
         }
         else->{
-            Result.Error(NetworkError.ERROR_UNKNOWN)
+            Result.Error(NetworkError.ErrorUnknown)
         }
     }
 }
+
+inline fun <T> Result<ApiResponse<T> , NetworkError>.unwrap() : Result<T, NetworkError>{
+    return when(this){
+        is Result.Error -> {
+            this
+        }
+        is Result.Success -> {
+            if(this.data.status){
+                Result.Success(this.data.data!!)
+            }else{
+                Result.Error(NetworkError.CustomError(data.error))
+            }
+        }
+    }
+}
+

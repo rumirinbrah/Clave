@@ -18,7 +18,7 @@ interface AuthSource {
 
     suspend fun createAccount(request: CreateAccountRequest) : Result<CreateAccountResponse, NetworkError>
 
-    suspend fun login(request : LoginRequest) : Result<LoginResponse, NetworkError>
+    suspend fun login(request : LoginRequest) : Result<LoginResponse , NetworkError>
 
     suspend fun refreshToken(request : RefreshTokenRequest) : Result<TokenPair, NetworkError>
 

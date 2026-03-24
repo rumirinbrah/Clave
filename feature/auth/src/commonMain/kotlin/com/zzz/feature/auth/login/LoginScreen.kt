@@ -1,5 +1,6 @@
 package com.zzz.feature.auth.login
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,17 +14,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,26 +31,50 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zzz.core.ui.domain.network.UIEvent
 import com.zzz.core.ui.presentation.components.ClaveDefaults
 import com.zzz.core.ui.presentation.components.GradientButton
 import com.zzz.core.ui.presentation.components.NormalTextField
 import com.zzz.core.ui.presentation.components.VerticalSpace
+import com.zzz.core.ui.util.ClaveLogger.logD
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun LoginScreen(
     onRegister: () -> Unit,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = koinViewModel()
 ) {
 
     val pagerState = rememberPagerState { authTabs.size }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val events = viewModel.events
+
+    LaunchedEffect(events){
+        events.collect{event->
+            when(event){
+                is LoginEvents.OtpVerification -> {
+                    logD {
+                        "OTP verification req"
+                    }
+                }
+                is UIEvent.Error ->{
+                    logD {
+                        event.errorMsg
+                    }
+                }
+                is UIEvent.Success ->{
+                    logD {
+                        "Succees"
+                    }
+                }
+            }
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -104,6 +128,15 @@ fun LoginScreen(
 
         VerticalSpace(24.dp)
 
+        AnimatedVisibility(uiState.errorMsg!=null){
+            Text(
+                uiState.errorMsg ?: "",
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        VerticalSpace(24.dp)
+
         HorizontalPager(
             state = pagerState,
             userScrollEnabled = true,
@@ -131,7 +164,7 @@ fun LoginScreen(
                         )
 
                         NormalTextField(
-                            value = uiState.mobileNo,
+                            value = uiState.password,
                             onValueChange = { viewModel.onPwdChange(it) },
                             placeholder = "Enter password"
                         )
@@ -181,7 +214,9 @@ fun LoginScreen(
 
         GradientButton(
             text = "Login",
-            onClick = { }
+            onClick = {
+                viewModel.login()
+            }
         )
 
         VerticalSpace(24.dp)

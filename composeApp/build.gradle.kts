@@ -35,6 +35,9 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            //----------KOIN----------
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,10 +51,18 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.jetbrains.compose.navigation)
 
+            //koin
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+//            implementation(libs.koin.compose)
+//            implementation(libs.koin.compose.viewmodel)
+
+            //modules
             implementation(project(":core:ui"))
             implementation(project(":feature:job"))
-            implementation(projects.feature.job)
+//            implementation(projects.feature.job)
             implementation(projects.feature.auth)
+            implementation(projects.data.remote)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

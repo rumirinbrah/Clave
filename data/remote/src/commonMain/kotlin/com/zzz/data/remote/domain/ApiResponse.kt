@@ -1,5 +1,7 @@
 package com.zzz.data.remote.domain
 
+import kotlinx.serialization.Serializable
+
 /**
  * ### Generic API response
  * @param status Call successful or not i.e. True/false
@@ -9,6 +11,7 @@ package com.zzz.data.remote.domain
  *
  * @author zyzz
  */
+@Serializable
 data class ApiResponse<T>(
     val status : Boolean,
     val data : T? = null,

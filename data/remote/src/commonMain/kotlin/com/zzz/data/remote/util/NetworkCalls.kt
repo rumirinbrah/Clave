@@ -26,11 +26,11 @@ suspend inline fun <reified T> safeNetworkCall(
             block()
         } catch (e : SerializationException) {
             e.printStackTrace()
-            return@withContext Result.Error(NetworkError.SERIALIZATION_ERROR)
+            return@withContext Result.Error(NetworkError.SerializationError)
         }catch (e : Exception) {
             coroutineContext.ensureActive()
             e.printStackTrace()
-            return@withContext Result.Error(NetworkError.ERROR_UNKNOWN)
+            return@withContext Result.Error(NetworkError.ErrorUnknown)
         }
 
         return@withContext responseToResult(response)

@@ -1,6 +1,8 @@
 package com.zzz.data.remote.data.auth
 
 import com.zzz.core.util.domain.Result
+import com.zzz.core.util.domain.map
+import com.zzz.data.remote.domain.ApiResponse
 import com.zzz.data.remote.domain.NetworkError
 import com.zzz.data.remote.domain.auth.AuthSource
 import com.zzz.data.remote.domain.auth.dto.CreateAccountRequest
@@ -12,9 +14,12 @@ import com.zzz.data.remote.domain.model.TokenPair
 import com.zzz.data.remote.util.ApiRoutes
 import com.zzz.data.remote.util.constructUrl
 import com.zzz.data.remote.util.safeNetworkCall
+import com.zzz.data.remote.util.unwrap
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 
 /**
  * DO NOT MAKE PUBLIC!
@@ -35,12 +40,18 @@ internal class RemoteAuthSource(
     }
 
     override suspend fun login(request: LoginRequest): Result<LoginResponse , NetworkError> {
-        return safeNetworkCall<LoginResponse> {
+        val result = safeNetworkCall<ApiResponse<LoginResponse>> {
             val url = constructUrl { ApiRoutes.AUTH_BASE+ApiRoutes.AUTH_LOGIN }
             client.post(url){
+                contentType(ContentType.Application.Json)
                 setBody(request)
             }
         }
+
+//        val mapped = result.unwrap()
+//        println(mapped)
+
+        return result.unwrap()
     }
 
     override suspend fun refreshToken(request: RefreshTokenRequest): Result<TokenPair , NetworkError> {

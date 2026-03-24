@@ -36,11 +36,17 @@ object HttpClientFactory {
             expectSuccess = false
 
             defaultRequest {
+//                host = if(testing){
+//                    "localhost:8080"
+//                }else{
+//                    "localhost:8080"
+//                }
                 host = if(testing){
-                    "localhost:8080"
+                    "10.0.2.2"
                 }else{
-                    "localhost:8080"
+                    "10.0.2.2"
                 }
+                port = 8080
             }
 
             //-----------SERIALIZATION-----------
