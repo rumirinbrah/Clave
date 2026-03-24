@@ -68,13 +68,7 @@ fun AppAndroidPreview() {
         Box(
             Modifier.fillMaxSize()
         ) {
-            BottomNavBar(
-                navController = rememberNavController() ,
-                currentRoute = Screen.Home ,
-                onRouteChange = {
-
-                }
-            )
+            UserProfilePageRoot()
         }
     }
 
