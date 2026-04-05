@@ -31,12 +31,15 @@ internal class RemoteAuthSource(
 ) : AuthSource{
 
     override suspend fun createAccount(request: CreateAccountRequest): Result<CreateAccountResponse , NetworkError> {
-        return safeNetworkCall<CreateAccountResponse> {
-            val url = constructUrl { ApiRoutes.AUTH_BASE+ApiRoutes.AUTH_CREATE }
-            client.post(url){
+        val result = safeNetworkCall<ApiResponse<CreateAccountResponse>> {
+            val url = constructUrl { ApiRoutes.AUTH_BASE + ApiRoutes.AUTH_CREATE }
+            client.post(url) {
+                contentType(ContentType.Application.Json)
                 setBody(request)
             }
         }
+
+        return result.unwrap()
     }
 
     override suspend fun login(request: LoginRequest): Result<LoginResponse , NetworkError> {
