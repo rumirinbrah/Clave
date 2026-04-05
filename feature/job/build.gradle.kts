@@ -41,7 +41,11 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
+            //date
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+
             implementation(project(":core:ui"))
+            implementation(project(":core:util"))
             implementation(project(":data:remote"))
         }
         commonTest.dependencies {

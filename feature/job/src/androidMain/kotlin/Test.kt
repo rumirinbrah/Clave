@@ -7,11 +7,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zzz.core.ui.theme.ClaveTheme
 import com.zzz.feature.job.home.presentation.JobHomePageRoot
-import com.zzz.feature.job.home.presentation.components.JobAnnouncementsCard
-import com.zzz.feature.job.home.presentation.components.RecentJobItem
-import com.zzz.feature.job.home.presentation.components.RecentJobsCard
-import com.zzz.feature.job.user.presentation.UserProfilePageRoot
-import com.zzz.feature.job.user.presentation.components.ProfileActionCard
 
 @Preview(showBackground = true)
 @Composable

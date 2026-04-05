@@ -60,6 +60,8 @@ fun ProfileActionCard(
             .background(background)
             .clickable(
                 enabled = enabled,
+                interactionSource = null,
+                indication = null,
                 onClick = {
                     onClick()
                 }

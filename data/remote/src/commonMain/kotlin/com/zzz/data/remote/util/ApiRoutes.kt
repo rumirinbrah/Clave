@@ -9,6 +9,7 @@ object ApiRoutes {
     const val AUTH_REFRESH_TOKEN = "/refresh"
 
     const val PROFILE_BASE = "/profile"
+    const val PROFILE_STUDENT = "/student"
     const val PROFILE_EXPERIENCE = "/experiences"
     const val PROFILE_PROJECT = "/projects"
     const val PROFILE_EDUCATIONS = "/educations"

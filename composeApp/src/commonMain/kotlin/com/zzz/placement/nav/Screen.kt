@@ -2,7 +2,17 @@ package com.zzz.placement.nav
 
 import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class Screen {
+
+    @Serializable
+    data object Auth : Screen(){
+        @Serializable
+        data object LogIn : Screen()
+
+        @Serializable
+        data object SignUp : Screen()
+    }
 
     @Serializable
     data object Home : Screen()
@@ -14,6 +24,15 @@ sealed class Screen {
     data object Community : Screen()
 
     @Serializable
-    data object Account : Screen()
+    data object Account : Screen(){
+        @Serializable
+        data object Profile
+
+        @Serializable
+        data object Preferences
+
+        @Serializable
+        data object Settings
+    }
 
 }

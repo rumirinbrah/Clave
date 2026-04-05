@@ -16,12 +16,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.core.ui.presentation.components.VerticalSpace
+import com.zzz.feature.job.user.presentation.viewmodel.UserProfileState
 import placementapp.feature.job.generated.resources.Recordify_logo
 import placementapp.feature.job.generated.resources.Res
 
 @Composable
 internal fun ProfileHeaderCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state : UserProfileState
 ){
     Column(
         modifier,
@@ -37,7 +39,7 @@ internal fun ProfileHeaderCard(
         )
         VerticalSpace(5.dp)
         Text(
-            text = "Rahul Shinde",
+            text = state.name,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
@@ -45,13 +47,13 @@ internal fun ProfileHeaderCard(
 
         VerticalSpace(5.dp)
         Text(
-            text = "22CO078",
+            text = state.rollNo,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
             lineHeight = 14.sp
         )
         Text(
-            text = "Computer Engineering",
+            text = state.branch,
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground.copy(0.7f),
             lineHeight = 14.sp

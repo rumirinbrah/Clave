@@ -22,19 +22,74 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+//import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.zzz.core.ui.presentation.components.ActionHeader
 import com.zzz.core.ui.presentation.components.ImageComponent
+import com.zzz.data.remote.domain.model.EmploymentType
 import com.zzz.data.remote.domain.model.Job
+import com.zzz.data.remote.domain.model.JobStatus
+import com.zzz.data.remote.domain.model.formatted
 import com.zzz.feature.job.details.presentation.components.JobInfoCard
+import org.koin.compose.viewmodel.koinViewModel
+import placementapp.feature.job.generated.resources.Res
+import placementapp.feature.job.generated.resources.baseline_arrow_back_24
 
+val dummyJob = Job(
+    id = "job_001",
+    companyName = "Google",
+    companyLogoUrl = "https://img.lovepik.com/png/20231120/google-logo-vector-sandwiches-data-engineer_642913_wh1200.png",
+    role = "Software Engineer",
+    employmentType = EmploymentType.FULL_TIME,
+    location = "Bangalore, India",
+    ctc = "18-25 LPA",
+    bondYears = null,
+    eligibleCourses = listOf(
+        "B.Tech",
+        "M.Tech",
+        "MCA"
+    ),
+    eligibilityCriteria = "Minimum 7 CGPA, no active backlogs",
+    description = "Work on scalable backend systems and distributed services.",
+    requiredSkills = listOf(
+        "Kotlin",
+        "Java",
+        "Spring Boot",
+        "Data Structures",
+        "System Design"
+    ),
+    selectionProcess = "Online Assessment -> Technical Interviews -> HR Round",
+
+    // 2026-04-30T23:59:59Z → epoch millis
+    lastDateToApply = 1777593599000,
+
+    formattedDate = "30 April 2026",
+
+    applicationLink = "https://careers.google.com/jobs/apply",
+    isApplied = false,
+    isBookmarked = false,
+    jobStatus = JobStatus.OPEN,
+
+    // 2026-04-05T10:30:00Z → epoch millis
+    lastUpdated = 1775385000000
+)
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun JobDescriptionPage(
-    jobPost: Job
+    jobPost: Job = dummyJob,
+    onBack : ()->Unit
 ) {
+//    BackHandler {
+//        onBack()
+//    }
+    val viewModel = koinViewModel<JobDescriptionViewModel>()
+
     Scaffold(
         bottomBar = {
             BottomAppBar(
@@ -66,7 +121,7 @@ fun JobDescriptionPage(
 
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+//                .padding(paddingValues)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -82,11 +137,14 @@ fun JobDescriptionPage(
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    Text(
-                        text = "Job Details",
-                        fontWeight = FontWeight.Bold
+                    ActionHeader(
+                        title = "Job details",
+                        onBack = {
+                            onBack()
+                        },
+                        icon = Res.drawable.baseline_arrow_back_24
                     )
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -123,8 +181,8 @@ fun JobDescriptionPage(
 
                 JobInfoCard(
                     ctc = jobPost.ctc ,
-                    jobType = jobPost.employmentType.name ,
-                    deadline = jobPost.lastDateToApply.toString() ,
+                    jobType = jobPost.employmentType.formatted() ,
+                    deadline = jobPost.formattedDate ,
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .offset(y = 40.dp)

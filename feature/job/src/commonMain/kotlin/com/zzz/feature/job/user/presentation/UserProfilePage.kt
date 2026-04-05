@@ -10,12 +10,17 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.feature.job.user.presentation.components.ProfileActionCard
 import com.zzz.feature.job.user.presentation.components.ProfileHeaderCard
+import com.zzz.feature.job.user.presentation.viewmodel.UserProfileState
+import com.zzz.feature.job.user.presentation.viewmodel.UserProfileViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import placementapp.feature.job.generated.resources.Res
 import placementapp.feature.job.generated.resources.edit
 import placementapp.feature.job.generated.resources.filter
@@ -29,13 +34,18 @@ import placementapp.feature.job.generated.resources.support
 fun UserProfilePageRoot(
     modifier: Modifier = Modifier
 ){
+    val viewModel = koinViewModel<UserProfileViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     UserProfilePage(
-        modifier
+        modifier,
+        state = state
     )
 }
 @Composable
-fun UserProfilePage(
-    modifier: Modifier
+private fun UserProfilePage(
+    modifier: Modifier,
+    state : UserProfileState
 ){
     Box(
 
@@ -48,7 +58,8 @@ fun UserProfilePage(
         ) {
             //--------HEADER--------
             ProfileHeaderCard(
-                Modifier.align(Alignment.CenterHorizontally)
+                Modifier.align(Alignment.CenterHorizontally),
+                state
             )
             VerticalSpace()
 

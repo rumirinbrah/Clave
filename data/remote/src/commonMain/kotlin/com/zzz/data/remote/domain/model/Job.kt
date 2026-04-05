@@ -16,6 +16,7 @@ data class Job(
     val requiredSkills: List<String> = emptyList(),
     val selectionProcess: String,
     val lastDateToApply: Long,
+    val formattedDate : String,
     val applicationLink: String? = null,
     val isApplied: Boolean = false,
     val isBookmarked: Boolean = false,
@@ -28,6 +29,14 @@ enum class EmploymentType {
     FULL_TIME,
     INTERNSHIP,
     PPO
+}
+
+fun EmploymentType.formatted() : String{
+    return when(this){
+        EmploymentType.FULL_TIME -> "Full-time"
+        EmploymentType.INTERNSHIP -> "Internship"
+        EmploymentType.PPO -> "PPO"
+    }
 }
 
 enum class JobStatus {

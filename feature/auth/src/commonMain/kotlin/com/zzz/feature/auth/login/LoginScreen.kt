@@ -45,6 +45,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LoginScreen(
     onRegister: () -> Unit,
+    navToHome : ()->Unit,
     viewModel: LoginViewModel = koinViewModel()
 ) {
 
@@ -67,6 +68,7 @@ fun LoginScreen(
                     }
                 }
                 is UIEvent.Success ->{
+                    navToHome()
                     logD {
                         "Succees"
                     }
@@ -216,6 +218,8 @@ fun LoginScreen(
             text = "Login",
             onClick = {
                 viewModel.login()
+                //TEST
+//                navToHome()
             }
         )
 

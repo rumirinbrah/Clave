@@ -3,6 +3,7 @@ package com.zzz.placement.di
 import com.zzz.data.remote.di.engineModule
 import com.zzz.data.remote.di.remoteDataModule
 import com.zzz.feature.auth.di.authModule
+import com.zzz.feature.job.di.jobModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -19,7 +20,8 @@ fun initKoin(
         modules(
             engineModule,
             remoteDataModule,
-            authModule
+            authModule,
+            jobModule
         )
     }
 }

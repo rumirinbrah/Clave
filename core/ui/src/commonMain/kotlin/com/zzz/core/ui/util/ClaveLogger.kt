@@ -18,7 +18,10 @@ expect object ClaveLogger{
      * Error log
      * @author zyzz
     */
-    fun Any.logE(msg: () -> String , e : Throwable? = null)
+    fun Any.logE(
+        e: Throwable? = null,
+        msg: () -> String ,
+    )
 
     /**
      * Information log

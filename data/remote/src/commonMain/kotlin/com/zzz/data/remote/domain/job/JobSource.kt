@@ -1,0 +1,9 @@
+package com.zzz.data.remote.domain.job
+
+import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.domain.NetworkError
+import com.zzz.data.remote.domain.model.Job
+
+interface JobSource {
+    suspend fun getJobs() : Result<List<Job>, NetworkError>
+}

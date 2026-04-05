@@ -25,7 +25,10 @@ actual object ClaveLogger {
         Log.v(tag , "❓ ${msg()}")
     }
 
-    actual fun Any.logE(msg: () -> String , e: Throwable?) {
+    actual fun Any.logE(
+        e: Throwable?,
+        msg: () -> String ,
+    ) {
         val tag = this::class.simpleName ?: "AppLog"
         Log.e(tag , "⚠️ ${msg()}" , e)
     }

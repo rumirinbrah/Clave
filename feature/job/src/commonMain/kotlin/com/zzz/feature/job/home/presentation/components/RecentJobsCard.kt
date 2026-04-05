@@ -1,6 +1,5 @@
 package com.zzz.feature.job.home.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.zzz.core.ui.presentation.components.CardContainer
@@ -39,8 +37,16 @@ fun RecentJobsCard(
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                RecentJobItem()
-                RecentJobItem()
+                if(state.jobs.isNotEmpty()){
+                    state.jobs.onEach {job->
+                        RecentJobItem(
+                            job = job
+                        )
+                    }
+                }else{
+                    RecentJobItemTest()
+                    RecentJobItemTest()
+                }
             }
             VerticalSpace()
 

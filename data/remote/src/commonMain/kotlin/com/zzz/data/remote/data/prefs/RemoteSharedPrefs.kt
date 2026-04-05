@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 
 internal const val datastoreName = "RemoteData.preferences_pb"
 
-internal class RemoteDatastoreSource(
+class RemoteDatastoreSource(
     private val datastore : DataStore<Preferences>
 ){
     private val accessTokenKey = stringPreferencesKey("access_token")

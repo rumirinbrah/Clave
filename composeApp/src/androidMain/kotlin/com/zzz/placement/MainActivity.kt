@@ -9,29 +9,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
-import com.zzz.core.ui.network.NetworkObserverCommon
-import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.core.ui.presentation.components.TestContainer
 import com.zzz.core.ui.theme.ClaveTheme
-import com.zzz.feature.auth.SignUpScreen
-import com.zzz.feature.auth.login.LoginScreen
+import com.zzz.feature.job.details.presentation.JobDescriptionPage
+import com.zzz.feature.job.user.UpdateProfileRoot
 import com.zzz.feature.job.user.presentation.UserProfilePageRoot
-import com.zzz.feature.job.user.presentation.components.ProfileActionCard
-import com.zzz.placement.nav.BottomNavBar
-import com.zzz.placement.nav.Screen
-import kotlinx.coroutines.launch
-import placementapp.composeapp.generated.resources.Res
-import placementapp.composeapp.generated.resources.compose_multiplatform
-import java.time.LocalDate
+import com.zzz.placement.nav.Navigation
 
 /**
  * Android entry point
@@ -50,11 +37,13 @@ class MainActivity : ComponentActivity() {
                     Column(
                         Modifier.padding(paddingValues)
                     ) {
-                        SignUpScreen {  }
+                        JobDescriptionPage(
+                            onBack = {}
+                        )
                     }
                 }
-
             }
+//            Navigation()
 
         }
     }
@@ -66,8 +55,9 @@ fun AppAndroidPreview() {
     ClaveTheme {
         Box(
             Modifier.fillMaxSize()
+                .padding(16.dp)
         ) {
-            UserProfilePageRoot()
+//            UpdateProfileDetailsPage()
         }
     }
 

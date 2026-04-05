@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.zzz.core.ui.domain.network.UIEvent
 import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.auth.AuthSource
 import com.zzz.data.remote.domain.auth.dto.LoginRequest
 import kotlinx.coroutines.channels.Channel
@@ -22,7 +23,8 @@ data class LoginUiState(
 )
 
 class LoginViewModel(
-    private val authSource: AuthSource
+    private val authSource: AuthSource,
+    private val datastore : RemoteDatastoreSource
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -49,6 +51,9 @@ class LoginViewModel(
         }
     }
 
+    fun simulateSuccessLogin(){
+
+    }
     fun login(){
         viewModelScope.launch {
             _uiState.update {
@@ -79,6 +84,13 @@ class LoginViewModel(
                     if(data.verificationRequired){
                         _events.send(LoginEvents.OtpVerification)
                     }else{
+                        //save tokens
+                        data.tokenPair?.let {
+                            datastore.saveTokens(
+                                access = it.accessToken,
+                                refresh = it.refreshToken
+                            )
+                        }
                         _events.send(UIEvent.Success)
                     }
                 }
