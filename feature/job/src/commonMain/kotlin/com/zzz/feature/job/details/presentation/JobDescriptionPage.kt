@@ -1,8 +1,11 @@
 package com.zzz.feature.job.details.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,17 +31,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 //import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.ActionHeader
 import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.data.remote.domain.model.EmploymentType
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.data.remote.domain.model.JobStatus
 import com.zzz.data.remote.domain.model.formatted
+import com.zzz.feature.job.details.presentation.components.JobHeader
 import com.zzz.feature.job.details.presentation.components.JobInfoCard
 import org.koin.compose.viewmodel.koinViewModel
 import placementapp.feature.job.generated.resources.Res
@@ -83,7 +93,7 @@ val dummyJob = Job(
 @Composable
 fun JobDescriptionPage(
     jobPost: Job = dummyJob,
-    onBack : ()->Unit
+    onBack: () -> Unit
 ) {
 //    BackHandler {
 //        onBack()
@@ -94,7 +104,7 @@ fun JobDescriptionPage(
         bottomBar = {
             BottomAppBar(
                 containerColor = Color.Transparent
-            ){
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,7 +112,7 @@ fun JobDescriptionPage(
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
-                        onClick = {  },
+                        onClick = { },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(52.dp),
@@ -121,114 +131,111 @@ fun JobDescriptionPage(
 
         Column(
             modifier = Modifier
-//                .padding(paddingValues)
+                .padding(paddingValues)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
 
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.4f)
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            JobHeader(jobPost, onBack)
+
+            SectionContainer("Eligible Courses"){
+                FlowRow(
+                    modifier = Modifier.padding(horizontal = 4.dp)
                 ) {
-                    ActionHeader(
-                        title = "Job details",
-                        onBack = {
-                            onBack()
-                        },
-                        icon = Res.drawable.baseline_arrow_back_24
-                    )
-
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Box(
-                        modifier = Modifier
-                            .size(70.dp)
-                            .background(Color.White, CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        ImageComponent(
-                            imageUrl = jobPost.companyLogoUrl ?: "",
-                            contentScale = ContentScale.Fit,
-                            size = 60.dp
-                        )
+                    jobPost.eligibleCourses.forEach { course ->
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 8.dp, bottom = 8.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(MaterialTheme.colorScheme.background) // 👈 NOT pure white
+                                .border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.outlineVariant,
+                                    shape = RoundedCornerShape(50)
+                                )
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Text(
+                                text = course,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
                     }
+                }
+            }
+
+            SectionContainer("Requirements"){
+                Column(modifier = Modifier.padding(horizontal = 4.dp)) {
+
+                    Text(
+                        text = jobPost.eligibilityCriteria,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = jobPost.companyName,
-                        style = MaterialTheme.typography.titleLarge
+                        text = "Skills required:",
+                        style = MaterialTheme.typography.titleSmall
                     )
 
                     Text(
-                        text = jobPost.role,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-
-                    Text(
-                        text = jobPost.location,
+                        text = jobPost.requiredSkills.joinToString(", "),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
+            }
 
-                JobInfoCard(
-                    ctc = jobPost.ctc ,
-                    jobType = jobPost.employmentType.formatted() ,
-                    deadline = jobPost.formattedDate ,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .offset(y = 40.dp)
-                        .height(80.dp)
+            SectionContainer(
+                "Job Description"
+            ){
+                Text(
+                    text = jobPost.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(4.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(70.dp))
+            SectionContainer(
+                "Selection Process"
+            ){
+                Text(
+                    text = jobPost.selectionProcess,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
 
-            SectionHeading("Eligible Courses")
-            SectionHeading("Requirements")
-            SectionHeading("Job Description")
-            SectionHeading("Selection Process")
+            Spacer(modifier = Modifier.height(24.dp))
 
         }
     }
 }
 
 @Composable
-fun ParagraphList(items: List<String>) {
-    Column {
-        items.forEach { item ->
-            Text(
-                text = item,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-    }
-}
-
-
-@Composable
-fun SectionHeading(
-    text: String
+fun SectionContainer(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
 ) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 24.dp,
-            bottom = 8.dp
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant
+            )
+            .padding(16.dp) // inner padding
+    ) {
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold
         )
-    )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        content()
+    }
 }
-
-

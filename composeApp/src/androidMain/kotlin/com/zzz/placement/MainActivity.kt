@@ -30,19 +30,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 //            App()
-            TestContainer {
-                Scaffold(
-                    Modifier.fillMaxSize()
-                ) {paddingValues ->
-                    Column(
-                        Modifier.padding(paddingValues)
-                    ) {
-                        JobDescriptionPage(
-                            onBack = {}
-                        )
-                    }
-                }
-            }
+            JobDescriptionPage() { }
+
+//            TestContainer {
+//                Scaffold(
+//                    Modifier.fillMaxSize()
+//                ) {paddingValues ->
+//                    Column(
+//                        Modifier.padding(paddingValues)
+//                    ) {
+//                        JobDescriptionPage(
+//                            onBack = {}
+//                        )
+//                    }
+//                }
+//            }
 //            Navigation()
 
         }
