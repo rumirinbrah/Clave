@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,10 +33,11 @@ internal fun ProfileHeaderCard(
     ) {
         //TODO(ADD URL)
         ImageComponent(
-            imageRes = Res.drawable.Recordify_logo,
+            imageUrl = "https://img.freepik.com/premium-photo/close-up-handsome-man-smiling_1203138-6107.jpg",
             modifier = Modifier.clip(CircleShape)
                 .background(Color.Gray),
-            size = 80.dp
+            size = 80.dp,
+            contentScale = ContentScale.Crop
         )
         VerticalSpace(5.dp)
         Text(

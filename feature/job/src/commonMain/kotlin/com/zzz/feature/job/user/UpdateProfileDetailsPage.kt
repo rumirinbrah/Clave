@@ -4,14 +4,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zzz.core.ui.domain.network.UIEvent
 import com.zzz.core.ui.presentation.components.ActionHeader
 import com.zzz.core.ui.presentation.components.GradientButton
 import com.zzz.core.ui.presentation.components.NormalTextField
 import com.zzz.core.ui.presentation.components.VerticalSpace
+import com.zzz.feature.job.user.presentation.viewmodel.ProfileEvents
 import com.zzz.feature.job.user.presentation.viewmodel.UpdateProfileViewModel
 import com.zzz.feature.job.user.presentation.viewmodel.UserProfileState
 import com.zzz.feature.job.user.presentation.viewmodel.UserProfileViewModel
@@ -23,19 +26,39 @@ import placementapp.feature.job.generated.resources.outline_arrow_forward_ios_24
 @Composable
 fun UpdateProfileRoot(
     modifier : Modifier = Modifier,
-    viewModel: UserProfileViewModel = koinViewModel()
+    viewModel: UserProfileViewModel = koinViewModel(),
+    onBack : ()->Unit
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
-    UpdateProfileDetailsPage(modifier,state)
+    UpdateProfileDetailsPage(
+        modifier ,
+        state,
+        onBack = onBack
+    )
 }
 
 @Composable
-internal fun UpdateProfileDetailsPage(
+private fun UpdateProfileDetailsPage(
     modifier : Modifier = Modifier,
-    profileState: UserProfileState
+    profileState: UserProfileState,
+    onBack : ()->Unit
 ){
     val viewModel = koinViewModel<UpdateProfileViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val events = viewModel.events
+
+    LaunchedEffect(Unit){
+        events.collect {
+            when(it){
+                UIEvent.Success -> {
+                   onBack()
+                }
+                is UIEvent.Error -> {
+
+                }
+            }
+        }
+    }
 
     Column(
         modifier.fillMaxSize(),
@@ -44,7 +67,7 @@ internal fun UpdateProfileDetailsPage(
         ActionHeader(
             title = "Update profile",
             onBack = {
-
+                onBack()
             },
             icon = Res.drawable.baseline_arrow_back_24
         )
@@ -55,7 +78,7 @@ internal fun UpdateProfileDetailsPage(
             onValueChange = {
                 viewModel.onNameChange(it)
             },
-            placeholder ="Your name",
+            placeholder = profileState.name,
             titleText = "Name"
         )
         NormalTextField(
@@ -64,7 +87,7 @@ internal fun UpdateProfileDetailsPage(
                 viewModel.onBranchChange(it)
 
             } ,
-            placeholder ="Your branch",
+            placeholder =profileState.branch,
             titleText = "Branch"
         )
         NormalTextField(
@@ -72,7 +95,7 @@ internal fun UpdateProfileDetailsPage(
             onValueChange = {
                 viewModel.onRollNoChange(it)
             },
-            placeholder ="Your roll number",
+            placeholder =profileState.rollNo,
             titleText = "Roll No"
         )
 

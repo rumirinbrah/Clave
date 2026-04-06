@@ -2,13 +2,16 @@ package com.zzz.feature.job.user.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zzz.core.ui.domain.network.UIEvent
 import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.ui.util.ClaveLogger.logE
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.domain.student.profile.ProfileSource
 import com.zzz.data.remote.domain.student.profile.dto.SaveStudentProfileRequest
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -25,6 +28,10 @@ class UpdateProfileViewModel(
 
     private val _state = MutableStateFlow(UpdateProfileState())
     internal val state = _state.asStateFlow()
+
+    private val _events = Channel<UIEvent>(capacity = 3)
+    val events = _events.receiveAsFlow()
+
 
     fun onNameChange(newName: String) {
         _state.update { it.copy(name = newName) }
@@ -61,11 +68,13 @@ class UpdateProfileViewModel(
                     logE {
                         "updateProfile : Error updating profile"
                     }
+                    _events.send(UIEvent.Error("Error updating profile"))
                 }
                 is Result.Success -> {
                     logD {
                         "updateProfile : Success"
                     }
+                    _events.send(UIEvent.Success)
                 }
             }
         }

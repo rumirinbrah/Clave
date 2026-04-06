@@ -31,25 +31,26 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RoundedInputField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    value: String ,
+    onValueChange: (String) -> Unit ,
     placeholder: String
 ) {
     TextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(placeholder) },
+        value = value ,
+        onValueChange = onValueChange ,
+        placeholder = { Text(placeholder) } ,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
-        shape = RoundedCornerShape(30.dp),
+            .height(56.dp) ,
+        shape = RoundedCornerShape(30.dp) ,
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            focusedIndicatorColor = Color.Transparent,
+            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer ,
+            focusedIndicatorColor = Color.Transparent ,
             unfocusedIndicatorColor = Color.Transparent
         )
     )
 }
+
 /**
  * LEADING ICON
  *
@@ -80,7 +81,7 @@ fun NormalTextField(
     maxLines: Int = 10 ,
     keyboardType: KeyboardType = KeyboardType.Unspecified ,
     imeAction: ImeAction = ImeAction.Unspecified ,
-    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences ,
     shape: Shape = OutlinedTextFieldDefaults.shape ,
     onImeAction: () -> Unit = {}
 ) {
@@ -131,17 +132,17 @@ fun NormalTextField(
                         )
                     )
                 } ,
-                leadingIcon = {
-                    if (leadingIcon != null) {
+                leadingIcon = if (leadingIcon != null) {
+                    {
                         Icon(
                             painter = painterResource(leadingIcon) ,
                             contentDescription = leadingIconLabel ,
                             modifier = Modifier.size(25.dp) ,
                             tint = onBackground
                         )
-                    } else {
-                        null
                     }
+                } else {
+                    null
                 } ,
                 trailingIcon = {
                     if (trailingIcon != null) {
@@ -154,16 +155,16 @@ fun NormalTextField(
                     } else {
                         null
                     }
-                },
+                } ,
                 keyboardOptions = KeyboardOptions(
-                    capitalization =capitalization,
+                    capitalization = capitalization ,
                     keyboardType = keyboardType ,
                     imeAction = imeAction
                 ) ,
                 keyboardActions = KeyboardActions(
                     onAny = {
                         onImeAction()
-                    },
+                    } ,
                 ) ,
                 supportingText = if (supportingText != null) {
                     {
@@ -174,7 +175,7 @@ fun NormalTextField(
                 }
             )
         }
-    }else{
+    } else {
         OutlinedTextField(
             value = value ,
             onValueChange = onValueChange ,

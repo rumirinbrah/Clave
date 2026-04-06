@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zzz.core.ui.theme.ClaveTheme
-import com.zzz.feature.job.home.presentation.JobHomePageRoot
+import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
 @Preview(showBackground = true)
 @Composable
@@ -16,7 +16,9 @@ private fun TempPrev() {
             Modifier.fillMaxSize()
                 .padding(16.dp)
         ){
-//            JobHomePageRoot()
+//            UserAccountPageRoot(
+//                onLogOut = {}
+//            )
         }
     }
 }

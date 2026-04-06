@@ -32,9 +32,13 @@ import placementapp.feature.job.generated.resources.resume
 import placementapp.feature.job.generated.resources.support
 
 @Composable
-fun UserProfilePageRoot(
+fun UserAccountPageRoot(
     modifier: Modifier = Modifier,
-    onLogOut : ()->Unit
+    onLogOut : ()->Unit,
+    editProfile : ()->Unit,
+    editSettings : ()->Unit,
+    editPrefs : ()->Unit,
+    editResume : ()->Unit,
 ){
     val viewModel = koinViewModel<UserProfileViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -51,19 +55,27 @@ fun UserProfilePageRoot(
         }
     }
 
-    UserProfilePage(
-        modifier,
-        state = state,
+    UserAccountPage(
+        modifier ,
+        state = state ,
         onLogOutClick = {
             viewModel.clearTokens()
-        }
+        } ,
+        editProfile = editProfile ,
+        editSettings =  editSettings,
+        editPrefs =  editPrefs,
+        editResume =  editResume,
     )
 }
 @Composable
-private fun UserProfilePage(
+private fun UserAccountPage(
     modifier: Modifier,
     state : UserProfileState,
-    onLogOutClick : ()->Unit
+    onLogOutClick : ()->Unit,
+    editProfile : ()->Unit,
+    editSettings : ()->Unit,
+    editPrefs : ()->Unit,
+    editResume : ()->Unit,
 ){
     Box(
 
@@ -89,25 +101,25 @@ private fun UserProfilePage(
                 ProfileActionCard(
                     icon = Res.drawable.outline_account_circle_24,
                     actionText = "Profile",
-                    onClick = {}
+                    onClick = editProfile
                 )
 
                 ProfileActionCard(
                     icon = Res.drawable.resume,
                     actionText = "Resume",
-                    onClick = {}
+                    onClick = editResume
                 )
 
                 ProfileActionCard(
                     icon = Res.drawable.filter,
                     actionText = "Preferences",
-                    onClick = {}
+                    onClick = editPrefs
                 )
 
                 ProfileActionCard(
                     icon = Res.drawable.gear,
                     actionText = "Settings",
-                    onClick = {}
+                    onClick = editSettings
                 )
             }
 

@@ -31,13 +31,19 @@ sealed class Screen {
     @Serializable
     data object Account : Screen(){
         @Serializable
-        data object Profile
+        data object AccountPage : Screen()
 
         @Serializable
-        data object Preferences
+        data object Profile : Screen()
 
         @Serializable
-        data object Settings
+        data object Preferences : Screen()
+
+        @Serializable
+        data object Settings : Screen()
+
+        @Serializable
+        data object Resume : Screen()
     }
 
 }

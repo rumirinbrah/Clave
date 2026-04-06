@@ -7,6 +7,7 @@ import com.zzz.core.ui.util.ClaveLogger.logE
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
+import com.zzz.data.remote.domain.student.profile.dto.Gender
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,6 +40,17 @@ class UserProfileViewModel(
                 is Result.Error -> {
                     logE{
                         "loadProfileData : ${result.error.errorMsg}"
+                    }
+                    _state.update {
+                        it.copy(
+                            id = "",
+                            name = "Fallback name",
+                            gender = Gender.MALE,
+                            rollNo = "Fallback rollno",
+                            branch = "Fallback branch",
+                            year = "Fallback year",
+                            dob = 9080900,
+                        )
                     }
                 }
                 is Result.Success -> {
