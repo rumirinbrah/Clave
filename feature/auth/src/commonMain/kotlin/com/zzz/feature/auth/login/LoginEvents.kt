@@ -4,5 +4,6 @@ import com.zzz.core.ui.domain.network.UIEvent
 
 sealed interface LoginEvents : UIEvent{
     data object OtpVerification : LoginEvents
+    data object AlreadyLoggedIn : LoginEvents
 
 }

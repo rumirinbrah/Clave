@@ -56,11 +56,16 @@ fun LoginScreen(
 
     LaunchedEffect(events){
         events.collect{event->
+                    println(event)
             when(event){
                 is LoginEvents.OtpVerification -> {
                     logD {
                         "OTP verification req"
                     }
+                }
+                LoginEvents.AlreadyLoggedIn->{
+                    println("ALREADY WALA EVENT")
+                   navToHome()
                 }
                 is UIEvent.Error ->{
                     logD {
@@ -85,48 +90,48 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        VerticalSpace(40.dp)
+//        VerticalSpace(40.dp)
+//
+//        // Logo
+//        Box(
+//            modifier = Modifier
+//                .size(80.dp)
+//                .background(
+//                    MaterialTheme.colorScheme.surface,
+//                    RoundedCornerShape(20.dp)
+//                ),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Text(
+//                text = "C",
+//                fontSize = 36.sp,
+//                fontWeight = FontWeight.Bold,
+//                color = MaterialTheme.colorScheme.primary
+//            )
+//        }
+//
+//        VerticalSpace(16.dp)
+//
+//        Text(
+//            text = "WELCOME TO CLAVE",
+//            style = MaterialTheme.typography.titleLarge,
+//            fontWeight = FontWeight.Bold
+//        )
+//
+//        VerticalSpace(8.dp)
+//
+//        Text(
+//            text = "Using the app as",
+//            style = MaterialTheme.typography.bodyMedium,
+//            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+//        )
+//
+//        VerticalSpace(16.dp)
 
-        // Logo
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .background(
-                    MaterialTheme.colorScheme.surface,
-                    RoundedCornerShape(20.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "C",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-
-        VerticalSpace(16.dp)
-
-        Text(
-            text = "WELCOME TO CLAVE",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-
-        VerticalSpace(8.dp)
-
-        Text(
-            text = "Using the app as",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-        )
-
-        VerticalSpace(16.dp)
-
-        RoleToggle(
-            pagerState = pagerState,
-            tabs = authTabs
-        )
+//        RoleToggle(
+//            pagerState = pagerState,
+//            tabs = authTabs
+//        )
 
         VerticalSpace(24.dp)
 

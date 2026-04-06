@@ -90,51 +90,51 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(
-                        MaterialTheme.colorScheme.surface,
-                        RoundedCornerShape(20.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "C",
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "WELCOME TO CLAVE",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Let's set you up!",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            RoleToggle(
-                pagerState = pagerState,
-                tabs = authTabs
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            VerticalSpace(24.dp)
+//            Spacer(modifier = Modifier.height(40.dp))
+//
+//            Box(
+//                modifier = Modifier
+//                    .size(80.dp)
+//                    .background(
+//                        MaterialTheme.colorScheme.surface,
+//                        RoundedCornerShape(20.dp)
+//                    ),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Text(
+//                    text = "C",
+//                    fontSize = 36.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    color = MaterialTheme.colorScheme.primary
+//                )
+//            }
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            Text(
+//                text = "WELCOME TO CLAVE",
+//                style = MaterialTheme.typography.titleLarge,
+//                fontWeight = FontWeight.Bold
+//            )
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            Text(
+//                text = "Let's set you up!",
+//                style = MaterialTheme.typography.bodyMedium,
+//                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            RoleToggle(
+//                pagerState = pagerState,
+//                tabs = authTabs
+//            )
+//
+//            Spacer(modifier = Modifier.height(24.dp))
+//
+//            VerticalSpace(24.dp)
 
             AnimatedVisibility(uiState.errorMsg != null) {
                 Text(

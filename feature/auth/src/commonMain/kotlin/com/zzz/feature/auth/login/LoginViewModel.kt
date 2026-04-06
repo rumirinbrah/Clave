@@ -24,7 +24,7 @@ data class LoginUiState(
 
 class LoginViewModel(
     private val authSource: AuthSource,
-    private val datastore : RemoteDatastoreSource
+    private val datastore : RemoteDatastoreSource,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -32,6 +32,21 @@ class LoginViewModel(
 
     private val _events = Channel<UIEvent>()
     val events = _events.receiveAsFlow()
+
+    init {
+        checkLogin()
+    }
+    fun checkLogin(){
+        viewModelScope.launch {
+            val access = datastore.getAccessToken()
+            if(access!=null){
+                this@LoginViewModel.logD {
+                    "User already logged in"
+                }
+                _events.send(LoginEvents.AlreadyLoggedIn)
+            }
+        }
+    }
 
     fun onRollNoChange(value: String) {
         _uiState.update {

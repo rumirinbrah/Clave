@@ -205,17 +205,17 @@ fun NormalTextField(
                     )
                 )
             } ,
-            leadingIcon = {
-                if (leadingIcon != null) {
+            leadingIcon = if (leadingIcon != null) {
+                {
                     Icon(
                         painter = painterResource(leadingIcon) ,
                         contentDescription = leadingIconLabel ,
                         modifier = Modifier.size(25.dp) ,
                         tint = onBackground
                     )
-                } else {
-                    null
                 }
+            } else {
+                null
             } ,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType ,

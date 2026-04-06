@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.zzz.feature.auth.AuthRoot
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
 val bottomRoutes = listOf(
@@ -59,12 +60,25 @@ fun Navigation(
         ) {paddingValues ->
             NavHost(
                 navController = navController ,
-                startDestination = Screen.Home,
+                startDestination = Screen.Auth,
                 modifier = Modifier.padding(paddingValues)
                     .padding(16.dp),
             ) {
-                authGraph(navController){
-                    viewModel.navBarVisible(it)
+//                authGraph(navController){
+//                    viewModel.navBarVisible(it)
+//                }
+                composable<Screen.Auth> {
+                    LaunchedEffect(Unit){
+                        viewModel.navBarVisible(false)
+                    }
+                    AuthRoot(
+                        navToHome = {
+                            println("NAV AUTH CB")
+                            navController.navigate(Screen.Home){
+                                navController.popBackStack()
+                            }
+                        }
+                    )
                 }
 
                 homeGraph(navController){
