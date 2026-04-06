@@ -22,12 +22,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zzz.core.ui.presentation.components.ImageComponent
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.data.remote.domain.model.formatted
 
@@ -39,7 +41,7 @@ fun SingleJobItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
 
@@ -51,7 +53,13 @@ fun SingleJobItem(
                     modifier = Modifier
                         .size(40.dp)
                         .background(Color.LightGray, RoundedCornerShape(8.dp))
-                )
+                ){
+                    ImageComponent(
+                        imageUrl = job.companyLogoUrl ?: "",
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(10.dp))
 
@@ -66,7 +74,8 @@ fun SingleJobItem(
                                 style = MaterialTheme.typography.bodyLarge
                             )
                             Text(
-                                job.role, color = Color.DarkGray,
+                                job.role,
+                                color = MaterialTheme.colorScheme.onBackground.copy(0.8f),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }

@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.zzz.feature.auth.AuthRoot
+import com.zzz.feature.job.details.presentation.JobListRoot
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
 val bottomRoutes = listOf(
@@ -86,13 +87,16 @@ fun Navigation(
                 }
 
                 composable<Screen.Jobs> {
-                    Box(
-                        Modifier.fillMaxSize()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
-                    ){
-                        Text("All jobs page")
-                    }
+//                    Box(
+//                        Modifier.fillMaxSize()
+//                            .padding(16.dp),
+//                        contentAlignment = Alignment.Center
+//                    ){
+//                        Text("All jobs page")
+//                    }
+                    JobListRoot(
+                        onApplyClick = {}
+                    )
                 }
                 composable<Screen.Community> {
                     Box(

@@ -19,22 +19,28 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzz.data.remote.domain.model.Job
+import com.zzz.feature.job.details.presentation.viewmodel.JobsPageViewModel
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 val jobList = listOf(dummyJob)
 
 @Composable
 fun JobListRoot(
-    jobs: List<Job> = jobList,
     onApplyClick: (String) -> Unit
 ) {
+    val viewModel = koinViewModel<JobsPageViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { jobTabs.size }
@@ -79,7 +85,7 @@ fun JobListRoot(
             when (jobTabs[page].type) {
 
                 JobTabType.JOBS -> {
-                    JobListPage(jobs, onApplyClick)
+                    JobListPage(state.jobs, onApplyClick)
                 }
 
                 JobTabType.APPLICATIONS -> {
