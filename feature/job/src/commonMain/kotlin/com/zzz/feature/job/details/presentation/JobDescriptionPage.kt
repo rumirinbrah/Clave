@@ -171,7 +171,7 @@ fun JobDescriptionPage(
                                 modifier = Modifier
                                     .padding(end = 8.dp, bottom = 8.dp)
                                     .clip(RoundedCornerShape(50))
-                                    .background(MaterialTheme.colorScheme.background) // 👈 NOT pure white
+                                    .background(MaterialTheme.colorScheme.background)
                                     .border(
                                         width = 1.dp,
                                         color = MaterialTheme.colorScheme.outlineVariant,
@@ -251,7 +251,7 @@ fun SectionContainer(
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant
             )
-            .padding(16.dp) // inner padding
+            .padding(16.dp)
     ) {
 
         Text(
