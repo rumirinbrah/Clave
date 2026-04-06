@@ -20,7 +20,8 @@ import com.zzz.feature.job.home.presentation.viewmodel.JobHomeState
 @Composable
 fun RecentJobsCard(
     modifier: Modifier = Modifier,
-    state : JobHomeState
+    state : JobHomeState,
+    onClick : (String)->Unit
 ) {
     CardContainer(
         modifier.fillMaxWidth() ,
@@ -40,7 +41,8 @@ fun RecentJobsCard(
                 if(state.jobs.isNotEmpty()){
                     state.jobs.onEach {job->
                         RecentJobItem(
-                            job = job
+                            job = job,
+                            onClick = onClick
                         )
                     }
                 }else{

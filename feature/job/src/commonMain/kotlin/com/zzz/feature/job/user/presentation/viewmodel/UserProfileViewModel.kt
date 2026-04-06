@@ -5,20 +5,29 @@ import androidx.lifecycle.viewModelScope
 import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.ui.util.ClaveLogger.logE
 import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
-import com.zzz.data.remote.domain.student.project.ProjectSource
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+sealed interface ProfileEvents{
+    data object LogOut : ProfileEvents
+}
 class UserProfileViewModel(
     //change to profile source
-    private val profileSource: ProfileSource
+    private val profileSource: ProfileSource,
+    private val datastoreSource: RemoteDatastoreSource
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UserProfileState())
     internal val state = _state.asStateFlow()
+
+    private val _events = Channel<ProfileEvents>(capacity = 3)
+    val events = _events.receiveAsFlow()
 
     init {
         loadProfileData()
@@ -50,6 +59,18 @@ class UserProfileViewModel(
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Logout
+     *
+     * @author zyzz
+    */
+    fun clearTokens(){
+        viewModelScope.launch {
+            datastoreSource.clearTokens()
+            _events.send(ProfileEvents.LogOut)
         }
     }
 

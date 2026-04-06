@@ -74,7 +74,7 @@ fun BottomNavBar(
             label = "Home" ,
             onClick = {
                 onRouteChange(Screen.Home)
-                TODO()
+//                TODO()
             } ,
             selected = currentRoute == Screen.Home ,
             modifier = Modifier
@@ -87,7 +87,7 @@ fun BottomNavBar(
             label = "Jobs" ,
             onClick = {
                 onRouteChange(Screen.Jobs)
-                TODO()
+//                TODO()
             } ,
             selected = currentRoute == Screen.Jobs ,
             size = iconSize ,
@@ -101,7 +101,7 @@ fun BottomNavBar(
             label = "Community" ,
             onClick = {
                 onRouteChange(Screen.Community)
-                TODO()
+//                TODO()
             } ,
             selected = currentRoute == Screen.Community ,
             size = iconSize ,
@@ -115,7 +115,7 @@ fun BottomNavBar(
             label = "Account" ,
             onClick = {
                 onRouteChange(Screen.Account)
-                TODO()
+//                TODO()
             } ,
             selected = currentRoute == Screen.Account ,
             size = iconSize ,
@@ -137,7 +137,7 @@ private fun BottomNavItem(
 ) {
     val background = animateColorAsState(
         targetValue = if (selected) {
-            MaterialTheme.colorScheme.surfaceContainer
+            MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surface
         } ,

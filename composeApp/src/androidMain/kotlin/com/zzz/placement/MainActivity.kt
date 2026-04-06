@@ -30,8 +30,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 //            App()
-            JobDescriptionPage() { }
-
 //            TestContainer {
 //                Scaffold(
 //                    Modifier.fillMaxSize()
@@ -45,7 +43,11 @@ class MainActivity : ComponentActivity() {
 //                    }
 //                }
 //            }
-//            Navigation()
+            ClaveTheme(
+
+            ) {
+                Navigation()
+            }
 
         }
     }

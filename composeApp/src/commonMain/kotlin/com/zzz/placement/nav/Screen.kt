@@ -15,7 +15,12 @@ sealed class Screen {
     }
 
     @Serializable
-    data object Home : Screen()
+    data object Home : Screen(){
+        @Serializable
+        data object HomeFeed : Screen()
+        @Serializable
+        data class JobDescription(val jobId : String) : Screen()
+    }
 
     @Serializable
     data object Jobs : Screen()

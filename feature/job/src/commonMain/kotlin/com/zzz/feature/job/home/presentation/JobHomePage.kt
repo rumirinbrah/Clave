@@ -34,20 +34,23 @@ import placementapp.feature.job.generated.resources.gear
 
 @Composable
 fun JobHomePageRoot(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onJobClick: (id: String) -> Unit
 ){
     val viewModel = koinViewModel<JobHomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     JobHomePage(
         modifier,
-        state = state
+        state = state,
+        onJobClick = onJobClick
     )
 }
 @Composable
 private fun JobHomePage(
     modifier: Modifier = Modifier,
-    state : JobHomeState
+    state : JobHomeState,
+    onJobClick : (id : String)->Unit
 ){
     Box(
         Modifier.fillMaxSize()
@@ -108,7 +111,8 @@ private fun JobHomePage(
             VerticalSpace(40.dp)
 
             RecentJobsCard(
-                state = state
+                state = state,
+                onClick = onJobClick
             )
         }
     }

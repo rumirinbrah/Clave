@@ -16,7 +16,7 @@ private fun TempPrev() {
             Modifier.fillMaxSize()
                 .padding(16.dp)
         ){
-            JobHomePageRoot()
+//            JobHomePageRoot()
         }
     }
 }

@@ -42,4 +42,11 @@ class RemoteDatastoreSource(
             }.firstOrNull()
     }
 
+    suspend fun clearTokens(){
+        datastore.edit {
+            it.remove(accessTokenKey)
+            it.remove(refreshTokenKey)
+        }
+    }
+
 }

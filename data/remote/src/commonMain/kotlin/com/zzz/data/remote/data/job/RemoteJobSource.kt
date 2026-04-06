@@ -14,6 +14,7 @@ import com.zzz.data.remote.util.safeNetworkCall
 import com.zzz.data.remote.util.unwrap
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.http.appendPathSegments
 
 class RemoteJobSource(
     private val client : HttpClient
@@ -29,6 +30,20 @@ class RemoteJobSource(
                 it.map { response ->
                     response.toJob()
                 }
+            }
+    }
+
+    override suspend fun getById(id: String): Result<Job , NetworkError> {
+        return safeNetworkCall<ApiResponse<JobResponse>> {
+            val url = constructUrl { "job" }
+            client.get(url) {
+                url{
+                    appendPathSegments(id)
+                }
+            }
+        }.unwrap()
+            .map {
+                it.toJob()
             }
     }
 }

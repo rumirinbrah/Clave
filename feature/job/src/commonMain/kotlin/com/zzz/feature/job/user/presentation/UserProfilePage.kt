@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.feature.job.user.presentation.components.ProfileActionCard
 import com.zzz.feature.job.user.presentation.components.ProfileHeaderCard
+import com.zzz.feature.job.user.presentation.viewmodel.ProfileEvents
 import com.zzz.feature.job.user.presentation.viewmodel.UserProfileState
 import com.zzz.feature.job.user.presentation.viewmodel.UserProfileViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -32,20 +33,37 @@ import placementapp.feature.job.generated.resources.support
 
 @Composable
 fun UserProfilePageRoot(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLogOut : ()->Unit
 ){
     val viewModel = koinViewModel<UserProfileViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val events = viewModel.events
+
+    LaunchedEffect(Unit){
+        events.collect {
+            when(it){
+                ProfileEvents.LogOut -> {
+                    onLogOut()
+                }
+            }
+        }
+    }
+
     UserProfilePage(
         modifier,
-        state = state
+        state = state,
+        onLogOutClick = {
+            viewModel.clearTokens()
+        }
     )
 }
 @Composable
 private fun UserProfilePage(
     modifier: Modifier,
-    state : UserProfileState
+    state : UserProfileState,
+    onLogOutClick : ()->Unit
 ){
     Box(
 
@@ -117,7 +135,9 @@ private fun UserProfilePage(
                 ProfileActionCard(
                     icon = Res.drawable.logout ,
                     actionText = "Log out" ,
-                    onClick = {}
+                    onClick = {
+                        onLogOutClick()
+                    }
                 )
             }
         }

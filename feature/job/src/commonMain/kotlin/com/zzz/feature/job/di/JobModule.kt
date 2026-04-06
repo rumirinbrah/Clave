@@ -10,7 +10,8 @@ import org.koin.dsl.module
 val jobModule = module {
     viewModel {
         UserProfileViewModel(
-            profileSource = get()
+            profileSource = get(),
+            datastoreSource = get()
         )
     }
     viewModel {
@@ -25,6 +26,8 @@ val jobModule = module {
         )
     }
     viewModel{
-        JobDescriptionViewModel()
+        JobDescriptionViewModel(
+            jobSource = get()
+        )
     }
 }

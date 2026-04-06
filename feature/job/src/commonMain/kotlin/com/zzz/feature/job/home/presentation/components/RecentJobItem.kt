@@ -1,6 +1,7 @@
 package com.zzz.feature.job.home.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,10 +29,18 @@ import placementapp.feature.job.generated.resources.heart
 @Composable
 fun RecentJobItem(
     modifier: Modifier = Modifier,
-    job: Job
+    job: Job,
+    onClick : (String)->Unit
 ){
     CardContainer(
-        modifier.fillMaxWidth(),
+        modifier.fillMaxWidth()
+            .clickable(
+                indication = null,
+                interactionSource = null,
+                onClick = {
+                    onClick(job.id)
+                }
+            ),
         padding = 16.dp,
     ) {
         Row(
