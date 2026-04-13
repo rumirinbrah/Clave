@@ -8,6 +8,7 @@ import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
 import com.zzz.data.remote.domain.student.profile.dto.Gender
+import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,11 +36,33 @@ class UserProfileViewModel(
     }
     fun loadProfileData(){
         viewModelScope.launch {
+            val username = datastoreSource.getUsername()
+            if(username!=null){
+                logD {
+                    "loadProfileData : cache avaialble"
+                }
+                val rollNo = datastoreSource.getRollNo()
+                val branch = datastoreSource.getBranch()
+
+                _state.update {
+                    it.copy(
+                        name = username,
+                        gender = Gender.MALE,
+                        rollNo = rollNo ?: "Fallback rollno",
+                        branch = branch ?: "Fallback branch",
+                        year = "Fallback year",
+                        dob = 9080900,
+                    )
+                }
+                return@launch
+            }
+
             val result = profileSource.get()
             when(result){
                 is Result.Error -> {
+                    val uiError = result.error.toUIError()
                     logE{
-                        "loadProfileData : ${result.error.errorMsg}"
+                        "loadProfileData : $uiError"
                     }
                     _state.update {
                         it.copy(

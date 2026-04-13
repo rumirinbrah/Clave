@@ -18,4 +18,6 @@ object ApiRoutes {
     const val PROFILE_SOCIALS = "/social-links"
     const val PROFILE_RESUME = "/resumes"
     const val PROFILE_RESUME_EMBEDDED = "/resumes/embedded"
+
+    const val APPLY_JOB = "/job/apply"
 }

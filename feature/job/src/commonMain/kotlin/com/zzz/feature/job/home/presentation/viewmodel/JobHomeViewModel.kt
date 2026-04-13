@@ -6,8 +6,10 @@ import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.ui.util.ClaveLogger.logE
 import com.zzz.core.ui.util.ClaveLogger.logI
 import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.job.JobSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
+import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class JobHomeViewModel(
     private val profileSource: ProfileSource,
-    private val jobSource : JobSource
+    private val jobSource : JobSource,
+    private val prefs : RemoteDatastoreSource
 )  : ViewModel(){
 
     private val _state = MutableStateFlow(JobHomeState())
@@ -32,6 +35,20 @@ class JobHomeViewModel(
     private fun getProfile(){
         viewModelScope.launch {
             //TODO(Add caching logic)
+            //try to get cached data
+            val username = prefs.getUsername()
+            if(username!=null){
+                this@JobHomeViewModel.logD {
+                    "getProfile : cached data available"
+                }
+                _state.update {
+                    it.copy(
+                        name = username
+                    )
+                }
+                return@launch
+            }
+
             val result = profileSource.get()
             when(result){
                 is Result.Error -> {
@@ -45,6 +62,7 @@ class JobHomeViewModel(
                     }
                 }
                 is Result.Success -> {
+                    //save to cache
                     val data = result.data
                     logD {
                         "getProfile : Success $data"
@@ -53,6 +71,12 @@ class JobHomeViewModel(
                         it.copy(
                             name = data.name
                         )
+                    }
+                    prefs.setBranch(data.branch)
+                    prefs.setUsername(data.name)
+                    prefs.setRollNo(data.rollNumber)
+                    logD {
+                        "getProfile : cached!"
                     }
                 }
             }
@@ -67,8 +91,9 @@ class JobHomeViewModel(
             val result = jobSource.getJobs()
             when(result){
                 is Result.Error -> {
+                    val uiError = result.error.toUIError()
                     logE {
-                        "getFeedJobs : Error ${result.error.errorMsg}"
+                        "getFeedJobs : Error $uiError}"
                     }
                 }
                 is Result.Success -> {

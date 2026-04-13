@@ -3,10 +3,12 @@ package com.zzz.feature.job.details.presentation
 //import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +23,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,13 +33,16 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.data.remote.domain.model.EmploymentType
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.data.remote.domain.model.JobStatus
 import com.zzz.feature.job.details.presentation.components.JobHeader
+import io.ktor.util.valuesOf
 import org.koin.compose.viewmodel.koinViewModel
 
 val dummyJob = Job(
@@ -86,15 +92,35 @@ fun JobDescriptionRoot(
 ) {
     val viewModel : JobDescriptionViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val events = viewModel.events
+
+    val uriHandler = LocalUriHandler.current
+
 
     LaunchedEffect(Unit){
         jobId?.let {
             viewModel.getJobById(it)
         }
     }
+    LaunchedEffect(Unit){
+        events.collect {event->
+            when(event){
+                is JobDetailEvents.OpenJobLink -> {
+                    uriHandler.openUri(event.url)
+                }
+            }
+        }
+    }
+
     JobDescriptionPage(
         state = state,
-        onBack = onBack
+        onBack = onBack,
+        onApply = {
+            viewModel.openJobLink()
+        },
+        onDidYouApply = {
+            viewModel.onDidYouApply(it)
+        }
     )
 
 }
@@ -106,6 +132,8 @@ fun JobDescriptionPage(
     jobPost: Job = dummyJob,
     state : JobDetailState,
     onBack : ()->Unit,
+    onApply : ()->Unit,
+    onDidYouApply : (applied : Boolean)->Unit,
 ) {
 //    BackHandler {
 //        onBack()
@@ -121,26 +149,58 @@ fun JobDescriptionPage(
             BottomAppBar(
                 containerColor = Color.Transparent
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = { },
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(52.dp),
-                        shape = RoundedCornerShape(14.dp)
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "Apply Now",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Button(
+                            onClick = {
+                                onApply()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(52.dp),
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text(
+                                text = "Apply Now",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    if(state.showDidYouApply){
+                        VerticalSpace()
+                        Row (
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ){
+                            TextButton(
+                                onClick = {
+                                    onDidYouApply(true)
+                                }
+                            ){
+                                Text(
+                                    "Yes"
+                                )
+                            }
+                            TextButton(
+                                onClick = {
+                                    onDidYouApply(false)
+                                }
+                            ){
+                                Text(
+                                    "No"
+                                )
+                            }
+                        }
                     }
                 }
+
             }
         }
     ) { paddingValues ->
