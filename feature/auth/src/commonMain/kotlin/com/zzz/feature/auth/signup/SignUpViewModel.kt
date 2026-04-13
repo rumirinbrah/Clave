@@ -13,14 +13,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.domain.toUIError
 import com.zzz.feature.auth.login.LoginEvents
 
 data class SignupUiState(
-    val rollNo: String = "",
-    val mobileNo: String = "",
-    val password: String = "",
-    val isAdmin: Boolean = false,
-    val errorMsg: String? = null,
+    val rollNo: String = "" ,
+    val mobileNo: String = "" ,
+    val password: String = "" ,
+    val isAdmin: Boolean = false ,
+    val errorMsg: String? = null ,
     val isLoading: Boolean = false
 )
 
@@ -54,6 +55,7 @@ class SignupViewModel(
     fun createAccount() {
         viewModelScope.launch {
 
+            TODO("Add email field instead of phone")
             val values = _uiState.value
 
             // Validation
@@ -68,28 +70,28 @@ class SignupViewModel(
 
             _uiState.update {
                 it.copy(
-                    isLoading = true,
+                    isLoading = true ,
                     errorMsg = null
                 )
             }
 
             val request = CreateAccountRequest(
-                rollNumber = values.rollNo,
-                phoneNumber = values.mobileNo,
-                password = values.password,
+                rollNumber = values.rollNo ,
+                email = TODO() ,
+                password = values.password ,
                 isAdmin = values.isAdmin
             )
 
             when (val result = authSource.createAccount(request)) {
 
                 is Result.Error -> {
-                    val error = result.error.errorMsg
+                    val error = result.error.toUIError()
 
                     logD { "FULL RESULT = $result" }
 
                     _uiState.update {
                         it.copy(
-                            errorMsg = error,
+                            errorMsg = error ,
                             isLoading = false
                         )
                     }
@@ -98,32 +100,46 @@ class SignupViewModel(
                 }
 
                 is Result.Success -> {
-                    val data = result.data
+                    //on success, simply navigate to OTP page
+//                    val data = result.data
 
-                    if (data.successful) {
-                        logD {
-                            "login : Success ${result.data}"
-                        }
-                        _uiState.update {
-                            it.copy(isLoading = false)
-                        }
-
-                        _events.send(LoginEvents.OtpVerification)
-
-                    } else {
-                        val error = data.errorMessage ?: "Something went wrong"
-
-                        _uiState.update {
-                            it.copy(
-                                errorMsg = error,
-                                isLoading = false
-                            )
-                        }
-
-                        _events.send(UIEvent.Error(error))
+                    _uiState.update {
+                        it.copy(isLoading = false)
                     }
+
+                    _events.send(LoginEvents.OtpVerification)
+//                    if (data.successful) {
+//                        logD {
+//                            "login : Success ${result.data}"
+//                        }
+//                        _uiState.update {
+//                            it.copy(isLoading = false)
+//                        }
+//
+//                        _events.send(LoginEvents.OtpVerification)
+//
+//                    } else {
+//                        val error = data.errorMessage ?: "Something went wrong"
+//
+//                        _uiState.update {
+//                            it.copy(
+//                                errorMsg = error,
+//                                isLoading = false
+//                            )
+//                        }
+//
+//                        _events.send(UIEvent.Error(error))
+//                    }
                 }
             }
         }
+    }
+
+    fun verifyOtp(){
+        TODO()
+    }
+
+    fun resendOtp(){
+        TODO()
     }
 }

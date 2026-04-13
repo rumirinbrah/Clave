@@ -6,8 +6,10 @@ import com.zzz.core.ui.domain.network.UIEvent
 import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
+import com.zzz.data.remote.domain.NetworkError
 import com.zzz.data.remote.domain.auth.AuthSource
 import com.zzz.data.remote.domain.auth.dto.LoginRequest
+import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,15 +18,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class LoginUiState(
-    val rollNo: String = "",
-    val mobileNo: String = "",
-    val password : String = "",
-    val errorMsg : String? = null
+    val rollNo: String = "" ,
+    val mobileNo: String = "" ,
+    val password: String = "" ,
+    val errorMsg: String? = null
 )
 
 class LoginViewModel(
-    private val authSource: AuthSource,
-    private val datastore : RemoteDatastoreSource,
+    private val authSource: AuthSource ,
+    private val datastore: RemoteDatastoreSource ,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -36,10 +38,11 @@ class LoginViewModel(
     init {
         checkLogin()
     }
-    fun checkLogin(){
+
+    fun checkLogin() {
         viewModelScope.launch {
             val access = datastore.getAccessToken()
-            if(access!=null){
+            if (access != null) {
                 this@LoginViewModel.logD {
                     "User already logged in"
                 }
@@ -66,48 +69,55 @@ class LoginViewModel(
         }
     }
 
-    fun simulateSuccessLogin(){
+    fun simulateSuccessLogin() {
 
     }
-    fun login(){
+
+    fun login() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(errorMsg = null)
             }
 
             val values = _uiState.value
+
             val request = LoginRequest(
-                rollNumber =  values.rollNo,
-                phoneNumber =  values.mobileNo,
+                rollNumber = values.rollNo ,
+                email = TODO("Add email feild in UI") ,
                 password = values.password
             )
-            when(val result = authSource.login(request)){
+
+            when (val result = authSource.login(request)) {
                 is Result.Error -> {
+                    val uiError = result.error.toUIError()
                     logD {
-                        "login : Error ${result.error.errorMsg}"
+                        "login : Error $uiError"
+                    }
+                    if (result.error is NetworkError.Unauthorized) {
+                        _events.send(LoginEvents.OtpVerification)
+                    } else {
+                        _events.send(UIEvent.Error(uiError))
                     }
                     _uiState.update {
-                        it.copy(errorMsg = result.error.errorMsg)
+                        it.copy(errorMsg = uiError)
                     }
-                    _events.send(UIEvent.Error(result.error.errorMsg))
                 }
+
                 is Result.Success -> {
                     logD {
                         "login : Success ${result.data}"
                     }
                     val data = result.data
-                    if(data.verificationRequired){
-                        _events.send(LoginEvents.OtpVerification)
-                    }else{
-                        //save tokens
-                        data.tokenPair?.let {
-                            datastore.saveTokens(
-                                access = it.accessToken,
-                                refresh = it.refreshToken
-                            )
-                        }
-                        _events.send(UIEvent.Success)
+
+                    //save tokens
+                    data.tokenPair?.let {
+                        datastore.saveTokens(
+                            access = it.accessToken ,
+                            refresh = it.refreshToken
+                        )
                     }
+                    _events.send(UIEvent.Success)
+
                 }
             }
         }

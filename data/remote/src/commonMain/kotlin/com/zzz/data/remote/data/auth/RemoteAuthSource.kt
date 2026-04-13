@@ -10,6 +10,9 @@ import com.zzz.data.remote.domain.auth.dto.CreateAccountResponse
 import com.zzz.data.remote.domain.auth.dto.LoginRequest
 import com.zzz.data.remote.domain.auth.dto.LoginResponse
 import com.zzz.data.remote.domain.auth.dto.RefreshTokenRequest
+import com.zzz.data.remote.domain.auth.dto.ResendOtpRequest
+import com.zzz.data.remote.domain.auth.dto.ResendOtpResponse
+import com.zzz.data.remote.domain.auth.dto.VerifyOtpRequest
 import com.zzz.data.remote.domain.model.TokenPair
 import com.zzz.data.remote.util.ApiRoutes
 import com.zzz.data.remote.util.constructUrl
@@ -30,8 +33,8 @@ internal class RemoteAuthSource(
     private val client : HttpClient
 ) : AuthSource{
 
-    override suspend fun createAccount(request: CreateAccountRequest): Result<CreateAccountResponse , NetworkError> {
-        val result = safeNetworkCall<ApiResponse<CreateAccountResponse>> {
+    override suspend fun createAccount(request: CreateAccountRequest): Result<Unit , NetworkError> {
+        val result = safeNetworkCall<ApiResponse<Unit>> {
             val url = constructUrl { ApiRoutes.AUTH_BASE + ApiRoutes.AUTH_CREATE }
             client.post(url) {
                 contentType(ContentType.Application.Json)
@@ -55,6 +58,26 @@ internal class RemoteAuthSource(
 //        println(mapped)
 
         return result.unwrap()
+    }
+
+    override suspend fun verifyOtp(request: VerifyOtpRequest): Result<Unit , NetworkError> {
+        return safeNetworkCall<ApiResponse<Unit>> {
+            val url = constructUrl { ApiRoutes.AUTH_BASE+ApiRoutes.AUTH_VERIFY_OTP }
+            client.post(url) {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+        }.unwrap()
+    }
+
+    override suspend fun resendOtp(request: ResendOtpRequest): Result<ResendOtpResponse , NetworkError> {
+        return safeNetworkCall<ApiResponse<ResendOtpResponse>> {
+            val url = constructUrl { ApiRoutes.AUTH_BASE+ApiRoutes.AUTH_RESEND_OTP }
+            client.post(url) {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+        }.unwrap()
     }
 
     override suspend fun refreshToken(request: RefreshTokenRequest): Result<TokenPair , NetworkError> {

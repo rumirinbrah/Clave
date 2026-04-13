@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateAccountRequest(
     val rollNumber : String,
-    val phoneNumber : String,
+    val email : String,
     val password : String,
     val isAdmin : Boolean = false
 )

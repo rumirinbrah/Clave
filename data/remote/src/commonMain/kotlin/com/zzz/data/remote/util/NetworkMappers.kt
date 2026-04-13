@@ -58,7 +58,11 @@ inline fun <T> Result<ApiResponse<T> , NetworkError>.unwrap() : Result<T, Networ
         }
         is Result.Success -> {
             if(this.data.status){
-                Result.Success(this.data.data!!)
+                if(data.data!=null){
+                    Result.Success(data.data!!)
+                }else{
+                    Result.Success(data = Unit as T)
+                }
             }else{
                 Result.Error(NetworkError.CustomError(data.error))
             }

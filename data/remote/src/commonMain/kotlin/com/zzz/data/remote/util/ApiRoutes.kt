@@ -6,6 +6,8 @@ object ApiRoutes {
     const val AUTH_BASE = "/auth"
     const val AUTH_CREATE = "/create"
     const val AUTH_LOGIN = "/login"
+    const val AUTH_VERIFY_OTP = "/verify-otp"
+    const val AUTH_RESEND_OTP = "/resend-otp"
     const val AUTH_REFRESH_TOKEN = "/refresh"
 
     const val PROFILE_BASE = "/profile"

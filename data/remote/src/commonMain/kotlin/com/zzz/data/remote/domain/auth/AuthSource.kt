@@ -8,6 +8,9 @@ import com.zzz.data.remote.domain.auth.dto.CreateAccountResponse
 import com.zzz.data.remote.domain.auth.dto.LoginRequest
 import com.zzz.data.remote.domain.auth.dto.LoginResponse
 import com.zzz.data.remote.domain.auth.dto.RefreshTokenRequest
+import com.zzz.data.remote.domain.auth.dto.ResendOtpRequest
+import com.zzz.data.remote.domain.auth.dto.ResendOtpResponse
+import com.zzz.data.remote.domain.auth.dto.VerifyOtpRequest
 import com.zzz.data.remote.domain.model.TokenPair
 
 
@@ -16,7 +19,20 @@ import com.zzz.data.remote.domain.model.TokenPair
 */
 interface AuthSource {
 
-    suspend fun createAccount(request: CreateAccountRequest) : Result<CreateAccountResponse, NetworkError>
+    suspend fun createAccount(request: CreateAccountRequest) : Result<Unit, NetworkError>
+
+    /**
+     * 2 min expiry
+     * @author zyzz
+    */
+    suspend fun verifyOtp(request : VerifyOtpRequest) : Result<Unit, NetworkError>
+
+    /**
+     * 30 sec cooldown
+     *
+     * @author zyzz
+    */
+    suspend fun resendOtp(request : ResendOtpRequest) : Result<ResendOtpResponse, NetworkError>
 
     suspend fun login(request : LoginRequest) : Result<LoginResponse , NetworkError>
 

@@ -72,6 +72,7 @@ object HttpClientFactory {
                         val accessToken = tokenSource.getAccessToken() ?: run {
                             return@loadTokens null
                         }
+
                         val refreshToken = tokenSource.getRefreshToken() ?: run {
                             return@loadTokens null
                         }
