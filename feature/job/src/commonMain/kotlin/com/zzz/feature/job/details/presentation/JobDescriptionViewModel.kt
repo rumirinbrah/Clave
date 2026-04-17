@@ -7,6 +7,7 @@ import com.zzz.core.ui.util.ClaveLogger.logE
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.domain.job.JobSource
 import com.zzz.data.remote.domain.model.Job
+import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +37,7 @@ class JobDescriptionViewModel(
             when(result){
                 is Result.Error -> {
                     this@JobDescriptionViewModel.logE {
-                        "getJobById : ${result.error.errorMsg}"
+                        "getJobById : ${result.error.toUIError()}"
                     }
                     _state.update {
                         it.copy(

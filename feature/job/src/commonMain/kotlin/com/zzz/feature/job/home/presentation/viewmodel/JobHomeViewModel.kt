@@ -8,6 +8,7 @@ import com.zzz.core.ui.util.ClaveLogger.logI
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.domain.job.JobSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
+import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -68,7 +69,7 @@ class JobHomeViewModel(
             when(result){
                 is Result.Error -> {
                     logE {
-                        "getFeedJobs : Error ${result.error.errorMsg}"
+                        "getFeedJobs : Error ${result.error.toUIError()}"
                     }
                 }
                 is Result.Success -> {

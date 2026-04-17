@@ -8,6 +8,7 @@ import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
 import com.zzz.data.remote.domain.student.profile.dto.Gender
+import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +40,7 @@ class UserProfileViewModel(
             when(result){
                 is Result.Error -> {
                     logE{
-                        "loadProfileData : ${result.error.errorMsg}"
+                        "loadProfileData : ${result.error.toUIError()}"
                     }
                     _state.update {
                         it.copy(

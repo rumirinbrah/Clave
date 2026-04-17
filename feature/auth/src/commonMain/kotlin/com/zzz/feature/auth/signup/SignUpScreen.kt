@@ -44,6 +44,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SignUpScreen(
     onLoginClick: () -> Unit,
+    onNavigateToOtp: (String) -> Unit,
     viewModel: SignupViewModel = koinViewModel()
 ) {
 
@@ -65,6 +66,7 @@ fun SignUpScreen(
                     logD {
                         "OTP verification req"
                     }
+                    onNavigateToOtp(event.email)
                 }
                 is UIEvent.Error ->{
                     logD {
@@ -165,8 +167,8 @@ fun SignUpScreen(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             NormalTextField(
-                                value = uiState.mobileNo,
-                                onValueChange = { viewModel.onMobileNoChange(it) },
+                                value = uiState.email,
+                                onValueChange = { viewModel.onEmailChange(it) },
                                 placeholder = "Enter your Mobile no"
                             )
 
@@ -187,9 +189,9 @@ fun SignUpScreen(
                         ) {
 
                             NormalTextField(
-                                value = uiState.mobileNo,
-                                onValueChange = { viewModel.onMobileNoChange(it) },
-                                placeholder = "Enter your Mobile no"
+                                value = uiState.email,
+                                onValueChange = { viewModel.onEmailChange(it) },
+                                placeholder = "Enter your Email"
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))

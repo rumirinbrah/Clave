@@ -12,6 +12,9 @@ sealed class Screen {
 
         @Serializable
         data object SignUp : Screen()
+
+        @Serializable
+        data class VerifyOtp(val email: String) : Screen()
     }
 
     @Serializable

@@ -78,6 +78,9 @@ fun Navigation(
                             navController.navigate(Screen.Home){
                                 navController.popBackStack()
                             }
+                        },
+                        navToOtp = { email->
+                            navController.navigate(Screen.Auth.VerifyOtp(email))
                         }
                     )
                 }

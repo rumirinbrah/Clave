@@ -14,11 +14,12 @@ import kotlinx.coroutines.launch
 import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.domain.toUIError
+import com.zzz.feature.auth.isValidEmail
 import com.zzz.feature.auth.login.LoginEvents
 
 data class SignupUiState(
     val rollNo: String = "" ,
-    val mobileNo: String = "" ,
+    val email: String = "" ,
     val password: String = "" ,
     val isAdmin: Boolean = false ,
     val errorMsg: String? = null ,
@@ -40,8 +41,8 @@ class SignupViewModel(
         _uiState.update { it.copy(rollNo = value) }
     }
 
-    fun onMobileNoChange(value: String) {
-        _uiState.update { it.copy(mobileNo = value) }
+    fun onEmailChange(value: String) {
+        _uiState.update { it.copy(email = value) }
     }
 
     fun onPwdChange(value: String) {
@@ -55,12 +56,11 @@ class SignupViewModel(
     fun createAccount() {
         viewModelScope.launch {
 
-            TODO("Add email field instead of phone")
             val values = _uiState.value
 
             // Validation
             if (values.rollNo.isBlank() ||
-                values.mobileNo.length != 10
+                !isValidEmail(values.email)
             ) {
                 val error = "Please enter valid details"
                 _uiState.update { it.copy(errorMsg = error) }
@@ -77,7 +77,7 @@ class SignupViewModel(
 
             val request = CreateAccountRequest(
                 rollNumber = values.rollNo ,
-                email = TODO() ,
+                email = values.email ,
                 password = values.password ,
                 isAdmin = values.isAdmin
             )
@@ -107,7 +107,9 @@ class SignupViewModel(
                         it.copy(isLoading = false)
                     }
 
-                    _events.send(LoginEvents.OtpVerification)
+                    _events.send(
+                        LoginEvents.OtpVerification(values.email)
+                    )
 //                    if (data.successful) {
 //                        logD {
 //                            "login : Success ${result.data}"
