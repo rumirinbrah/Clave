@@ -23,12 +23,14 @@ val jobModule = module {
     viewModel{
         JobHomeViewModel(
             profileSource = get(),
-            jobSource = get()
+            jobSource = get(),
+            prefs = get()
         )
     }
     viewModel{
         JobDescriptionViewModel(
-            jobSource = get()
+            jobSource = get(),
+            jobApplicationSource = get()
         )
     }
     viewModel{

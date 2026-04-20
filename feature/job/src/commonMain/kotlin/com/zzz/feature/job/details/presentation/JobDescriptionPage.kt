@@ -42,7 +42,7 @@ import com.zzz.data.remote.domain.model.EmploymentType
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.data.remote.domain.model.JobStatus
 import com.zzz.feature.job.details.presentation.components.JobHeader
-import io.ktor.util.valuesOf
+//import io.ktor.util.valuesOf
 import org.koin.compose.viewmodel.koinViewModel
 
 val dummyJob = Job(
