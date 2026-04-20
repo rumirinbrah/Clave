@@ -165,9 +165,9 @@ fun LoginScreen(
 
 
                         NormalTextField(
-                            value = uiState.mobileNo,
-                            onValueChange = { viewModel.onMobileNoChange(it) },
-                            placeholder = "Enter your Mobile no"
+                            value = uiState.email,
+                            onValueChange = { viewModel.onEmailChange(it) },
+                            placeholder = "Enter your Email"
                         )
 
                         NormalTextField(
@@ -191,9 +191,9 @@ fun LoginScreen(
                         VerticalSpace(16.dp)
 
                         NormalTextField(
-                            value = uiState.mobileNo,
-                            onValueChange = { viewModel.onMobileNoChange(it) },
-                            placeholder = "Enter your Mobile no"
+                            value = uiState.email,
+                            onValueChange = { viewModel.onEmailChange(it) },
+                            placeholder = "Enter your Email"
                         )
                     }
                 }

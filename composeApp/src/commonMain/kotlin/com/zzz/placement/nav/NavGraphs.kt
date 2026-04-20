@@ -13,6 +13,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.zzz.feature.auth.otp.VerifyOtpScreen
 import com.zzz.feature.auth.login.LoginScreen
 import com.zzz.feature.auth.signup.SignUpScreen
 import com.zzz.feature.job.details.presentation.JobDescriptionRoot
@@ -56,6 +57,27 @@ fun NavGraphBuilder.authGraph(
                 onLoginClick = {
                     navController.navigate(Screen.Auth.LogIn){
                         navController.popBackStack()
+                    }
+                },
+                onNavigateToOtp = { email->
+                    navController.navigate(Screen.Auth.VerifyOtp(email))
+                }
+            )
+        }
+
+        composable<Screen.Auth.VerifyOtp> { backStack ->
+
+            LaunchedEffect(Unit) {
+                navBarVisibilityChange(false)
+            }
+
+            val route = backStack.toRoute<Screen.Auth.VerifyOtp>()
+
+            VerifyOtpScreen(
+                email = route.email,
+                onOtpVerified = {
+                    navController.navigate(Screen.Auth.LogIn) {
+                        popUpTo(Screen.Auth) { inclusive = true }
                     }
                 }
             )

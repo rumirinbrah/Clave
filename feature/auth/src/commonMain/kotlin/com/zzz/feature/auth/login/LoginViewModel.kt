@@ -10,6 +10,7 @@ import com.zzz.data.remote.domain.NetworkError
 import com.zzz.data.remote.domain.auth.AuthSource
 import com.zzz.data.remote.domain.auth.dto.LoginRequest
 import com.zzz.data.remote.domain.toUIError
+import com.zzz.feature.auth.isValidEmail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 
 data class LoginUiState(
     val rollNo: String = "" ,
+    val email: String = "",
     val mobileNo: String = "" ,
     val password: String = "" ,
     val errorMsg: String? = null
@@ -57,15 +59,15 @@ class LoginViewModel(
         }
     }
 
-    fun onMobileNoChange(value: String) {
-        _uiState.update {
-            it.copy(mobileNo = value)
-        }
-    }
-
     fun onPwdChange(value: String) {
         _uiState.update {
             it.copy(password = value)
+        }
+    }
+
+    fun onEmailChange(value: String) {
+        _uiState.update {
+            it.copy(email = value)
         }
     }
 
@@ -75,15 +77,26 @@ class LoginViewModel(
 
     fun login() {
         viewModelScope.launch {
+
+            val values = _uiState.value
+            val email = values.email
+
+            if (values.rollNo.isBlank() ||
+                !isValidEmail(values.email)
+            ) {
+                val error = "Please enter valid details"
+                _uiState.update { it.copy(errorMsg = error) }
+                _events.send(UIEvent.Error(error))
+                return@launch
+            }
+
             _uiState.update {
                 it.copy(errorMsg = null)
             }
 
-            val values = _uiState.value
-
             val request = LoginRequest(
                 rollNumber = values.rollNo ,
-                email = TODO("Add email feild in UI") ,
+                email = values.email ,
                 password = values.password
             )
 
@@ -94,7 +107,7 @@ class LoginViewModel(
                         "login : Error $uiError"
                     }
                     if (result.error is NetworkError.Unauthorized) {
-                        _events.send(LoginEvents.OtpVerification)
+                        _events.send(LoginEvents.OtpVerification(email))
                     } else {
                         _events.send(UIEvent.Error(uiError))
                     }

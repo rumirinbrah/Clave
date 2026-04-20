@@ -32,10 +32,12 @@ import kotlinx.coroutines.launch
 fun AuthRoot(
     modifier: Modifier = Modifier,
     navToHome : ()->Unit,
+    navToOtp: (String) -> Unit
 ){
     AuthPage(
         modifier,
-        navToHome = navToHome
+        navToHome = navToHome,
+        navToOtp = navToOtp
     )
 }
 val authPagerTabs = listOf(
@@ -46,6 +48,7 @@ val authPagerTabs = listOf(
 private fun AuthPage(
     modifier: Modifier = Modifier,
     navToHome : ()->Unit,
+    navToOtp: (String) -> Unit
 ){
     val pagerState = rememberPagerState { authTabs.size }
     val scope = rememberCoroutineScope()
@@ -121,7 +124,8 @@ private fun AuthPage(
                             scope.launch {
                                 pagerState.animateScrollToPage(0)
                             }
-                        }
+                        },
+                        onNavigateToOtp = navToOtp
                     )
                 }
             }
