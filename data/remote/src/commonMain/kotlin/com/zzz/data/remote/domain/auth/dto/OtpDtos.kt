@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class VerifyOtpRequest(
-    val email : String,
+    val userId: String,
     val otp : String
 )
 
 @Serializable
 data class ResendOtpRequest(
-    val email : String
+    val userId : String
 )
 /**
  * @param message Whether resent or not

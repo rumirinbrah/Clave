@@ -18,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.zzz.feature.auth.AuthRoot
 import com.zzz.feature.job.details.presentation.JobListRoot
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
@@ -68,22 +67,22 @@ fun Navigation(
 //                authGraph(navController){
 //                    viewModel.navBarVisible(it)
 //                }
-                composable<Screen.Auth> {
-                    LaunchedEffect(Unit){
-                        viewModel.navBarVisible(false)
-                    }
-                    AuthRoot(
-                        navToHome = {
-                            println("NAV AUTH CB")
-                            navController.navigate(Screen.Home){
-                                navController.popBackStack()
-                            }
-                        },
-                        navToOtp = { email->
-                            navController.navigate(Screen.Auth.VerifyOtp(email))
-                        }
-                    )
-                }
+//                composable<Screen.Auth> {
+//                    LaunchedEffect(Unit){
+//                        viewModel.navBarVisible(false)
+//                    }
+//                    AuthRoot(
+//                        navToHome = {
+//                            println("NAV AUTH CB")
+//                            navController.navigate(Screen.Home){
+//                                navController.popBackStack()
+//                            }
+//                        },
+//                        navToOtp = { userId->
+//                            navController.navigate(Screen.Auth.VerifyOtp(userId))
+//                        }
+//                    )
+//                }
 
                 homeGraph(navController){
                     viewModel.navBarVisible(it)

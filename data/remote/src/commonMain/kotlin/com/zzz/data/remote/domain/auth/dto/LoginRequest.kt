@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 */
 @Serializable
 data class LoginRequest(
-    val rollNumber : String,
     val email : String,
     val password : String,
 )

@@ -1,5 +1,6 @@
 package com.zzz.feature.auth.otp
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -40,12 +43,16 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun VerifyOtpScreen(
-    email: String,
+    userId: String,
     viewModel: OtpViewModel = koinViewModel(),
     onOtpVerified: () -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(userId) {
+        viewModel.setUserId(userId)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -77,13 +84,23 @@ fun VerifyOtpScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Enter the code sent to\n$email",
+            text = "Enter the code sent to your registered email",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(0.6f),
             textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(32.dp))
+
+        AnimatedVisibility(uiState.errorMsg != null) {
+            Text(
+                text = uiState.errorMsg ?: "",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         OtpInputField(
             otp = uiState.otp,
@@ -94,7 +111,7 @@ fun VerifyOtpScreen(
 
         Button(
             onClick = {
-                viewModel.verifyOtp(email)
+                viewModel.verifyOtp()
             },
             enabled = uiState.otp.length == 6,
             modifier = Modifier
@@ -112,14 +129,14 @@ fun VerifyOtpScreen(
                 text = "Didn’t receive code? ",
                 color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
             )
-            Text(
-                text = "Resend",
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.clickable {
-                    viewModel.resendOtp(email)
-                }
-            )
+//            Text(
+//                text = "Resend",
+//                color = MaterialTheme.colorScheme.primary,
+//                fontWeight = FontWeight.SemiBold,
+//                modifier = Modifier.clickable {
+//                    viewModel.resendOtp()
+//                }
+//            )
 
             Text(
                 text = if (uiState.resendEnabled) {
@@ -135,9 +152,20 @@ fun VerifyOtpScreen(
                 modifier = Modifier.clickable(
                     enabled = uiState.resendEnabled
                 ) {
-                    viewModel.resendOtp(email)
+                    viewModel.resendOtp()
                 }
             )
+        }
+
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
@@ -172,7 +200,7 @@ fun OtpInputField(
     }
 
     Row(
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         repeat(6) { index ->
 

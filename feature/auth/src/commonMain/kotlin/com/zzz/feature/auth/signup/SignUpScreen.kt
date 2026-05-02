@@ -33,9 +33,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzz.core.ui.domain.network.UIEvent
+import com.zzz.core.ui.presentation.components.ClaveDefaults
 import com.zzz.core.ui.presentation.components.NormalTextField
 import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.core.ui.util.ClaveLogger.logD
+import com.zzz.feature.auth.AuthHeader
 import com.zzz.feature.auth.login.LoginEvents
 import com.zzz.feature.auth.login.RoleToggle
 import com.zzz.feature.auth.login.authTabs
@@ -48,16 +50,9 @@ fun SignUpScreen(
     viewModel: SignupViewModel = koinViewModel()
 ) {
 
-    val pagerState = rememberPagerState { authTabs.size }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events = viewModel.events
-
-    LaunchedEffect(pagerState.currentPage) {
-        viewModel.onRoleChange(
-            isAdmin = pagerState.currentPage == 1
-        )
-    }
 
     LaunchedEffect(events){
         events.collect{event->
@@ -66,7 +61,7 @@ fun SignUpScreen(
                     logD {
                         "OTP verification req"
                     }
-                    onNavigateToOtp(event.email)
+                    onNavigateToOtp(event.userId)
                 }
                 is UIEvent.Error ->{
                     logD {
@@ -88,125 +83,44 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = ClaveDefaults.CONTAINER_PADDING),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-//            Spacer(modifier = Modifier.height(40.dp))
-//
-//            Box(
-//                modifier = Modifier
-//                    .size(80.dp)
-//                    .background(
-//                        MaterialTheme.colorScheme.surface,
-//                        RoundedCornerShape(20.dp)
-//                    ),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Text(
-//                    text = "C",
-//                    fontSize = 36.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    color = MaterialTheme.colorScheme.primary
-//                )
-//            }
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            Text(
-//                text = "WELCOME TO CLAVE",
-//                style = MaterialTheme.typography.titleLarge,
-//                fontWeight = FontWeight.Bold
-//            )
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            Text(
-//                text = "Let's set you up!",
-//                style = MaterialTheme.typography.bodyMedium,
-//                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-//            )
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            RoleToggle(
-//                pagerState = pagerState,
-//                tabs = authTabs
-//            )
-//
-//            Spacer(modifier = Modifier.height(24.dp))
-//
-//            VerticalSpace(24.dp)
+            VerticalSpace(40.dp)
+
+            AuthHeader()
+
+            VerticalSpace(24.dp)
 
             AnimatedVisibility(uiState.errorMsg != null) {
                 Text(
                     uiState.errorMsg ?: "",
-                    color = MaterialTheme.colorScheme.error
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
             VerticalSpace(24.dp)
 
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxWidth(),
-                userScrollEnabled = false
-            ) { page ->
+            Column {
 
-                when (page) {
+                NormalTextField(
+                    value = uiState.rollNo,
+                    onValueChange = { viewModel.onRollNoChange(it) },
+                    placeholder = "Enter your Roll no"
+                )
 
-                    0 -> { // Student
-                        Column {
+                Spacer(modifier = Modifier.height(16.dp))
 
-                            NormalTextField(
-                                value = uiState.rollNo,
-                                onValueChange = { viewModel.onRollNoChange(it) },
-                                placeholder = "Enter your Roll no"
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            NormalTextField(
-                                value = uiState.email,
-                                onValueChange = { viewModel.onEmailChange(it) },
-                                placeholder = "Enter your Mobile no"
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            NormalTextField(
-                                value = uiState.password,
-                                onValueChange = { viewModel.onPwdChange(it) },
-                                placeholder = "Enter your Password"
-                            )
-
-                        }
-                    }
-
-                    1 -> { // Coordinator
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-
-                            NormalTextField(
-                                value = uiState.email,
-                                onValueChange = { viewModel.onEmailChange(it) },
-                                placeholder = "Enter your Email"
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            NormalTextField(
-                                value = uiState.password,
-                                onValueChange = { viewModel.onPwdChange(it) },
-                                placeholder = "Enter your Password"
-                            )
-                        }
-                    }
-                }
+                NormalTextField(
+                    value = uiState.password,
+                    onValueChange = { viewModel.onPwdChange(it) },
+                    placeholder = "Enter your Password"
+                )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            VerticalSpace(24.dp)
 
             Row {
                 Text(text = "Have an account? ")
@@ -227,7 +141,7 @@ fun SignUpScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            VerticalSpace(24.dp)
         }
 
         if (uiState.isLoading) {

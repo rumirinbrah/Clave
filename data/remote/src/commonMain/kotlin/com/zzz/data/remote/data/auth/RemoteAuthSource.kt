@@ -33,8 +33,8 @@ internal class RemoteAuthSource(
     private val client : HttpClient
 ) : AuthSource{
 
-    override suspend fun createAccount(request: CreateAccountRequest): Result<Unit , NetworkError> {
-        val result = safeNetworkCall<ApiResponse<Unit>> {
+    override suspend fun createAccount(request: CreateAccountRequest): Result<CreateAccountResponse , NetworkError> {
+        val result = safeNetworkCall<ApiResponse<CreateAccountResponse>> {
             val url = constructUrl { ApiRoutes.AUTH_BASE + ApiRoutes.AUTH_CREATE }
             client.post(url) {
                 contentType(ContentType.Application.Json)

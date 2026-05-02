@@ -11,5 +11,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LoginResponse(
     val verificationRequired : Boolean = false,
+    val userId: String,
     val tokenPair : TokenPair?
 )

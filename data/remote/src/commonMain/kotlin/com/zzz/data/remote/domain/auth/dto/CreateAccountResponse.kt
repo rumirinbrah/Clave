@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 */
 @Serializable
 data class CreateAccountResponse(
+    val userId: String,
     val successful : Boolean,
     val errorMessage : String? = null
 )

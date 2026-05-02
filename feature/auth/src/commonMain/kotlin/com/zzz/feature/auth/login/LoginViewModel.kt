@@ -19,10 +19,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class LoginUiState(
-    val rollNo: String = "" ,
     val email: String = "",
-    val mobileNo: String = "" ,
     val password: String = "" ,
+    val isLoading: Boolean = false,
     val errorMsg: String? = null
 )
 
@@ -53,12 +52,6 @@ class LoginViewModel(
         }
     }
 
-    fun onRollNoChange(value: String) {
-        _uiState.update {
-            it.copy(rollNo = value)
-        }
-    }
-
     fun onPwdChange(value: String) {
         _uiState.update {
             it.copy(password = value)
@@ -79,61 +72,131 @@ class LoginViewModel(
         viewModelScope.launch {
 
             val values = _uiState.value
-            val email = values.email
+            val email = values.email.trim()
+            val password = values.password.trim()
 
-            if (values.rollNo.isBlank() ||
-                !isValidEmail(values.email)
-            ) {
-                val error = "Please enter valid details"
+            if (!isValidEmail(email)) {
+                val error = "Please enter valid email"
+                _uiState.update { it.copy(errorMsg = error) }
+                _events.send(UIEvent.Error(error))
+                return@launch
+            }
+
+            if (password.isBlank()) {
+                val error = "Please enter password"
                 _uiState.update { it.copy(errorMsg = error) }
                 _events.send(UIEvent.Error(error))
                 return@launch
             }
 
             _uiState.update {
-                it.copy(errorMsg = null)
+                it.copy(isLoading = true, errorMsg = null)
             }
 
             val request = LoginRequest(
-                rollNumber = values.rollNo ,
-                email = values.email ,
-                password = values.password
+                email = email,
+                password = password
             )
 
             when (val result = authSource.login(request)) {
+
                 is Result.Error -> {
                     val uiError = result.error.toUIError()
-                    logD {
-                        "login : Error $uiError"
-                    }
-                    if (result.error is NetworkError.Unauthorized) {
-                        _events.send(LoginEvents.OtpVerification(email))
-                    } else {
-                        _events.send(UIEvent.Error(uiError))
-                    }
+
                     _uiState.update {
-                        it.copy(errorMsg = uiError)
+                        it.copy(
+                            errorMsg = uiError,
+                            isLoading = false
+                        )
                     }
+
+                    _events.send(UIEvent.Error(uiError))
                 }
 
                 is Result.Success -> {
-                    logD {
-                        "login : Success ${result.data}"
-                    }
+
                     val data = result.data
 
-                    //save tokens
-                    data.tokenPair?.let {
-                        datastore.saveTokens(
-                            access = it.accessToken ,
-                            refresh = it.refreshToken
-                        )
-                    }
-                    _events.send(UIEvent.Success)
+                    if (data.verificationRequired) {
 
+                        _uiState.update { it.copy(isLoading = false) }
+
+                        _events.send(LoginEvents.OtpVerification(email))
+
+                    } else {
+
+                        data.tokenPair?.let {
+                            datastore.saveTokens(
+                                access = it.accessToken,
+                                refresh = it.refreshToken
+                            )
+                        }
+
+                        _uiState.update { it.copy(isLoading = false) }
+
+                        _events.send(UIEvent.Success)
+                    }
                 }
             }
         }
     }
+
+//    fun login() {
+//        viewModelScope.launch {
+//
+//            val values = _uiState.value
+//            val email = values.email
+//
+//            if (!isValidEmail(values.email)) {
+//                val error = "Please enter valid details"
+//                _uiState.update { it.copy(errorMsg = error) }
+//                _events.send(UIEvent.Error(error))
+//                return@launch
+//            }
+//
+//            _uiState.update {
+//                it.copy(errorMsg = null)
+//            }
+//
+//            val request = LoginRequest(
+//                email = values.email ,
+//                password = values.password
+//            )
+//
+//            when (val result = authSource.login(request)) {
+//                is Result.Error -> {
+//                    val uiError = result.error.toUIError()
+//                    logD {
+//                        "login : Error $uiError"
+//                    }
+//                    if (result.error is NetworkError.Unauthorized) {
+//                        _events.send(LoginEvents.OtpVerification(email))
+//                    } else {
+//                        _events.send(UIEvent.Error(uiError))
+//                    }
+//                    _uiState.update {
+//                        it.copy(errorMsg = uiError)
+//                    }
+//                }
+//
+//                is Result.Success -> {
+//                    logD {
+//                        "login : Success ${result.data}"
+//                    }
+//                    val data = result.data
+//
+//                    //save tokens
+//                    data.tokenPair?.let {
+//                        datastore.saveTokens(
+//                            access = it.accessToken ,
+//                            refresh = it.refreshToken
+//                        )
+//                    }
+//                    _events.send(UIEvent.Success)
+//
+//                }
+//            }
+//        }
+//    }
 
 }

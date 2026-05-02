@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +39,7 @@ import com.zzz.core.ui.presentation.components.GradientButton
 import com.zzz.core.ui.presentation.components.NormalTextField
 import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.core.ui.util.ClaveLogger.logD
+import com.zzz.feature.auth.AuthHeader
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -45,192 +47,299 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LoginScreen(
     onRegister: () -> Unit,
-    navToHome : ()->Unit,
+    navToHome: () -> Unit,
+    onNavigateToOtp: (String) -> Unit,
     viewModel: LoginViewModel = koinViewModel()
 ) {
-
-    val pagerState = rememberPagerState { authTabs.size }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events = viewModel.events
 
-    LaunchedEffect(events){
-        events.collect{event->
-                    println(event)
-            when(event){
-                is LoginEvents.OtpVerification -> {
-                    logD {
-                        "OTP verification req"
-                    }
+    LaunchedEffect(events) {
+        events.collect { event ->
+            when (event) {
+                LoginEvents.AlreadyLoggedIn -> navToHome()
+                is UIEvent.Success -> navToHome()
+                is LoginEvents.OtpVerification ->{
+                    onNavigateToOtp(event.userId)
                 }
-                LoginEvents.AlreadyLoggedIn->{
-                    println("ALREADY WALA EVENT")
-                   navToHome()
+                is UIEvent.Error -> {
+                    logD { event.errorMsg }
                 }
-                is UIEvent.Error ->{
-                    logD {
-                        event.errorMsg
-                    }
-                }
-                is UIEvent.Success ->{
-                    navToHome()
-                    logD {
-                        "Succees"
-                    }
-                }
+                else -> {}
             }
         }
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = ClaveDefaults.CONTAINER_PADDING),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = ClaveDefaults.CONTAINER_PADDING),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            VerticalSpace(40.dp)
 
-//        VerticalSpace(40.dp)
+            AuthHeader()
+
+            VerticalSpace(24.dp)
+
+            AnimatedVisibility(uiState.errorMsg != null) {
+                Text(
+                    uiState.errorMsg ?: "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            VerticalSpace(24.dp)
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+
+                NormalTextField(
+                    value = uiState.email,
+                    onValueChange = { viewModel.onEmailChange(it) },
+                    placeholder = "Enter your Email"
+                )
+
+                NormalTextField(
+                    value = uiState.password,
+                    onValueChange = { viewModel.onPwdChange(it) },
+                    placeholder = "Enter password"
+                )
+            }
+
+            VerticalSpace(24.dp)
+
+            Row {
+                Text(text = "New User? ")
+                Text(
+                    text = "Register",
+                    color = MaterialTheme.colorScheme.error,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable {
+                        onRegister()
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            GradientButton(
+                text = "Login",
+                onClick = {
+                    viewModel.login()
+                },
+            )
+
+            VerticalSpace(24.dp)
+        }
+
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+    }
+}
+
+//@Composable
+//fun LoginScreen(
+//    onRegister: () -> Unit,
+//    navToHome : ()->Unit,
+//    viewModel: LoginViewModel = koinViewModel()
+//) {
 //
-//        // Logo
-//        Box(
-//            modifier = Modifier
-//                .size(80.dp)
-//                .background(
-//                    MaterialTheme.colorScheme.surface,
-//                    RoundedCornerShape(20.dp)
-//                ),
-//            contentAlignment = Alignment.Center
-//        ) {
+//    val pagerState = rememberPagerState { authTabs.size }
+//
+//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+//    val events = viewModel.events
+//
+//    LaunchedEffect(events){
+//        events.collect{event->
+//                    println(event)
+//            when(event){
+//                is LoginEvents.OtpVerification -> {
+//                    logD {
+//                        "OTP verification req"
+//                    }
+//                }
+//                LoginEvents.AlreadyLoggedIn->{
+//                    println("ALREADY WALA EVENT")
+//                   navToHome()
+//                }
+//                is UIEvent.Error ->{
+//                    logD {
+//                        event.errorMsg
+//                    }
+//                }
+//                is UIEvent.Success ->{
+//                    navToHome()
+//                    logD {
+//                        "Succees"
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(horizontal = ClaveDefaults.CONTAINER_PADDING),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//
+////        VerticalSpace(40.dp)
+////
+////        // Logo
+////        Box(
+////            modifier = Modifier
+////                .size(80.dp)
+////                .background(
+////                    MaterialTheme.colorScheme.surface,
+////                    RoundedCornerShape(20.dp)
+////                ),
+////            contentAlignment = Alignment.Center
+////        ) {
+////            Text(
+////                text = "C",
+////                fontSize = 36.sp,
+////                fontWeight = FontWeight.Bold,
+////                color = MaterialTheme.colorScheme.primary
+////            )
+////        }
+////
+////        VerticalSpace(16.dp)
+////
+////        Text(
+////            text = "WELCOME TO CLAVE",
+////            style = MaterialTheme.typography.titleLarge,
+////            fontWeight = FontWeight.Bold
+////        )
+////
+////        VerticalSpace(8.dp)
+////
+////        Text(
+////            text = "Using the app as",
+////            style = MaterialTheme.typography.bodyMedium,
+////            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+////        )
+////
+////        VerticalSpace(16.dp)
+//
+////        RoleToggle(
+////            pagerState = pagerState,
+////            tabs = authTabs
+////        )
+//
+//        VerticalSpace(24.dp)
+//
+//        AnimatedVisibility(uiState.errorMsg!=null){
 //            Text(
-//                text = "C",
-//                fontSize = 36.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = MaterialTheme.colorScheme.primary
+//                uiState.errorMsg ?: "",
+//                color = MaterialTheme.colorScheme.error
 //            )
 //        }
 //
-//        VerticalSpace(16.dp)
+//        VerticalSpace(24.dp)
 //
-//        Text(
-//            text = "WELCOME TO CLAVE",
-//            style = MaterialTheme.typography.titleLarge,
-//            fontWeight = FontWeight.Bold
+//        HorizontalPager(
+//            state = pagerState,
+//            userScrollEnabled = true,
+//            modifier = Modifier.fillMaxWidth()
+//        ) { page ->
+//
+//            when (page) {
+//
+//                0 -> { // Student
+//                    Column (
+//                        verticalArrangement = Arrangement.spacedBy(16.dp)
+//                    ){
+//
+//                        NormalTextField(
+//                            value = uiState.rollNo,
+//                            onValueChange = { viewModel.onRollNoChange(it) },
+//                            placeholder = "Enter your Roll no"
+//                        )
+//
+//
+//                        NormalTextField(
+//                            value = uiState.email,
+//                            onValueChange = { viewModel.onEmailChange(it) },
+//                            placeholder = "Enter your Email"
+//                        )
+//
+//                        NormalTextField(
+//                            value = uiState.password,
+//                            onValueChange = { viewModel.onPwdChange(it) },
+//                            placeholder = "Enter password"
+//                        )
+//                    }
+//                }
+//
+//                1 -> { // Coordinator
+//
+//                    Column{
+//
+//                        NormalTextField(
+//                            value = uiState.rollNo,
+//                            onValueChange = { viewModel.onRollNoChange(it) },
+//                            placeholder = "Enter your Roll no"
+//                        )
+//
+//                        VerticalSpace(16.dp)
+//
+//                        NormalTextField(
+//                            value = uiState.email,
+//                            onValueChange = { viewModel.onEmailChange(it) },
+//                            placeholder = "Enter your Email"
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//
+//        VerticalSpace(24.dp)
+//
+//        Row {
+//            Text(text = "New User? ")
+//            Text(
+//                text = "Register",
+//                color = MaterialTheme.colorScheme.error,
+//                fontWeight = FontWeight.Bold,
+//                modifier = Modifier.clickable(
+//                    indication = null,
+//                    interactionSource = null
+//                ) {
+//                    onRegister()
+//                }
+//            )
+//        }
+//
+//        Spacer(modifier = Modifier.weight(1f))
+//
+//        GradientButton(
+//            text = "Login",
+//            onClick = {
+//                viewModel.login()
+//                //TEST
+////                navToHome()
+//            }
 //        )
 //
-//        VerticalSpace(8.dp)
-//
-//        Text(
-//            text = "Using the app as",
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-//        )
-//
-//        VerticalSpace(16.dp)
-
-//        RoleToggle(
-//            pagerState = pagerState,
-//            tabs = authTabs
-//        )
-
-        VerticalSpace(24.dp)
-
-        AnimatedVisibility(uiState.errorMsg!=null){
-            Text(
-                uiState.errorMsg ?: "",
-                color = MaterialTheme.colorScheme.error
-            )
-        }
-
-        VerticalSpace(24.dp)
-
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = true,
-            modifier = Modifier.fillMaxWidth()
-        ) { page ->
-
-            when (page) {
-
-                0 -> { // Student
-                    Column (
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ){
-
-                        NormalTextField(
-                            value = uiState.rollNo,
-                            onValueChange = { viewModel.onRollNoChange(it) },
-                            placeholder = "Enter your Roll no"
-                        )
-
-
-                        NormalTextField(
-                            value = uiState.email,
-                            onValueChange = { viewModel.onEmailChange(it) },
-                            placeholder = "Enter your Email"
-                        )
-
-                        NormalTextField(
-                            value = uiState.password,
-                            onValueChange = { viewModel.onPwdChange(it) },
-                            placeholder = "Enter password"
-                        )
-                    }
-                }
-
-                1 -> { // Coordinator
-
-                    Column{
-
-                        NormalTextField(
-                            value = uiState.rollNo,
-                            onValueChange = { viewModel.onRollNoChange(it) },
-                            placeholder = "Enter your Roll no"
-                        )
-
-                        VerticalSpace(16.dp)
-
-                        NormalTextField(
-                            value = uiState.email,
-                            onValueChange = { viewModel.onEmailChange(it) },
-                            placeholder = "Enter your Email"
-                        )
-                    }
-                }
-            }
-        }
-
-        VerticalSpace(24.dp)
-
-        Row {
-            Text(text = "New User? ")
-            Text(
-                text = "Register",
-                color = MaterialTheme.colorScheme.error,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable(
-                    indication = null,
-                    interactionSource = null
-                ) {
-                    onRegister()
-                }
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        GradientButton(
-            text = "Login",
-            onClick = {
-                viewModel.login()
-                //TEST
-//                navToHome()
-            }
-        )
-
-        VerticalSpace(24.dp)
-    }
-}
+//        VerticalSpace(24.dp)
+//    }
+//}
 
 @Composable
 internal fun RoleToggle(
