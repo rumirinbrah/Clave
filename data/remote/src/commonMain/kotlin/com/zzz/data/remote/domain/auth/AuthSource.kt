@@ -19,7 +19,7 @@ import com.zzz.data.remote.domain.model.TokenPair
 */
 interface AuthSource {
 
-    suspend fun createAccount(request: CreateAccountRequest) : Result<Unit, NetworkError>
+    suspend fun createAccount(request: CreateAccountRequest) : Result<CreateAccountResponse, NetworkError>
 
     /**
      * 2 min expiry
