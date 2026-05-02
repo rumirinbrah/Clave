@@ -104,14 +104,14 @@ class SignupViewModel(
 
                 is Result.Success -> {
 
-                    val userId = result.data.userId
+                    val email = result.data.email
 
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
 
                     // pass userId to OTP screen
-                    _events.send(LoginEvents.OtpVerification(userId))
+                    _events.send(LoginEvents.OtpVerification(email))
                 }
             }
         }

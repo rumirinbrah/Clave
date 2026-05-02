@@ -43,118 +43,125 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun VerifyOtpScreen(
-    userId: String,
+    email: String,
     viewModel: OtpViewModel = koinViewModel(),
     onOtpVerified: () -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(userId) {
-        viewModel.setUserId(userId)
+    LaunchedEffect(email) {
+        viewModel.setEmail(email)
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(true) {
         viewModel.events.collect { event ->
             when (event) {
                 is UIEvent.Success -> onOtpVerified()
                 is UIEvent.Error -> {
-
                 }
             }
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Text(
-            text = "Verify OTP",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Enter the code sent to your registered email",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.6f),
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        AnimatedVisibility(uiState.errorMsg != null) {
-            Text(
-                text = uiState.errorMsg ?: "",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OtpInputField(
-            otp = uiState.otp,
-            onOtpChange = viewModel::onOtpChange
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = {
-                viewModel.verifyOtp()
-            },
-            enabled = uiState.otp.length == 6,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp),
-            shape = RoundedCornerShape(14.dp)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Verify")
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
-        Row {
             Text(
-                text = "Didn’t receive code? ",
-                color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
+                text = "Verify OTP",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
             )
-//            Text(
-//                text = "Resend",
-//                color = MaterialTheme.colorScheme.primary,
-//                fontWeight = FontWeight.SemiBold,
-//                modifier = Modifier.clickable {
-//                    viewModel.resendOtp()
-//                }
-//            )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = if (uiState.resendEnabled) {
-                    "Resend"
-                } else {
-                    "Resend in ${uiState.secondsLeft}s"
+                text = "Enter the OTP sent to your email",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(0.6f),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = email,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            AnimatedVisibility(uiState.errorMsg != null) {
+                Text(
+                    text = uiState.errorMsg ?: "",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OtpInputField(
+                otp = uiState.otp,
+                onOtpChange = viewModel::onOtpChange
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = {
+                    viewModel.verifyOtp()
                 },
-                color = if (uiState.resendEnabled)
-                    MaterialTheme.colorScheme.primary
-                else
-                    MaterialTheme.colorScheme.onBackground.copy(0.4f),
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.clickable(
-                    enabled = uiState.resendEnabled
-                ) {
-                    viewModel.resendOtp()
-                }
-            )
+                enabled = uiState.otp.length == 6,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("Verify")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
+                Text(
+                    text = "Didn’t receive code? ",
+                    color = MaterialTheme.colorScheme.onBackground.copy(0.6f)
+                )
+
+                Text(
+                    text = if (uiState.resendEnabled) {
+                        "Resend"
+                    } else {
+                        "Resend in ${uiState.secondsLeft}s"
+                    },
+                    color = if (uiState.resendEnabled)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.onBackground.copy(0.4f),
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .alpha(if (uiState.resendEnabled) 1f else 0.5f)
+                        .clickable(
+                            enabled = uiState.resendEnabled
+                        ) {
+                            viewModel.resendOtp()
+                        }
+                )
+            }
         }
 
         if (uiState.isLoading) {

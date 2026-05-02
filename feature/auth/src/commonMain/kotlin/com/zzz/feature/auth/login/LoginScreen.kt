@@ -61,7 +61,7 @@ fun LoginScreen(
                 LoginEvents.AlreadyLoggedIn -> navToHome()
                 is UIEvent.Success -> navToHome()
                 is LoginEvents.OtpVerification ->{
-                    onNavigateToOtp(event.userId)
+                    onNavigateToOtp(event.email)
                 }
                 is UIEvent.Error -> {
                     logD { event.errorMsg }

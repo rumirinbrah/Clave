@@ -34,10 +34,10 @@ class OtpViewModel(
     private val _events = Channel<UIEvent>()
     val events = _events.receiveAsFlow()
 
-    private var userId: String = ""
+    private var email: String = ""
 
-    fun setUserId(id: String) {
-        userId = id
+    fun setEmail(emailID: String) {
+        email = emailID
     }
 
     fun onOtpChange(value: String) {
@@ -65,7 +65,7 @@ class OtpViewModel(
             }
 
             val request = VerifyOtpRequest(
-                userId = userId,
+                email = email,
                 otp = values.otp
             )
 
@@ -101,7 +101,7 @@ class OtpViewModel(
 
             if (!_uiState.value.resendEnabled) return@launch
 
-            val request = ResendOtpRequest(userId = userId)
+            val request = ResendOtpRequest(email = email)
 
             when (val result = authSource.resendOtp(request)) {
 

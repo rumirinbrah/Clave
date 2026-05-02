@@ -14,7 +14,7 @@ sealed class Screen {
         data object SignUp : Screen()
 
         @Serializable
-        data class VerifyOtp(val userId: String) : Screen()
+        data class VerifyOtp(val email: String) : Screen()
     }
 
     @Serializable

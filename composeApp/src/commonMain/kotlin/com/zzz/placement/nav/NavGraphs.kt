@@ -62,8 +62,8 @@ fun NavGraphBuilder.authGraph(
                         navController.popBackStack()
                     }
                 },
-                onNavigateToOtp = { userId->
-                    navController.navigate(Screen.Auth.VerifyOtp(userId))
+                onNavigateToOtp = { email->
+                    navController.navigate(Screen.Auth.VerifyOtp(email))
                 }
             )
         }
@@ -76,7 +76,7 @@ fun NavGraphBuilder.authGraph(
 
             val route = backStack.toRoute<Screen.Auth.VerifyOtp>()
             VerifyOtpScreen(
-                userId = route.userId,
+                email = route.email,
                 onOtpVerified = {
                     navController.navigate(Screen.Home) {
                         popUpTo(Screen.Auth) { inclusive = true }

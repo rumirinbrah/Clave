@@ -61,7 +61,7 @@ fun SignUpScreen(
                     logD {
                         "OTP verification req"
                     }
-                    onNavigateToOtp(event.userId)
+                    onNavigateToOtp(event.email)
                 }
                 is UIEvent.Error ->{
                     logD {
