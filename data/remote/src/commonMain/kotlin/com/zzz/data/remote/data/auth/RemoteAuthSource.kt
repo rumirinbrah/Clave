@@ -19,6 +19,7 @@ import com.zzz.data.remote.util.constructUrl
 import com.zzz.data.remote.util.safeNetworkCall
 import com.zzz.data.remote.util.unwrap
 import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -88,4 +89,13 @@ internal class RemoteAuthSource(
             }
         }
     }
+    override suspend fun getCourses(): Result<Map<Int , String> , NetworkError> {
+        return safeNetworkCall<ApiResponse<Map<Int , String>>> {
+            val url = constructUrl { "auth"+"/college-courses" }
+            client.get(url) {
+
+            }
+        }.unwrap()
+    }
+
 }

@@ -28,7 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.GradientButton
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,8 +46,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SignUpScreen(
-    onLoginClick: () -> Unit,
-    onNavigateToOtp: (String) -> Unit,
+    onLoginClick: () -> Unit ,
+    onNavigateToOtp: (String) -> Unit ,
     viewModel: SignupViewModel = koinViewModel()
 ) {
 
@@ -59,21 +62,23 @@ fun SignUpScreen(
         )
     }
 
-    LaunchedEffect(events){
-        events.collect{event->
-            when(event){
+    LaunchedEffect(events) {
+        events.collect { event ->
+            when (event) {
                 is LoginEvents.OtpVerification -> {
                     logD {
                         "OTP verification req"
                     }
                     onNavigateToOtp(event.email)
                 }
-                is UIEvent.Error ->{
+
+                is UIEvent.Error -> {
                     logD {
                         event.errorMsg
                     }
                 }
-                is UIEvent.Success ->{
+
+                is UIEvent.Success -> {
                     logD {
                         "Succees"
                     }
@@ -88,7 +93,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 20.dp) ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -140,7 +145,7 @@ fun SignUpScreen(
 
             AnimatedVisibility(uiState.errorMsg != null) {
                 Text(
-                    uiState.errorMsg ?: "",
+                    uiState.errorMsg ?: "" ,
                     color = MaterialTheme.colorScheme.error
                 )
             }
@@ -148,8 +153,8 @@ fun SignUpScreen(
             VerticalSpace(24.dp)
 
             HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxWidth(),
+                state = pagerState ,
+                modifier = Modifier.fillMaxWidth() ,
                 userScrollEnabled = false
             ) { page ->
 
@@ -159,24 +164,81 @@ fun SignUpScreen(
                         Column {
 
                             NormalTextField(
-                                value = uiState.rollNo,
-                                onValueChange = { viewModel.onRollNoChange(it) },
+                                value = uiState.rollNo ,
+                                onValueChange = { viewModel.onRollNoChange(it) } ,
                                 placeholder = "Enter your Roll no"
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
 
                             NormalTextField(
-                                value = uiState.email,
-                                onValueChange = { viewModel.onEmailChange(it) },
-                                placeholder = "Enter your Mobile no"
+                                value = uiState.email ,
+                                onValueChange = { viewModel.onEmailChange(it) } ,
+                                placeholder = "Enter your mail"
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
 
                             NormalTextField(
-                                value = uiState.password,
-                                onValueChange = { viewModel.onPwdChange(it) },
+                                value = uiState.name ,
+                                onValueChange = {
+                                    viewModel.onNameChange(it)
+                                } ,
+                                placeholder = "Enter your name"
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            var expanded by remember { mutableStateOf(false) }
+                            Box {
+                                Button(
+                                    onClick = {
+                                        expanded = true
+                                    },
+                                    shape = MaterialTheme.shapes.small
+                                ) {
+                                    Text(
+                                        "Course ${uiState.selectedCourse?:""}"
+                                    )
+                                }
+
+                                DropdownMenu(
+                                    expanded = expanded ,
+                                    onDismissRequest = { expanded = false }
+                                ) {
+                                    uiState.courses.forEach {
+                                        DropdownMenuItem(
+                                            text = { Text(it) } ,
+                                            onClick = {
+//                                            selected = "Option 1"
+                                                viewModel.onCourseSelect(it)
+                                                expanded = false
+                                            }
+                                        )
+                                    }
+//                                    DropdownMenuItem(
+//                                        text = { Text("Option 1") } ,
+//                                        onClick = {
+////                                            selected = "Option 1"
+//                                            expanded = false
+//                                        }
+//                                    )
+//                                    DropdownMenuItem(
+//                                        text = { Text("Option 2") } ,
+//                                        onClick = {
+////                                            selected = "Option 2"
+//                                            expanded = false
+//                                        }
+//                                    )
+                                }
+                            }
+
+
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            NormalTextField(
+                                value = uiState.password ,
+                                onValueChange = { viewModel.onPwdChange(it) } ,
                                 placeholder = "Enter your Password"
                             )
 
@@ -189,16 +251,16 @@ fun SignUpScreen(
                         ) {
 
                             NormalTextField(
-                                value = uiState.email,
-                                onValueChange = { viewModel.onEmailChange(it) },
+                                value = uiState.email ,
+                                onValueChange = { viewModel.onEmailChange(it) } ,
                                 placeholder = "Enter your Email"
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
 
                             NormalTextField(
-                                value = uiState.password,
-                                onValueChange = { viewModel.onPwdChange(it) },
+                                value = uiState.password ,
+                                onValueChange = { viewModel.onPwdChange(it) } ,
                                 placeholder = "Enter your Password"
                             )
                         }
@@ -211,9 +273,9 @@ fun SignUpScreen(
             Row {
                 Text(text = "Have an account? ")
                 Text(
-                    text = "Login",
-                    color = MaterialTheme.colorScheme.error,
-                    fontWeight = FontWeight.Bold,
+                    text = "Login" ,
+                    color = MaterialTheme.colorScheme.error ,
+                    fontWeight = FontWeight.Bold ,
                     modifier = Modifier.clickable { onLoginClick() }
                 )
             }
@@ -221,7 +283,7 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             GradientButton(
-                text = "Create account",
+                text = "Create account" ,
                 onClick = {
                     viewModel.createAccount()
                 }
@@ -234,7 +296,7 @@ fun SignUpScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.3f)),
+                    .background(Color.Black.copy(alpha = 0.3f)) ,
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()

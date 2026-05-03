@@ -8,4 +8,7 @@ interface JobSource {
     suspend fun getJobs() : Result<List<Job>, NetworkError>
 
     suspend fun getById(id : String) : Result<Job, NetworkError>
+
+    suspend fun getCourses() : Result<Map<Int,String>, NetworkError>
+
 }

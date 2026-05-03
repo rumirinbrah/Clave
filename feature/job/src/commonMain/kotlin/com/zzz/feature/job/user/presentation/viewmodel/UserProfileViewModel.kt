@@ -87,9 +87,9 @@ class UserProfileViewModel(
                             name = data.name,
                             gender = data.gender,
                             rollNo = data.rollNumber,
-                            branch = data.branch,
+                            branch = data.course,
                             year = data.year,
-                            dob = data.dateOfBirth,
+                            dob = data.dateOfBirth?:0L,
                         )
                     }
                 }

@@ -18,7 +18,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.zzz.feature.auth.AuthRoot
+import com.zzz.feature.auth.otp.VerifyOtpScreen
 import com.zzz.feature.job.details.presentation.JobListRoot
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
@@ -84,6 +86,19 @@ fun Navigation(
                         }
                     )
                 }
+                composable<Screen.Auth.VerifyOtp> { backStack ->
+
+                    val route = backStack.toRoute<Screen.Auth.VerifyOtp>()
+
+                    VerifyOtpScreen(
+                        email = route.email,
+                        onOtpVerified = {
+                            navController.navigate(Screen.Auth) {
+                                popUpTo(Screen.Auth) { inclusive = true }
+                            }
+                        }
+                    )
+                }
 
                 homeGraph(navController){
                     viewModel.navBarVisible(it)
@@ -97,10 +112,16 @@ fun Navigation(
 //                    ){
 //                        Text("All jobs page")
 //                    }
+                    LaunchedEffect(Unit){
+                        viewModel.navBarVisible(true)
+                    }
                     JobListRoot(
-                        onApplyClick = {}
+                        onApplyClick = {
+                            navController.navigate(Screen.Home.JobDescription(it))
+                        }
                     )
                 }
+
                 composable<Screen.Community> {
                     Box(
                         Modifier.fillMaxSize()

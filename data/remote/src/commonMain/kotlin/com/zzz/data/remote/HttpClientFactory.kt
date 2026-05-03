@@ -47,6 +47,8 @@ object HttpClientFactory {
                     "10.0.2.2"
                 }
                 port = 8080
+//                url("http://82.29.167.147:8080")
+
             }
 
             //-----------SERIALIZATION-----------

@@ -13,8 +13,8 @@ data class StudentProfileResponse(
     val name : String,
     val gender: Gender,
     val rollNumber : String,
-    val branch : String,
+    val course : String,
     val year : String,
-    val dateOfBirth: Long,
+    val dateOfBirth: Long?,
 )
 

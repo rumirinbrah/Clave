@@ -72,7 +72,7 @@ class JobHomeViewModel(
                             name = data.name
                         )
                     }
-                    prefs.setBranch(data.branch)
+                    prefs.setBranch(data.course)
                     prefs.setUsername(data.name)
                     prefs.setRollNo(data.rollNumber)
                     logD {

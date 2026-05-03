@@ -17,12 +17,12 @@ import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 
 class RemoteJobSource(
-    private val client : HttpClient
+    private val client: HttpClient
 ) : JobSource {
     override suspend fun getJobs(): Result<List<Job> , NetworkError> {
         return safeNetworkCall<ApiResponse<List<JobResponse>>> {
             val url = constructUrl { "job" }
-            client.get(url){
+            client.get(url) {
 
             }
         }.unwrap()
@@ -37,7 +37,7 @@ class RemoteJobSource(
         return safeNetworkCall<ApiResponse<JobResponse>> {
             val url = constructUrl { "job" }
             client.get(url) {
-                url{
+                url {
                     appendPathSegments(id)
                 }
             }
@@ -45,5 +45,14 @@ class RemoteJobSource(
             .map {
                 it.toJob()
             }
+    }
+
+    override suspend fun getCourses(): Result<Map<Int , String> , NetworkError> {
+        return safeNetworkCall<ApiResponse<Map<Int , String>>> {
+            val url = constructUrl { "job"+"/college-courses" }
+            client.get(url) {
+
+            }
+        }.unwrap()
     }
 }

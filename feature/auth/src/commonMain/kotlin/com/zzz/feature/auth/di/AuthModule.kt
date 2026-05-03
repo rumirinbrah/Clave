@@ -17,7 +17,8 @@ val authModule = module {
 
     viewModel {
         SignupViewModel(
-            authSource = get()
+            authSource = get(),
+            jobSource = get()
         )
     }
 

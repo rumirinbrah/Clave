@@ -96,8 +96,13 @@ android {
         }
     }
     buildTypes {
+        debug {
+//            buildConfigField("String","BASE_URL","\"10.0.2.2\"")
+//            buildConfigField("String","BASE_URL","\"http://82.29.167.147:8080\"")
+        }
         getByName("release") {
             isMinifyEnabled = false
+//            buildConfigField("String","BASE_URL","\"10.0.2.2\"")
         }
     }
     compileOptions {

@@ -38,4 +38,7 @@ interface AuthSource {
 
     suspend fun refreshToken(request : RefreshTokenRequest) : Result<TokenPair, NetworkError>
 
+    suspend fun getCourses() : Result<Map<Int,String>, NetworkError>
+
+
 }
