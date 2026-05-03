@@ -33,7 +33,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzz.core.ui.domain.network.UIEvent
 import com.zzz.core.ui.presentation.components.NormalTextField
@@ -55,6 +60,9 @@ fun SignUpScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events = viewModel.events
+
+    val (rollFocus, emailFocus, nameFocus, passwordFocus) = FocusRequester.createRefs()
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(pagerState.currentPage) {
         viewModel.onRoleChange(
@@ -166,7 +174,12 @@ fun SignUpScreen(
                             NormalTextField(
                                 value = uiState.rollNo ,
                                 onValueChange = { viewModel.onRollNoChange(it) } ,
-                                placeholder = "Enter your Roll no"
+                                placeholder = "Enter your Roll no",
+                                modifier = Modifier.focusRequester(rollFocus),
+                                imeAction = ImeAction.Next,
+                                onImeAction = {
+                                    emailFocus.requestFocus()
+                                }
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -174,7 +187,12 @@ fun SignUpScreen(
                             NormalTextField(
                                 value = uiState.email ,
                                 onValueChange = { viewModel.onEmailChange(it) } ,
-                                placeholder = "Enter your mail"
+                                placeholder = "Enter your Email",
+                                imeAction = ImeAction.Next,
+                                modifier = Modifier.focusRequester(emailFocus),
+                                onImeAction = {
+                                    passwordFocus.requestFocus()
+                                }
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -184,7 +202,12 @@ fun SignUpScreen(
                                 onValueChange = {
                                     viewModel.onNameChange(it)
                                 } ,
-                                placeholder = "Enter your name"
+                                placeholder = "Enter your name",
+                                imeAction = ImeAction.Next,
+                                modifier = Modifier.focusRequester(nameFocus),
+                                onImeAction = {
+                                    passwordFocus.requestFocus()
+                                }
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -239,7 +262,14 @@ fun SignUpScreen(
                             NormalTextField(
                                 value = uiState.password ,
                                 onValueChange = { viewModel.onPwdChange(it) } ,
-                                placeholder = "Enter your Password"
+                                placeholder = "Enter your Password",
+                                imeAction = ImeAction.Done,
+                                keyboardType = KeyboardType.Password,
+                                modifier = Modifier.focusRequester(passwordFocus),
+                                onImeAction = {
+                                    focusManager.clearFocus()
+                                    viewModel.createAccount()
+                                }
                             )
 
                         }

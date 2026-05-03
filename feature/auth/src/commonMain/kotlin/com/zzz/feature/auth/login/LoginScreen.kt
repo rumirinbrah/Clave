@@ -26,8 +26,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +58,10 @@ fun LoginScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events = viewModel.events
+
+    val (rollFocus, emailFocus, passwordFocus) = FocusRequester.createRefs()
+
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(events){
         events.collect{event->
@@ -90,48 +99,6 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-//        VerticalSpace(40.dp)
-//
-//        // Logo
-//        Box(
-//            modifier = Modifier
-//                .size(80.dp)
-//                .background(
-//                    MaterialTheme.colorScheme.surface,
-//                    RoundedCornerShape(20.dp)
-//                ),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            Text(
-//                text = "C",
-//                fontSize = 36.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = MaterialTheme.colorScheme.primary
-//            )
-//        }
-//
-//        VerticalSpace(16.dp)
-//
-//        Text(
-//            text = "WELCOME TO CLAVE",
-//            style = MaterialTheme.typography.titleLarge,
-//            fontWeight = FontWeight.Bold
-//        )
-//
-//        VerticalSpace(8.dp)
-//
-//        Text(
-//            text = "Using the app as",
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-//        )
-//
-//        VerticalSpace(16.dp)
-
-//        RoleToggle(
-//            pagerState = pagerState,
-//            tabs = authTabs
-//        )
 
         VerticalSpace(24.dp)
 
@@ -160,20 +127,37 @@ fun LoginScreen(
                         NormalTextField(
                             value = uiState.rollNo,
                             onValueChange = { viewModel.onRollNoChange(it) },
-                            placeholder = "Enter your Roll no"
+                            placeholder = "Enter your Roll no",
+                            modifier = Modifier.focusRequester(rollFocus),
+                            imeAction = ImeAction.Next,
+                            onImeAction = {
+                                emailFocus.requestFocus()
+                            }
                         )
 
 
                         NormalTextField(
                             value = uiState.email,
                             onValueChange = { viewModel.onEmailChange(it) },
-                            placeholder = "Enter your Email"
+                            placeholder = "Enter your Email",
+                            imeAction = ImeAction.Next,
+                            modifier = Modifier.focusRequester(emailFocus),
+                            onImeAction = {
+                                passwordFocus.requestFocus()
+                            }
                         )
 
                         NormalTextField(
                             value = uiState.password,
                             onValueChange = { viewModel.onPwdChange(it) },
-                            placeholder = "Enter password"
+                            placeholder = "Enter password",
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password,
+                            modifier = Modifier.focusRequester(passwordFocus),
+                            onImeAction = {
+                                focusManager.clearFocus()
+                                viewModel.login()
+                            }
                         )
                     }
                 }

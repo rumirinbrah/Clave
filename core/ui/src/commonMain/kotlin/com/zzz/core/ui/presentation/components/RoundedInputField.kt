@@ -162,9 +162,8 @@ fun NormalTextField(
                     imeAction = imeAction
                 ) ,
                 keyboardActions = KeyboardActions(
-                    onAny = {
-                        onImeAction()
-                    } ,
+                    onDone = { onImeAction() },
+                    onNext = { onImeAction() }
                 ) ,
                 supportingText = if (supportingText != null) {
                     {
@@ -222,9 +221,8 @@ fun NormalTextField(
                 imeAction = imeAction
             ) ,
             keyboardActions = KeyboardActions(
-                onAny = {
-                    onImeAction()
-                }
+                onDone = { onImeAction() },
+                onNext = { onImeAction() }
             ) ,
             supportingText = if (supportingText != null) {
                 {
