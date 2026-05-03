@@ -148,12 +148,13 @@ fun JobDescriptionPage(
 
     Scaffold(
         bottomBar = {
-            BottomAppBar(
-                Modifier.height(200.dp),
-                containerColor = Color.Transparent
-            ) {
+//            BottomAppBar(
+//                Modifier.height(200.dp),
+//                containerColor = Color.Transparent
+//            ) {
                 Column (
-                    Modifier.height(200.dp)
+                    Modifier
+//                        .height(200.dp)
                         .padding(bottom = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
@@ -207,7 +208,7 @@ fun JobDescriptionPage(
                     }
                 }
 
-            }
+//            }
         }
     ) { paddingValues ->
 

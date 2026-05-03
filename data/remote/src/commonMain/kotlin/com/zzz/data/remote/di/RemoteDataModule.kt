@@ -9,10 +9,12 @@ import com.zzz.data.remote.data.job.RemoteJobApplicationSource
 import com.zzz.data.remote.data.job.RemoteJobSource
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.data.prefs.datastoreName
+import com.zzz.data.remote.data.student.announcements.RemoteAnnouncementSource
 import com.zzz.data.remote.data.student.profile.RemoteProfileSource
 import com.zzz.data.remote.domain.auth.AuthSource
 import com.zzz.data.remote.domain.job.JobApplicationSource
 import com.zzz.data.remote.domain.job.JobSource
+import com.zzz.data.remote.domain.student.announcements.AnnouncementSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
 import io.ktor.client.HttpClient
 import org.koin.core.module.Module
@@ -51,6 +53,11 @@ val remoteDataModule = module {
     }
     single<JobApplicationSource> {
         RemoteJobApplicationSource(
+            client = get()
+        )
+    }
+    single<AnnouncementSource> {
+        RemoteAnnouncementSource(
             client = get()
         )
     }
