@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -147,68 +148,6 @@ fun JobDescriptionPage(
 
 
     Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                Modifier.height(200.dp),
-                containerColor = Color.Transparent
-            ) {
-                Column (
-                    Modifier.height(200.dp)
-                        .padding(bottom = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Button(
-                            onClick = {
-                                onApply()
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(52.dp),
-                            shape = RoundedCornerShape(14.dp)
-                        ) {
-                            Text(
-                                text = "Apply Now",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                    if(state.showDidYouApply){
-//                        VerticalSpace()
-                        Text("Did you apply?")
-                        Row (
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ){
-                            TextButton(
-                                onClick = {
-                                    onDidYouApply(true)
-                                }
-                            ){
-                                Text(
-                                    "Yes"
-                                )
-                            }
-                            TextButton(
-                                onClick = {
-                                    onDidYouApply(false)
-                                }
-                            ){
-                                Text(
-                                    "No"
-                                )
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
     ) { paddingValues ->
 
         if(job==null){
@@ -219,86 +158,135 @@ fun JobDescriptionPage(
                 CircularProgressIndicator()
             }
         }else{
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
 
-                JobHeader(job, onBack)
+                    JobHeader(job, onBack)
 
-                SectionContainer("Eligible Courses"){
-                    FlowRow(
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    ) {
-                        job.eligibleCourses.forEach { course ->
-                            Box(
-                                modifier = Modifier
-                                    .padding(end = 8.dp, bottom = 8.dp)
-                                    .clip(RoundedCornerShape(50))
-                                    .background(MaterialTheme.colorScheme.background)
-                                    .border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.outlineVariant,
-                                        shape = RoundedCornerShape(50)
+                    SectionContainer("Eligible Courses"){
+                        FlowRow(
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        ) {
+                            job.eligibleCourses.forEach { course ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(end = 8.dp, bottom = 8.dp)
+                                        .clip(RoundedCornerShape(50))
+                                        .background(MaterialTheme.colorScheme.background)
+                                        .border(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colorScheme.outlineVariant,
+                                            shape = RoundedCornerShape(50)
+                                        )
+                                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    Text(
+                                        text = course,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onBackground
                                     )
-                                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                            ) {
-                                Text(
-                                    text = course,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                }
+                            }
+                        }
+                    }
+
+                    SectionContainer("Requirements"){
+                        Column(modifier = Modifier.padding(horizontal = 4.dp)) {
+
+                            Text(
+                                text = job.eligibilityCriteria,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Text(
+                                text = "Skills required:",
+                                style = MaterialTheme.typography.titleSmall
+                            )
+
+                            Text(
+                                text = job.requiredSkills.joinToString(", "),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+
+                    SectionContainer(
+                        "Job Description"
+                    ){
+                        Text(
+                            text = job.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+
+                    SectionContainer(
+                        "Selection Process"
+                    ){
+                        Text(
+                            text = job.selectionProcess,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(100.dp))
+
+                }
+
+                Column(
+                    modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.background
                                 )
+                            )
+                        )
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Button(
+                        onClick = { onApply() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Text(
+                            text = "Apply Now",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    if (state.showDidYouApply) {
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text("Did you apply?")
+
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            TextButton(onClick = { onDidYouApply(true) }) {
+                                Text("Yes")
+                            }
+                            TextButton(onClick = { onDidYouApply(false) }) {
+                                Text("No")
                             }
                         }
                     }
                 }
-
-                SectionContainer("Requirements"){
-                    Column(modifier = Modifier.padding(horizontal = 4.dp)) {
-
-                        Text(
-                            text = job.eligibilityCriteria,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "Skills required:",
-                            style = MaterialTheme.typography.titleSmall
-                        )
-
-                        Text(
-                            text = job.requiredSkills.joinToString(", "),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-
-                SectionContainer(
-                    "Job Description"
-                ){
-                    Text(
-                        text = job.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(4.dp)
-                    )
-                }
-
-                SectionContainer(
-                    "Selection Process"
-                ){
-                    Text(
-                        text = job.selectionProcess,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(4.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
             }
         }
 

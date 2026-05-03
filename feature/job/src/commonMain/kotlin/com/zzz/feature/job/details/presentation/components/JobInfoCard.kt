@@ -69,7 +69,7 @@ private fun InfoItem(
 
         Text(
             text = value,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleSmall,
             color = Color.Black
         )
     }
