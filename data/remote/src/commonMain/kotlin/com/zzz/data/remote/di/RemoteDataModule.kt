@@ -5,11 +5,13 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.zzz.data.remote.HttpClientFactory
 import com.zzz.data.remote.data.auth.RemoteAuthSource
+import com.zzz.data.remote.data.job.RemoteJobApplicationSource
 import com.zzz.data.remote.data.job.RemoteJobSource
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.data.prefs.datastoreName
 import com.zzz.data.remote.data.student.profile.RemoteProfileSource
 import com.zzz.data.remote.domain.auth.AuthSource
+import com.zzz.data.remote.domain.job.JobApplicationSource
 import com.zzz.data.remote.domain.job.JobSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
 import io.ktor.client.HttpClient
@@ -44,6 +46,11 @@ val remoteDataModule = module {
     //--------JOB--------
     single<JobSource> {
         RemoteJobSource(
+            client = get()
+        )
+    }
+    single<JobApplicationSource> {
+        RemoteJobApplicationSource(
             client = get()
         )
     }

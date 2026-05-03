@@ -141,15 +141,20 @@ fun JobDescriptionPage(
     val job = remember(state.job) {
         state.job
     }
-
+    LaunchedEffect(state.showDidYouApply){
+        println("on did you apply change ${state.showDidYouApply}")
+    }
 
 
     Scaffold(
         bottomBar = {
             BottomAppBar(
+                Modifier.height(200.dp),
                 containerColor = Color.Transparent
             ) {
                 Column (
+                    Modifier.height(200.dp)
+                        .padding(bottom = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
                     Box(
@@ -175,7 +180,8 @@ fun JobDescriptionPage(
                         }
                     }
                     if(state.showDidYouApply){
-                        VerticalSpace()
+//                        VerticalSpace()
+                        Text("Did you apply?")
                         Row (
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ){

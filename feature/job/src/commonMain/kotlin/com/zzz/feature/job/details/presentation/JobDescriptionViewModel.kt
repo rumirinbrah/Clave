@@ -45,6 +45,9 @@ class JobDescriptionViewModel(
             _state.value.job?.applicationLink?.let {
                 _events.send(JobDetailEvents.OpenJobLink(it))
             }
+            this@JobDescriptionViewModel.logD {
+                "Show did you apply"
+            }
             _state.update {
                 it.copy(
                     showDidYouApply = true
