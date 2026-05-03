@@ -21,7 +21,9 @@ class RemoteJobApplicationSource(
     override suspend fun apply(request: ApplyJobRequest): Result<Unit , NetworkError> {
         return safeNetworkCall<ApiResponse<Unit>> {
             client.post {
-                val url = constructUrl { ApiRoutes.APPLY_JOB }
+                val url = constructUrl { "/job/apply" } ///job/apply
+                println("URL is $url")
+
                 client.post(url){
                     setBody(request)
                     contentType(ContentType.Application.Json)

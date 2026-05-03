@@ -24,7 +24,8 @@ val jobModule = module {
         JobHomeViewModel(
             profileSource = get(),
             jobSource = get(),
-            prefs = get()
+            prefs = get(),
+            announcementSource = get()
         )
     }
     viewModel{

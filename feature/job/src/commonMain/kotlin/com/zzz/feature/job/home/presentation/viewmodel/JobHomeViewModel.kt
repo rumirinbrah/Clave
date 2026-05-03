@@ -8,6 +8,7 @@ import com.zzz.core.ui.util.ClaveLogger.logI
 import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.job.JobSource
+import com.zzz.data.remote.domain.student.announcements.AnnouncementSource
 import com.zzz.data.remote.domain.student.profile.ProfileSource
 import com.zzz.data.remote.domain.toUIError
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 class JobHomeViewModel(
     private val profileSource: ProfileSource,
     private val jobSource : JobSource,
-    private val prefs : RemoteDatastoreSource
+    private val announcementSource: AnnouncementSource,
+    private val prefs : RemoteDatastoreSource,
 )  : ViewModel(){
 
     private val _state = MutableStateFlow(JobHomeState())
@@ -29,7 +31,35 @@ class JobHomeViewModel(
             "JobHomeViewModel init..."
         }
         getProfile()
+        getAnnouncements()
         getFeedJobs()
+    }
+
+    private fun getAnnouncements() {
+        this.logD {
+            "getAnnouncements : getting..."
+        }
+        viewModelScope.launch {
+            val result = announcementSource.getAnnouncements()
+            when(result){
+                is Result.Error -> {
+                    this@JobHomeViewModel.logE {
+                        "getAnnouncements : ${result.error.toUIError()}"
+                    }
+                }
+                is Result.Success -> {
+                    val announcements = result.data
+                    this@JobHomeViewModel.logD {
+                        "getAnnouncements : $announcements"
+                    }
+                    _state.update {
+                        it.copy(
+                            announcements = announcements
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun getProfile(){

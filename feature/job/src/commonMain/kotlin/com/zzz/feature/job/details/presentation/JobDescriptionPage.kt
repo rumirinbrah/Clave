@@ -148,6 +148,69 @@ fun JobDescriptionPage(
 
 
     Scaffold(
+        bottomBar = {
+//            BottomAppBar(
+//                Modifier.height(200.dp),
+//                containerColor = Color.Transparent
+//            ) {
+                Column (
+                    Modifier
+//                        .height(200.dp)
+                        .padding(bottom = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                onApply()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(52.dp),
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text(
+                                text = "Apply Now",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    if(state.showDidYouApply){
+//                        VerticalSpace()
+                        Text("Did you apply?")
+                        Row (
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ){
+                            TextButton(
+                                onClick = {
+                                    onDidYouApply(true)
+                                }
+                            ){
+                                Text(
+                                    "Yes"
+                                )
+                            }
+                            TextButton(
+                                onClick = {
+                                    onDidYouApply(false)
+                                }
+                            ){
+                                Text(
+                                    "No"
+                                )
+                            }
+                        }
+                    }
+                }
+
+//            }
+        }
     ) { paddingValues ->
 
         if(job==null){
