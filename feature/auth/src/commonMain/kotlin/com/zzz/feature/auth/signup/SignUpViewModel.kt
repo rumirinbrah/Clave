@@ -20,10 +20,10 @@ import com.zzz.feature.auth.login.LoginEvents
 import kotlinx.coroutines.selects.select
 
 data class SignupUiState(
-    val rollNo: String = "22CO078" ,
-    val email: String = "atharvapajgade@gmail.com" ,
-    val name: String = "Atharva" ,
-    val password: String = "P@jgade55" ,
+    val rollNo: String = "" ,
+    val email: String = "" ,
+    val name: String = "" ,
+    val password: String = "" ,
     val isAdmin: Boolean = false ,
     val errorMsg: String? = null ,
     val isLoading: Boolean = false,

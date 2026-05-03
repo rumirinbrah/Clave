@@ -3,6 +3,7 @@ package com.zzz.feature.auth.signup
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.GradientButton
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -100,56 +103,11 @@ fun SignUpScreen(
     ) {
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(horizontal = 20.dp) ,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-//            Spacer(modifier = Modifier.height(40.dp))
-//
-//            Box(
-//                modifier = Modifier
-//                    .size(80.dp)
-//                    .background(
-//                        MaterialTheme.colorScheme.surface,
-//                        RoundedCornerShape(20.dp)
-//                    ),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Text(
-//                    text = "C",
-//                    fontSize = 36.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    color = MaterialTheme.colorScheme.primary
-//                )
-//            }
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            Text(
-//                text = "WELCOME TO CLAVE",
-//                style = MaterialTheme.typography.titleLarge,
-//                fontWeight = FontWeight.Bold
-//            )
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            Text(
-//                text = "Let's set you up!",
-//                style = MaterialTheme.typography.bodyMedium,
-//                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-//            )
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            RoleToggle(
-//                pagerState = pagerState,
-//                tabs = authTabs
-//            )
-//
-//            Spacer(modifier = Modifier.height(24.dp))
-//
-//            VerticalSpace(24.dp)
 
             AnimatedVisibility(uiState.errorMsg != null) {
                 Text(
@@ -160,6 +118,111 @@ fun SignUpScreen(
 
             VerticalSpace(24.dp)
 
+            Column {
+
+                NormalTextField(
+                    value = uiState.rollNo ,
+                    onValueChange = { viewModel.onRollNoChange(it) } ,
+                    placeholder = "Enter your Roll no",
+                    modifier = Modifier.focusRequester(rollFocus),
+                    imeAction = ImeAction.Next,
+                    onImeAction = {
+                        emailFocus.requestFocus()
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                NormalTextField(
+                    value = uiState.email ,
+                    onValueChange = { viewModel.onEmailChange(it) } ,
+                    placeholder = "Enter your Email",
+                    imeAction = ImeAction.Next,
+                    modifier = Modifier.focusRequester(emailFocus),
+                    onImeAction = {
+                        passwordFocus.requestFocus()
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                NormalTextField(
+                    value = uiState.name ,
+                    onValueChange = {
+                        viewModel.onNameChange(it)
+                    } ,
+                    placeholder = "Enter your name",
+                    imeAction = ImeAction.Next,
+                    modifier = Modifier.focusRequester(nameFocus),
+                    onImeAction = {
+                        passwordFocus.requestFocus()
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                var expanded by remember { mutableStateOf(false) }
+                Box {
+                    Button(
+                        onClick = {
+                            expanded = true
+                        },
+                        shape = MaterialTheme.shapes.small
+                    ) {
+                        Text(
+                            "Course ${uiState.selectedCourse?:""}"
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = expanded ,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        uiState.courses.forEach {
+                            DropdownMenuItem(
+                                text = { Text(it) } ,
+                                onClick = {
+//                                            selected = "Option 1"
+                                    viewModel.onCourseSelect(it)
+                                    expanded = false
+                                }
+                            )
+                        }
+//                                    DropdownMenuItem(
+//                                        text = { Text("Option 1") } ,
+//                                        onClick = {
+////                                            selected = "Option 1"
+//                                            expanded = false
+//                                        }
+//                                    )
+//                                    DropdownMenuItem(
+//                                        text = { Text("Option 2") } ,
+//                                        onClick = {
+////                                            selected = "Option 2"
+//                                            expanded = false
+//                                        }
+//                                    )
+                    }
+                }
+
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                NormalTextField(
+                    value = uiState.password ,
+                    onValueChange = { viewModel.onPwdChange(it) } ,
+                    placeholder = "Enter your Password",
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password,
+                    modifier = Modifier.focusRequester(passwordFocus),
+                    onImeAction = {
+                        focusManager.clearFocus()
+                        viewModel.createAccount()
+                    }
+                )
+
+            }
+            /*
             HorizontalPager(
                 state = pagerState ,
                 modifier = Modifier.fillMaxWidth() ,
@@ -296,7 +359,7 @@ fun SignUpScreen(
                         }
                     }
                 }
-            }
+            }*/
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -310,7 +373,7 @@ fun SignUpScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            VerticalSpace()
 
             GradientButton(
                 text = "Create account" ,
