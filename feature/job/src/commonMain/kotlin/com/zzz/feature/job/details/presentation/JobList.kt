@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,10 +68,12 @@ fun JobListRoot(
                     text = {
                         Text(
                             text = tab.title,
-                            fontWeight = if (pagerState.currentPage == index)
-                                FontWeight.SemiBold
+                            color = if (pagerState.currentPage == index)
+                                MaterialTheme.colorScheme.primary
                             else
-                                FontWeight.Normal
+                                MaterialTheme.colorScheme.onBackground.copy(0.7f),
+                            maxLines = 1,
+                            softWrap = false
                         )
                     }
                 )
@@ -79,7 +82,7 @@ fun JobListRoot(
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp)
         ) { page ->
 
             when (jobTabs[page].type) {
@@ -106,7 +109,8 @@ fun JobListPage(
     onApplyClick: (String) -> Unit
 ) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(bottom = 100.dp)
     ) {
         items(jobs.size) {
             val job = jobs[it]

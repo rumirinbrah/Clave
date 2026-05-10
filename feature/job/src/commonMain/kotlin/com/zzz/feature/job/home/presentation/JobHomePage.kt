@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +31,7 @@ import com.zzz.feature.job.home.presentation.viewmodel.JobHomeState
 import com.zzz.feature.job.home.presentation.viewmodel.JobHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.foundation.layout.padding
 import placementapp.feature.job.generated.resources.Res
 import placementapp.feature.job.generated.resources.gear
 
@@ -52,68 +55,67 @@ private fun JobHomePage(
     state : JobHomeState,
     onJobClick : (id : String)->Unit
 ){
-    Box(
-        Modifier.fillMaxSize()
-    ){
-        Column(
-            modifier
-        ) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 100.dp)
+    ) {
+        Row (
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        ){
             Row (
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                Modifier.weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ){
-                Row (
-                    Modifier.weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-                ){
-                    ImageComponent(
-                        Modifier.clip(CircleShape),
-                        imageUrl = "https://img.freepik.com/premium-vector/tik-tok-logo_578229-290.jpg?semt=ais_hybrid&w=740&q=80",
-                        size = 40.dp,
-                    )
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    fontSize = 14.sp
-                                )
-                            ){
-                                append("Welcome back")
-                            }
-                            appendLine()
-                            withStyle(
-                                style = SpanStyle(
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            ){
-                                append(state.name)
-                            }
-                        }
-                    )
-                }
-
-                CircularIconButton(
-                    icon = Res.drawable.gear,
-                    contentDescription = "Alerts",
-                    onClick = {},
-                    iconSize = 25.dp,
-                    contentPadding = 16.dp
+                ImageComponent(
+                    Modifier.clip(CircleShape),
+                    imageUrl = "https://img.freepik.com/premium-vector/tik-tok-logo_578229-290.jpg?semt=ais_hybrid&w=740&q=80",
+                    size = 40.dp,
                 )
-
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = 14.sp
+                            )
+                        ){
+                            append("Welcome back")
+                        }
+                        appendLine()
+                        withStyle(
+                            style = SpanStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ){
+                            append(state.name)
+                        }
+                    }
+                )
             }
-            VerticalSpace(40.dp)
 
-            JobAnnouncementsCard()
-
-            VerticalSpace(40.dp)
-
-            RecentJobsCard(
-                state = state,
-                onClick = onJobClick
+            CircularIconButton(
+                icon = Res.drawable.gear,
+                contentDescription = "Alerts",
+                onClick = {},
+                iconSize = 25.dp,
+                contentPadding = 16.dp
             )
+
         }
+        VerticalSpace(40.dp)
+
+        JobAnnouncementsCard()
+
+        VerticalSpace(40.dp)
+
+        RecentJobsCard(
+            state = state,
+            onClick = onJobClick
+        )
     }
 }
