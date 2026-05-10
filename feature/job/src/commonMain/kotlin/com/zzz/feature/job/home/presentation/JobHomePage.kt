@@ -109,7 +109,9 @@ private fun JobHomePage(
         }
         VerticalSpace(40.dp)
 
-        JobAnnouncementsCard()
+        JobAnnouncementsCard(
+            items = state.announcements
+        )
 
         VerticalSpace(40.dp)
 
