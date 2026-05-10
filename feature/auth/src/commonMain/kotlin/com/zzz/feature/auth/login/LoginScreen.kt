@@ -111,6 +111,48 @@ fun LoginScreen(
 
         VerticalSpace(24.dp)
 
+        Column (
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ){
+
+            NormalTextField(
+                value = uiState.rollNo,
+                onValueChange = { viewModel.onRollNoChange(it) },
+                placeholder = "Enter your Roll no",
+                modifier = Modifier.focusRequester(rollFocus),
+                imeAction = ImeAction.Next,
+                onImeAction = {
+                    emailFocus.requestFocus()
+                }
+            )
+
+
+            NormalTextField(
+                value = uiState.email,
+                onValueChange = { viewModel.onEmailChange(it) },
+                placeholder = "Enter your Email",
+                imeAction = ImeAction.Next,
+                modifier = Modifier.focusRequester(emailFocus),
+                onImeAction = {
+                    passwordFocus.requestFocus()
+                }
+            )
+
+            NormalTextField(
+                value = uiState.password,
+                onValueChange = { viewModel.onPwdChange(it) },
+                placeholder = "Enter password",
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password,
+                modifier = Modifier.focusRequester(passwordFocus),
+                onImeAction = {
+                    focusManager.clearFocus()
+                    viewModel.login()
+                }
+            )
+        }
+
+        /*
         HorizontalPager(
             state = pagerState,
             userScrollEnabled = true,
@@ -182,7 +224,7 @@ fun LoginScreen(
                     }
                 }
             }
-        }
+        }*/
 
         VerticalSpace(24.dp)
 

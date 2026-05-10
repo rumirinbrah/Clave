@@ -55,4 +55,16 @@ class RemoteJobSource(
             }
         }.unwrap()
     }
+
+    override suspend fun getAppliedJobs(): Result<List<Job> , NetworkError> {
+        return safeNetworkCall<ApiResponse<List<JobResponse>>> {
+            val url = "/job/apply/user-applied"
+            client.get(url)
+        }.unwrap()
+            .map {
+                it.map {job->
+                    job.toJob()
+                }
+            }
+    }
 }

@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class AllJobsState(
-    val jobs : List<Job> = emptyList()
+    val jobs : List<Job> = emptyList(),
+    val applied : List<Job> = emptyList()
 )
 
 class JobsPageViewModel(
@@ -27,6 +28,31 @@ class JobsPageViewModel(
 
     init {
         getJobs()
+        getAppliedJobs()
+    }
+
+    private fun getAppliedJobs() {
+        viewModelScope.launch {
+            val result = jobSource.getAppliedJobs()
+            when(result){
+                is Result.Error -> {
+                    val uiError = result.error.toUIError()
+                    this@JobsPageViewModel.logE {
+                        "error : $uiError"
+                    }
+                }
+                is Result.Success -> {
+                    this@JobsPageViewModel.logD {
+                        "success"
+                    }
+                    _state.update {
+                        it.copy(
+                            applied = result.data
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun getJobs(){

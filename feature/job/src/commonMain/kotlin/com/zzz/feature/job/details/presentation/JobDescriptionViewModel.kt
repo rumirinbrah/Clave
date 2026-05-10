@@ -57,6 +57,9 @@ class JobDescriptionViewModel(
     }
 
     fun onDidYouApply(applied: Boolean) {
+        this.logD {
+            "onDidYouApply : Marking as applied"
+        }
         viewModelScope.launch {
             if (applied) {
                 //api call
@@ -70,6 +73,9 @@ class JobDescriptionViewModel(
                 val result = jobApplicationSource.apply(ApplyJobRequest(id))
                 when (result) {
                     is Result.Error -> {
+                        this.logE {
+                            "onDidYouApply : Error ${result.error}"
+                        }
                         val error = result.error.toUIError()
                         this@JobDescriptionViewModel.logE {
                             "applyJob : error $error"
@@ -77,6 +83,9 @@ class JobDescriptionViewModel(
                     }
 
                     is Result.Success -> {
+                        this.logD {
+                            "onDidYouApply : Marked as applied"
+                        }
                         this@JobDescriptionViewModel.logD {
                             "applyJob : success"
                         }

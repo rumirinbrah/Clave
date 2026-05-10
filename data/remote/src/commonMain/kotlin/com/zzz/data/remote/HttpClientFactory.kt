@@ -11,7 +11,9 @@ import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.http.auth.AuthScheme
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
@@ -41,13 +43,13 @@ object HttpClientFactory {
 //                }else{
 //                    "localhost:8080"
 //                }
-                host = if(testing){
-                    "10.0.2.2"
-                }else{
-                    "10.0.2.2"
-                }
-                port = 8080
-//                url("http://82.29.167.147:8080")
+//                host = if(testing){
+//                    "10.0.2.2"
+//                }else{
+//                    "10.0.2.2"
+//                }
+//                port = 8080
+                url("http://82.29.167.147:8080")
 
             }
 

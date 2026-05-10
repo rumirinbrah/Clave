@@ -92,7 +92,7 @@ fun JobListRoot(
                 }
 
                 JobTabType.APPLICATIONS -> {
-
+                    JobListPage(state.applied, onApplyClick)
                 }
 
                 JobTabType.OFFERS -> {

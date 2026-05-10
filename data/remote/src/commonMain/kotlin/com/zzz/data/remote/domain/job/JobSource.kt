@@ -6,6 +6,8 @@ import com.zzz.data.remote.domain.model.Job
 
 interface JobSource {
     suspend fun getJobs() : Result<List<Job>, NetworkError>
+    // job/apply/user-applied
+    suspend fun getAppliedJobs() : Result<List<Job>, NetworkError>
 
     suspend fun getById(id : String) : Result<Job, NetworkError>
 
