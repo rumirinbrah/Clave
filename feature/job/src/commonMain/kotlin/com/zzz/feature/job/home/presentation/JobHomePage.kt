@@ -32,13 +32,15 @@ import com.zzz.feature.job.home.presentation.viewmodel.JobHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import placementapp.feature.job.generated.resources.Res
+import placementapp.feature.job.generated.resources.bell
 import placementapp.feature.job.generated.resources.gear
 
 @Composable
 fun JobHomePageRoot(
     modifier: Modifier = Modifier,
     onJobClick: (id: String) -> Unit,
-    viewAll : ()->Unit
+    viewAll : ()->Unit,
+    onNotifyClick : ()->Unit
 ){
     val viewModel = koinViewModel<JobHomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -47,7 +49,8 @@ fun JobHomePageRoot(
         modifier,
         state = state,
         onJobClick = onJobClick,
-        viewAll = viewAll
+        viewAll = viewAll,
+        onNotifyClick = onNotifyClick
     )
 }
 @Composable
@@ -55,7 +58,8 @@ private fun JobHomePage(
     modifier: Modifier = Modifier,
     state : JobHomeState,
     onJobClick : (id : String)->Unit,
-    viewAll : ()->Unit
+    viewAll : ()->Unit,
+    onNotifyClick : ()->Unit
 ){
     Box(
         Modifier.fillMaxSize()
@@ -103,9 +107,11 @@ private fun JobHomePage(
                 }
 
                 CircularIconButton(
-                    icon = Res.drawable.gear,
-                    contentDescription = "Alerts",
-                    onClick = {},
+                    icon = Res.drawable.bell,
+                    contentDescription = "Notifications",
+                    onClick = {
+                        onNotifyClick()
+                    },
                     iconSize = 25.dp,
                     contentPadding = 16.dp
                 )

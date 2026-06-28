@@ -7,6 +7,8 @@ import com.zzz.data.remote.HttpClientFactory
 import com.zzz.data.remote.data.auth.RemoteAuthSource
 import com.zzz.data.remote.data.job.RemoteJobApplicationSource
 import com.zzz.data.remote.data.job.RemoteJobSource
+import com.zzz.data.remote.data.notification.NotificationSource
+import com.zzz.data.remote.data.notification.RemoteNotificationSource
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.data.prefs.datastoreName
 import com.zzz.data.remote.data.student.announcements.RemoteAnnouncementSource
@@ -58,6 +60,11 @@ val remoteDataModule = module {
     }
     single<AnnouncementSource> {
         RemoteAnnouncementSource(
+            client = get()
+        )
+    }
+    single<NotificationSource>{
+        RemoteNotificationSource(
             client = get()
         )
     }

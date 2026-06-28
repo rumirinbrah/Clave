@@ -1,9 +1,11 @@
 package com.zzz.feature.job.di
 
+import com.zzz.data.remote.data.notification.NotificationSource
 import com.zzz.feature.job.details.presentation.JobDescriptionViewModel
 import com.zzz.feature.job.details.presentation.viewmodel.JobsPageViewModel
 import com.zzz.feature.job.home.presentation.viewmodel.AnnouncementsViewModel
 import com.zzz.feature.job.home.presentation.viewmodel.JobHomeViewModel
+import com.zzz.feature.job.notification.NotificationViewModel
 import com.zzz.feature.job.user.presentation.viewmodel.UpdateProfileViewModel
 import com.zzz.feature.job.user.presentation.viewmodel.UserProfileViewModel
 import org.koin.core.module.dsl.viewModel
@@ -43,6 +45,11 @@ val jobModule = module {
     viewModel{
         AnnouncementsViewModel(
             announcementSource = get()
+        )
+    }
+    viewModel {
+        NotificationViewModel(
+            notificationSource = get()
         )
     }
 }

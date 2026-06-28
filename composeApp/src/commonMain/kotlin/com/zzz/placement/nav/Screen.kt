@@ -25,6 +25,9 @@ sealed class Screen {
         data class JobDescription(val jobId : String) : Screen()
         @Serializable
         data object AllAnnouncements : Screen()
+
+        @Serializable
+        data object Notifications : Screen()
     }
 
     @Serializable
