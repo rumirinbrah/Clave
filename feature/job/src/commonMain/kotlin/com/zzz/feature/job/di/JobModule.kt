@@ -2,6 +2,7 @@ package com.zzz.feature.job.di
 
 import com.zzz.feature.job.details.presentation.JobDescriptionViewModel
 import com.zzz.feature.job.details.presentation.viewmodel.JobsPageViewModel
+import com.zzz.feature.job.home.presentation.viewmodel.AnnouncementsViewModel
 import com.zzz.feature.job.home.presentation.viewmodel.JobHomeViewModel
 import com.zzz.feature.job.user.presentation.viewmodel.UpdateProfileViewModel
 import com.zzz.feature.job.user.presentation.viewmodel.UserProfileViewModel
@@ -37,6 +38,11 @@ val jobModule = module {
     viewModel{
         JobsPageViewModel(
             jobSource = get()
+        )
+    }
+    viewModel{
+        AnnouncementsViewModel(
+            announcementSource = get()
         )
     }
 }

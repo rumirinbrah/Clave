@@ -103,4 +103,14 @@ class RemoteDatastoreSource(
         }.firstOrNull()
     }
 
+    suspend fun logout(){
+        clearTokens()
+        datastore.edit {
+            it.remove(loggedInKey)
+            it.remove(usernameKey)
+            it.remove(rollNoKey)
+            it.remove(branchKey)
+        }
+    }
+
 }

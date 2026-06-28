@@ -18,6 +18,7 @@ import com.zzz.feature.auth.login.LoginScreen
 import com.zzz.feature.auth.signup.SignUpScreen
 import com.zzz.feature.job.details.presentation.JobDescriptionRoot
 import com.zzz.feature.job.home.presentation.JobHomePageRoot
+import com.zzz.feature.job.home.presentation.components.AllAnnouncementsPage
 import com.zzz.feature.job.user.UpdateProfileRoot
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
@@ -98,6 +99,9 @@ fun NavGraphBuilder.homeGraph(
             JobHomePageRoot(
                 onJobClick = {
                     navController.navigate(Screen.Home.JobDescription(it))
+                },
+                viewAll = {
+                    navController.navigate(Screen.Home.AllAnnouncements)
                 }
             )
         }
@@ -111,6 +115,16 @@ fun NavGraphBuilder.homeGraph(
                     navController.navigateUp()
                 },
                 jobId = route.jobId
+            )
+        }
+        composable<Screen.Home.AllAnnouncements> {
+            LaunchedEffect(Unit){
+                navBarVisibilityChange(false)
+            }
+            AllAnnouncementsPage(
+                onBack = {
+                    navController.navigateUp()
+                }
             )
         }
     }

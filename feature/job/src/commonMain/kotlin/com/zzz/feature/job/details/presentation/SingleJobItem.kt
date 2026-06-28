@@ -57,7 +57,7 @@ fun SingleJobItem(
                     ImageComponent(
                         imageUrl = job.companyLogoUrl ?: "",
                         contentDescription = "",
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Fit
                     )
                 }
 

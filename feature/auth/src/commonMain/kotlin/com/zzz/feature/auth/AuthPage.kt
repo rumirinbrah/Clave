@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.ClaveDefaults
 import com.zzz.core.ui.presentation.components.VerticalSpace
+import com.zzz.feature.auth.login.AuthBackgroundSlider
 import com.zzz.feature.auth.login.AuthTabItem
 import com.zzz.feature.auth.login.LoginScreen
 import com.zzz.feature.auth.login.RoleToggle
@@ -53,83 +54,90 @@ private fun AuthPage(
     val pagerState = rememberPagerState { authTabs.size }
     val scope = rememberCoroutineScope()
 
-    Column(
-        modifier
-            .fillMaxSize()
-            .padding(ClaveDefaults.CONTAINER_PADDING),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(){
+        AuthBackgroundSlider(
+            Modifier.fillMaxWidth(),
+            pagerState.currentPage
+        )
+        Column(
+            modifier
+                .fillMaxSize()
+                .padding(ClaveDefaults.CONTAINER_PADDING),
+            horizontalAlignment = Alignment.CenterHorizontally
 
-    ) {
-        VerticalSpace(40.dp)
-
-        // Logo
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .background(
-                    MaterialTheme.colorScheme.surface,
-                    RoundedCornerShape(20.dp)
-                ),
-            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "C",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
+            VerticalSpace(40.dp)
 
-        VerticalSpace(16.dp)
-
-        Text(
-            text = "WELCOME TO CLAVE",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-
-        VerticalSpace(8.dp)
-
-        Text(
-            text = "Choose action",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
-        )
-
-        VerticalSpace(16.dp)
-
-        RoleToggle(
-            pagerState = pagerState,
-            tabs = authPagerTabs
-        )
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = true,
-            modifier = Modifier.fillMaxWidth()
-        ) {page->
-            when(page){
-                0->{
-                    LoginScreen(
-                        onRegister = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(1)
-                            }
-                        },
-                        navToHome = navToHome
-                    )
-                }
-                1->{
-                    SignUpScreen(
-                        onLoginClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(0)
-                            }
-                        },
-                        onNavigateToOtp = navToOtp
-                    )
-                }
+            // Logo
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                        RoundedCornerShape(20.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "C",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
 
+            VerticalSpace(16.dp)
+
+            Text(
+                text = "WELCOME TO CLAVE",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+
+            VerticalSpace(8.dp)
+
+            Text(
+                text = "Choose action",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+            )
+
+            VerticalSpace(16.dp)
+
+            RoleToggle(
+                pagerState = pagerState,
+                tabs = authPagerTabs
+            )
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = true,
+                modifier = Modifier.fillMaxWidth()
+            ) {page->
+                when(page){
+                    0->{
+                        LoginScreen(
+                            onRegister = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(1)
+                                }
+                            },
+                            navToHome = navToHome
+                        )
+                    }
+                    1->{
+                        SignUpScreen(
+                            onLoginClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(0)
+                                }
+                            },
+                            onNavigateToOtp = navToOtp
+                        )
+                    }
+                }
+
+            }
         }
     }
+
 }

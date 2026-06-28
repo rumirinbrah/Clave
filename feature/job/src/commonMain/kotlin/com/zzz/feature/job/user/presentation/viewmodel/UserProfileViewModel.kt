@@ -104,7 +104,7 @@ class UserProfileViewModel(
     */
     fun clearTokens(){
         viewModelScope.launch {
-            datastoreSource.clearTokens()
+            datastoreSource.logout()
             _events.send(ProfileEvents.LogOut)
         }
     }
