@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.feature.job.details.presentation.viewmodel.JobsPageViewModel
 import kotlinx.coroutines.launch
@@ -111,6 +112,9 @@ fun JobListPage(
         items(jobs.size) {
             val job = jobs[it]
             SingleJobItem(job, onApplyClick)
+        }
+        item{
+            VerticalSpace(16.dp)
         }
     }
 }
