@@ -12,5 +12,6 @@ data class JobHomeState(
     val offers : String = "-",
     val name : String = "",
     val jobs : List<Job> = emptyList(),
-    val announcements : List<AnnouncementResponse> = emptyList()
+    val announcements : List<AnnouncementResponse> = emptyList(),
+    val notifCount : String = "0"
 )

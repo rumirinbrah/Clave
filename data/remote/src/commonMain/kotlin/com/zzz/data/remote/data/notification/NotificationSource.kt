@@ -5,4 +5,6 @@ import com.zzz.data.remote.domain.NetworkError
 interface NotificationSource {
 
     suspend fun getNotifications(): Result<List<NotificationResponse>, NetworkError>
+
+    suspend fun getNotifCount() : Result<Long, NetworkError>
 }

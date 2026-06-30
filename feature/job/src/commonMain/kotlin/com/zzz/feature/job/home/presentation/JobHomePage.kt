@@ -1,5 +1,6 @@
 package com.zzz.feature.job.home.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,9 @@ import com.zzz.feature.job.home.presentation.viewmodel.JobHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import placementapp.feature.job.generated.resources.Res
 import placementapp.feature.job.generated.resources.bell
 import placementapp.feature.job.generated.resources.gear
@@ -106,15 +110,30 @@ private fun JobHomePage(
                 )
             }
 
-            CircularIconButton(
-                icon = Res.drawable.bell ,
-                contentDescription = "Alerts" ,
-                onClick = {
-                    onNotifyClick()
-                } ,
-                iconSize = 25.dp ,
-                contentPadding = 16.dp
-            )
+            Box(){
+                CircularIconButton(
+                    icon = Res.drawable.bell ,
+                    contentDescription = "Alerts" ,
+                    onClick = {
+                        onNotifyClick()
+                    } ,
+                    iconSize = 25.dp ,
+                    contentPadding = 16.dp
+                )
+                Box(
+                    Modifier.clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.error)
+                        .padding(2.dp)
+                        .align(Alignment.TopEnd)
+                ){
+                    Text(
+                        text = state.notifCount,
+//                        modifier = Modifier.align(Alignment.TopEnd),
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onError
+                    )
+                }
+            }
 
         }
         VerticalSpace(40.dp)
