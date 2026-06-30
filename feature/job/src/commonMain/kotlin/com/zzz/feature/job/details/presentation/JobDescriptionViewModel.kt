@@ -22,7 +22,8 @@ import kotlinx.coroutines.launch
 data class JobDetailState(
     val job: Job? = null ,
     val loading: Boolean = false ,
-    val showDidYouApply: Boolean = false
+    val showDidYouApply: Boolean = false,
+    val applied : Boolean = false
 )
 
 sealed interface JobDetailEvents {
@@ -83,14 +84,17 @@ class JobDescriptionViewModel(
                         this@JobDescriptionViewModel.logE {
                             "applyJob : error $error"
                         }
+                        _state.update {
+                            it.copy(applied = false)
+                        }
                     }
 
                     is Result.Success -> {
                         this.logD {
                             "onDidYouApply : Marked as applied"
                         }
-                        this@JobDescriptionViewModel.logD {
-                            "applyJob : success"
+                        _state.update {
+                            it.copy(applied = true)
                         }
                     }
                 }
@@ -107,10 +111,12 @@ class JobDescriptionViewModel(
 
     fun getJobById(id: String) {
         viewModelScope.launch {
+
             _state.update {
                 it.copy(loading = true)
             }
             val result = jobSource.getById(id)
+
             when (result) {
                 is Result.Error -> {
                     val uiError = result.error.toUIError()
@@ -128,12 +134,43 @@ class JobDescriptionViewModel(
                     this@JobDescriptionViewModel.logD {
                         "getJobById : Success ${result.data}"
                     }
+                    this.logD {
+                        "before launch"
+                    }
+                    launch {
+                        getAppliedOrNot(result.data.id)
+                    }
+                    this.logD {
+                        "after launch"
+                    }
                     _state.update {
                         it.copy(
                             loading = false ,
                             job = result.data
                         )
                     }
+                }
+            }
+        }
+    }
+
+    private suspend fun getAppliedOrNot(id : String){
+        this.logD {
+            "calling applied or not for ${id}"
+        }
+        val appliedResult = jobApplicationSource.getAppliedOrNot(id)
+        when(appliedResult){
+            is Result.Error -> {
+                this@JobDescriptionViewModel.logE {
+                    "getAppliedNot : ${appliedResult.error.toUIError()}"
+                }
+            }
+            is Result.Success -> {
+                this@JobDescriptionViewModel.logD {
+                    "getJobById : Success ${appliedResult.data}"
+                }
+                _state.update {
+                    it.copy(applied = appliedResult.data)
                 }
             }
         }

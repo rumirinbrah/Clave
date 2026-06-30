@@ -305,51 +305,84 @@ fun JobDescriptionPage(
 
                 }
 
-                Column(
-                    modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color.Transparent,
-                                    MaterialTheme.colorScheme.background
+                if(!state.loading){
+                    if(state.applied){
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .background(
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            Color.Transparent,
+                                            MaterialTheme.colorScheme.background
+                                        )
+                                    )
                                 )
-                            )
-                        )
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Button(
-                        onClick = { onApply() },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(52.dp),
-                        shape = RoundedCornerShape(14.dp)
-                    ) {
-                        Text(
-                            text = "Apply Now",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    if (state.showDidYouApply) {
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text("Did you apply?")
-
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            TextButton(onClick = { onDidYouApply(true) }) {
-                                Text("Yes")
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row (
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ){
+                                Text(
+                                    text = "You have already applied to this job",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
-                            TextButton(onClick = { onDidYouApply(false) }) {
-                                Text("No")
+                        }
+                    }else{
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .background(
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            Color.Transparent,
+                                            MaterialTheme.colorScheme.background
+                                        )
+                                    )
+                                )
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Button(
+                                onClick = { onApply() },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(52.dp),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text(
+                                    text = "Apply Now",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            if (state.showDidYouApply) {
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text("Did you apply?")
+
+                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    TextButton(onClick = { onDidYouApply(true) }) {
+                                        Text("Yes")
+                                    }
+                                    TextButton(onClick = { onDidYouApply(false) }) {
+                                        Text("No")
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
+
             }
         }
 

@@ -58,7 +58,7 @@ fun JobListRoot(
             .animateContentSize()
     ) {
 
-        SearchBar()
+//        SearchBar()
 
         TabRow(selectedTabIndex = pagerState.currentPage) {
             jobTabs.forEachIndexed { index, tab ->

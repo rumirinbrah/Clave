@@ -69,17 +69,17 @@ class JobsPageViewModel(
             when(result){
                 is Result.Error -> {
                     val uiError = result.error.toUIError()
-                    this@JobsPageViewModel.logE {
-                        "getFeedJobs : Error ${uiError}"
-                    }
+//                    this@JobsPageViewModel.logE {
+//                        "getFeedJobs : Error ${uiError}"
+//                    }
                     _state.update {
                         it.copy(jobsLoading = false)
                     }
                 }
                 is Result.Success -> {
-                    this@JobsPageViewModel.logI {
-                        "getFeedJobs : Success ${result.data}"
-                    }
+//                    this@JobsPageViewModel.logI {
+//                        "getFeedJobs : Success ${result.data}"
+//                    }
                     _state.update {
                         it.copy(jobs = result.data , jobsLoading = false)
                     }

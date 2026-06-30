@@ -51,42 +51,74 @@ fun NotificationPage(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
+//            .statusBarsPadding()
     ) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 16.dp, vertical = 12.dp),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
 
-            Surface(
-                modifier = Modifier.size(40.dp),
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                onClick = onBack
+//            Surface(
+//                modifier = Modifier.size(40.dp),
+//                shape = CircleShape,
+//                color = MaterialTheme.colorScheme.primaryContainer,
+//                onClick = onBack
+//            ) {
+//                Box(
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Icon(
+//                        painter = painterResource(Res.drawable.baseline_arrow_back_24),
+//                        contentDescription = "Back",
+//                        modifier = Modifier.size(22.dp),
+//                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+//                    )
+//                }
+//                CircularIconButton(
+//                    icon = Res.drawable.baseline_arrow_back_24 ,
+//                    contentDescription = "back" ,
+//                    onClick = {
+//                        onBack()
+//                    } ,
+//                    iconSize = 25.dp ,
+//                    contentPadding = 16.dp
+//                )
+//            }
+        //            Spacer(modifier = Modifier.width(12.dp))
+//
+//            Text(
+//                text = "Notifications",
+//                style = MaterialTheme.typography.titleLarge,
+//                fontWeight = FontWeight.Bold
+//            )
+//        }
+            Row(
+                Modifier.fillMaxWidth() ,
+                horizontalArrangement = Arrangement.spacedBy(12.dp) ,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.baseline_arrow_back_24),
-                        contentDescription = "Back",
-                        modifier = Modifier.size(22.dp),
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
+                CircularIconButton(
+                    icon = Res.drawable.baseline_arrow_back_24 ,
+                    contentDescription = "back" ,
+                    onClick = {
+                        onBack()
+                    } ,
+                    iconSize = 25.dp ,
+                    contentPadding = 16.dp
+                )
+
+                Text(
+                    text = "Notifications" ,
+                    style = MaterialTheme.typography.titleMedium ,
+                    fontWeight = FontWeight.Bold ,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
 
-            Text(
-                text = "Notifications",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-        }
 
         when {
 

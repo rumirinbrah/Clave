@@ -6,4 +6,5 @@ import com.zzz.data.remote.domain.NetworkError
 
 interface JobApplicationSource {
     suspend fun apply(request: ApplyJobRequest) : Result<Unit, NetworkError>
+    suspend fun getAppliedOrNot(jobId : String) : Result<Boolean, NetworkError>
 }

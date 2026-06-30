@@ -10,9 +10,11 @@ import com.zzz.data.remote.util.constructUrl
 import com.zzz.data.remote.util.safeNetworkCall
 import com.zzz.data.remote.util.unwrap
 import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.appendPathSegments
 import io.ktor.http.contentType
 
 class RemoteJobApplicationSource(
@@ -23,11 +25,25 @@ class RemoteJobApplicationSource(
             client.post {
                 val url = constructUrl { "/job/apply" } ///job/apply
 //                println("URL is $url")
-                client.post(url){
+                client.post(url) {
                     setBody(request)
                     contentType(ContentType.Application.Json)
                 }
             }
+        }.unwrap()
+    }
+
+    override suspend fun getAppliedOrNot(jobId: String): Result<Boolean , NetworkError> {
+        return safeNetworkCall<ApiResponse<Boolean>> {
+
+            val url = constructUrl { "/job/apply/user-applied" }
+            client.get(url) {
+                contentType(ContentType.Application.Json)
+                url {
+                    appendPathSegments(jobId)
+                }
+            }
+
         }.unwrap()
     }
 }
