@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zzz.core.ui.presentation.components.CardContainer
 import com.zzz.core.ui.presentation.components.CircularIconButton
+import com.zzz.core.ui.presentation.components.HorizontalSpace
 import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.core.ui.theme.cardShinyBlue
 import com.zzz.data.remote.data.student.announcements.AnnouncementResponse
@@ -164,6 +165,8 @@ fun AllAnnouncementsPage(
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
+
+        HorizontalSpace(16.dp)
 
         Column(
             Modifier.fillMaxWidth()

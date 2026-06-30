@@ -19,6 +19,7 @@ import com.zzz.feature.auth.signup.SignUpScreen
 import com.zzz.feature.job.details.presentation.JobDescriptionRoot
 import com.zzz.feature.job.home.presentation.JobHomePageRoot
 import com.zzz.feature.job.home.presentation.components.AllAnnouncementsPage
+import com.zzz.feature.job.notification.NotificationPage
 import com.zzz.feature.job.user.UpdateProfileRoot
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
@@ -102,6 +103,9 @@ fun NavGraphBuilder.homeGraph(
                 },
                 viewAll = {
                     navController.navigate(Screen.Home.AllAnnouncements)
+                },
+                onNotifyClick = {
+                    navController.navigate(Screen.Home.Notifications)
                 }
             )
         }
@@ -123,6 +127,17 @@ fun NavGraphBuilder.homeGraph(
             }
             AllAnnouncementsPage(
                 onBack = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Screen.Home.Notifications> {
+            LaunchedEffect(Unit){
+                navBarVisibilityChange(false)
+            }
+            NotificationPage(
+                onBack= {
                     navController.navigateUp()
                 }
             )
