@@ -22,8 +22,7 @@ class RemoteJobApplicationSource(
         return safeNetworkCall<ApiResponse<Unit>> {
             client.post {
                 val url = constructUrl { "/job/apply" } ///job/apply
-                println("URL is $url")
-
+//                println("URL is $url")
                 client.post(url){
                     setBody(request)
                     contentType(ContentType.Application.Json)

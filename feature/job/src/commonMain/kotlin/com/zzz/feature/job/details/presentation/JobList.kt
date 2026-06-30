@@ -1,8 +1,10 @@
 package com.zzz.feature.job.details.presentation
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -27,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.feature.job.details.presentation.viewmodel.JobsPageViewModel
 import kotlinx.coroutines.launch
@@ -51,6 +55,7 @@ fun JobListRoot(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .animateContentSize()
     ) {
 
         SearchBar()
@@ -85,7 +90,16 @@ fun JobListRoot(
             when (jobTabs[page].type) {
 
                 JobTabType.JOBS -> {
-                    JobListPage(state.jobs, onApplyClick)
+                    if(state.jobsLoading){
+                        Box(
+                            Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ){
+                            CircularProgressIndicator()
+                        }
+                    }else{
+                        JobListPage(state.jobs, onApplyClick)
+                    }
                 }
 
                 JobTabType.APPLICATIONS -> {
@@ -111,6 +125,9 @@ fun JobListPage(
         items(jobs.size) {
             val job = jobs[it]
             SingleJobItem(job, onApplyClick)
+        }
+        item{
+            VerticalSpace(40.dp)
         }
     }
 }

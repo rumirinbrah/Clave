@@ -124,6 +124,9 @@ private fun JobHomePage(
                 state = state,
                 onClick = onJobClick
             )
+
+            VerticalSpace(40.dp)
+
         }
     }
 }

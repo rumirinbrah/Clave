@@ -9,6 +9,7 @@ import com.zzz.core.util.domain.Result
 import com.zzz.data.remote.domain.job.JobSource
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.data.remote.domain.toUIError
+import com.zzz.feature.job.details.presentation.jobList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 data class AllJobsState(
     val jobs : List<Job> = emptyList(),
-    val applied : List<Job> = emptyList()
+    val applied : List<Job> = emptyList(),
+    val jobsLoading : Boolean = false
 )
 
 class JobsPageViewModel(
@@ -60,6 +62,9 @@ class JobsPageViewModel(
             this@JobsPageViewModel.logD {
                 "getFeedJobs : Getting jobs"
             }
+            _state.update {
+                it.copy(jobsLoading = true)
+            }
             val result = jobSource.getJobs()
             when(result){
                 is Result.Error -> {
@@ -67,13 +72,16 @@ class JobsPageViewModel(
                     this@JobsPageViewModel.logE {
                         "getFeedJobs : Error ${uiError}"
                     }
+                    _state.update {
+                        it.copy(jobsLoading = false)
+                    }
                 }
                 is Result.Success -> {
                     this@JobsPageViewModel.logI {
                         "getFeedJobs : Success ${result.data}"
                     }
                     _state.update {
-                        it.copy(jobs = result.data)
+                        it.copy(jobs = result.data , jobsLoading = false)
                     }
                 }
             }

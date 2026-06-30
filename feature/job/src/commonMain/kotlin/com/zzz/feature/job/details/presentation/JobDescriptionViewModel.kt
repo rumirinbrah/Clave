@@ -64,6 +64,9 @@ class JobDescriptionViewModel(
             if (applied) {
                 //api call
                 val id = _state.value.job?.id ?: return@launch
+                this@JobDescriptionViewModel.logD {
+                    "Job id is $id"
+                }
                 _state.update {
                     it.copy(
                         showDidYouApply = false ,

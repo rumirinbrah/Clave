@@ -31,31 +31,31 @@ import placementapp.feature.job.generated.resources.megaphone
 
 @Composable
 fun JobAnnouncementsCard(
-    modifier: Modifier = Modifier,
-    items : List<AnnouncementResponse>,
-    viewAll : ()->Unit
-){
+    modifier: Modifier = Modifier ,
+    items: List<AnnouncementResponse> ,
+    viewAll: () -> Unit
+) {
     CardContainer(
-        modifier.fillMaxWidth(),
+        modifier.fillMaxWidth() ,
         padding = 12.dp
     ) {
         Column {
-            Row (
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+            Row(
+                Modifier.fillMaxWidth() ,
+                horizontalArrangement = Arrangement.SpaceBetween ,
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Text(
-                    text = "Announcements (${items.size})",
+                    text = "Announcements (${items.size})" ,
                     style = MaterialTheme.typography.titleMedium ,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold ,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 TextButton(
                     onClick = {
                         viewAll()
                     }
-                ){
+                ) {
                     Text("View All")
                 }
             }
@@ -129,36 +129,38 @@ fun JobAnnouncementsCard(
         }
     }
 }
+
 @Composable
 fun AllAnnouncementsPage(
-    modifier: Modifier = Modifier,
-    onBack : ()->Unit
-){
+    modifier: Modifier = Modifier ,
+    onBack: () -> Unit
+) {
     val viewModel = koinViewModel<AnnouncementsViewModel>()
     val items by viewModel.items.collectAsStateWithLifecycle()
     Column(
         modifier.fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row (
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Row(
+            Modifier.fillMaxWidth() ,
+            horizontalArrangement = Arrangement.SpaceBetween ,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             CircularIconButton(
-                icon = Res.drawable.baseline_arrow_back_24,
-                contentDescription = "back",
+                icon = Res.drawable.baseline_arrow_back_24 ,
+                contentDescription = "back" ,
                 onClick = {
                     onBack()
-                },
-                iconSize = 25.dp,
+                } ,
+                iconSize = 25.dp ,
                 contentPadding = 16.dp
             )
 
             Text(
-                text = "Announcements (${items.size})",
+                text = "Announcements (${items.size})" ,
                 style = MaterialTheme.typography.titleMedium ,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold ,
                 color = MaterialTheme.colorScheme.onBackground
             )
         }
@@ -179,37 +181,37 @@ fun AllAnnouncementsPage(
 
 @Composable
 fun AnnouncementItem(
-    modifier: Modifier = Modifier,
-    items : AnnouncementResponse
-){
+    modifier: Modifier = Modifier ,
+    items: AnnouncementResponse
+) {
     CardContainer(
-        modifier.fillMaxWidth(),
-        background = cardShinyBlue,
+        modifier.fillMaxWidth() ,
+        background = cardShinyBlue ,
         padding = 16.dp
     ) {
         Column {
             //-------ICON AND TITLE------
             Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top,
+                Modifier.fillMaxWidth() ,
+                verticalAlignment = Alignment.Top ,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 CircularIconButton(
-                    icon = Res.drawable.megaphone,
-                    contentDescription = "Icon",
-                    onClick = {},
-                    tint = Color.White,
-                    background = Color.White.copy(0.25f),
-                    enabled = false,
-                    iconSize = 24.dp,
-                    contentPadding = 10.dp,
+                    icon = Res.drawable.megaphone ,
+                    contentDescription = "Icon" ,
+                    onClick = {} ,
+                    tint = Color.White ,
+                    background = Color.White.copy(0.25f) ,
+                    enabled = false ,
+                    iconSize = 24.dp ,
+                    contentPadding = 10.dp ,
                 )
                 //-------TITLE AND SUB T------
                 Column {
                     Text(
-                        items.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
+                        items.title ,
+                        style = MaterialTheme.typography.titleMedium ,
+                        fontWeight = FontWeight.Bold ,
                         color = Color.White
                     )
 //                            Text(
@@ -223,8 +225,8 @@ fun AnnouncementItem(
             //-------DESCRIPITON------
             VerticalSpace(15.dp)
             Text(
-                items.description,
-                style = MaterialTheme.typography.bodyMedium,
+                items.description ,
+                style = MaterialTheme.typography.bodyMedium ,
                 color = Color.White
             )
         }
