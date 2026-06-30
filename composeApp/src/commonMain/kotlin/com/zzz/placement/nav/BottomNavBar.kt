@@ -96,19 +96,19 @@ fun BottomNavBar(
                 .weight(1f)
         )
 
-        BottomNavItem(
-            icon = Res.drawable.chat ,
-            label = "Community" ,
-            onClick = {
-                onRouteChange(Screen.Community)
-//                TODO()
-            } ,
-            selected = currentRoute == Screen.Community ,
-            size = iconSize ,
-            modifier = Modifier
-                .height(height)
-                .weight(1f)
-        )
+//        BottomNavItem(
+//            icon = Res.drawable.chat ,
+//            label = "Community" ,
+//            onClick = {
+//                onRouteChange(Screen.Community)
+////                TODO()
+//            } ,
+//            selected = currentRoute == Screen.Community ,
+//            size = iconSize ,
+//            modifier = Modifier
+//                .height(height)
+//                .weight(1f)
+//        )
 
         BottomNavItem(
             icon = Res.drawable.account_person ,

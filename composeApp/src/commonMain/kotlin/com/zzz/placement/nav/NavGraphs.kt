@@ -21,6 +21,8 @@ import com.zzz.feature.job.home.presentation.JobHomePageRoot
 import com.zzz.feature.job.home.presentation.components.AllAnnouncementsPage
 import com.zzz.feature.job.notification.NotificationPage
 import com.zzz.feature.job.user.UpdateProfileRoot
+import com.zzz.feature.job.user.presentation.AboutScreen
+import com.zzz.feature.job.user.presentation.ThemeScreen
 import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
 fun NavGraphBuilder.authGraph(
@@ -147,7 +149,10 @@ fun NavGraphBuilder.homeGraph(
 
 fun NavGraphBuilder.accountGraph(
     navController: NavController,
-    navBarVisibilityChange : (visible : Boolean) ->Unit
+    darkTheme: Boolean,
+    onThemeChanged: (Boolean) -> Unit,
+    navBarVisibilityChange : (visible : Boolean) ->Unit,
+
 ) {
     navigation<Screen.Account>(
         startDestination = Screen.Account.AccountPage
@@ -159,65 +164,53 @@ fun NavGraphBuilder.accountGraph(
             }
 
             UserAccountPageRoot(
-                onLogOut = {
+                onLogoutClick= {
                     navController.navigate(Screen.Auth) {
                         popUpTo(Screen.Home) {
                             inclusive = true
                         }
                     }
                 } ,
-                editProfile =  {
+                onProfileClick =  {
                     navController.navigate(Screen.Account.Profile)
                 },
-                editSettings =  {
-                    navController.navigate(Screen.Account.Settings)
+                onThemeClick =  {
+                    navController.navigate(Screen.Account.Theme)
                 },
-                editPrefs =  {
-                    navController.navigate(Screen.Account.Preferences)
-                },
-                editResume =  {
-                    navController.navigate(Screen.Account.Resume)
+                onAboutClick =  {
+                    navController.navigate(Screen.Account.About)
                 },
             )
         }
-        //--------SETT--------
-        composable<Screen.Account.Settings> {
+        //--------THEME--------
+        composable<Screen.Account.Theme> {
             LaunchedEffect(Unit){
                 navBarVisibilityChange(false)
             }
-            Box(
-                Modifier.fillMaxSize()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ){
-                Text("Settings")
-            }
+            ThemeScreen(
+                isDarkTheme = darkTheme,
+                onThemeSelected = onThemeChanged
+            )
         }
         //--------PREFS--------
-        composable<Screen.Account.Preferences> {
+//        composable<Screen.Account.Preferences> {
+//            LaunchedEffect(Unit){
+//                navBarVisibilityChange(false)
+//            }
+//            Box(
+//                Modifier.fillMaxSize()
+//                    .padding(16.dp),
+//                contentAlignment = Alignment.Center
+//            ){
+//                Text("Preferences")
+//            }
+//        }
+        //--------ABOUT--------
+        composable<Screen.Account.About> {
             LaunchedEffect(Unit){
                 navBarVisibilityChange(false)
             }
-            Box(
-                Modifier.fillMaxSize()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ){
-                Text("Preferences")
-            }
-        }
-        //--------RESUME--------
-        composable<Screen.Account.Resume> {
-            LaunchedEffect(Unit){
-                navBarVisibilityChange(false)
-            }
-            Box(
-                Modifier.fillMaxSize()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ){
-                Text("Resume")
-            }
+            AboutScreen()
         }
         //--------PROF--------
         composable<Screen.Account.Profile> {

@@ -48,10 +48,10 @@ sealed class Screen {
         data object Preferences : Screen()
 
         @Serializable
-        data object Settings : Screen()
+        data object Theme: Screen()
 
         @Serializable
-        data object Resume : Screen()
+        data object About : Screen()
     }
 
 }

@@ -21,8 +21,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.zzz.feature.auth.AuthRoot
 import com.zzz.feature.auth.otp.VerifyOtpScreen
+import com.zzz.feature.job.community.presentation.CommunityScreen
 import com.zzz.feature.job.details.presentation.JobListRoot
-import com.zzz.feature.job.user.presentation.UserAccountPageRoot
 
 val bottomRoutes = listOf(
     Screen.Home,
@@ -37,7 +37,8 @@ val bottomRoutes = listOf(
  */
 @Composable
 fun Navigation(
-
+    darkTheme: Boolean,
+    onThemeChanged: (Boolean) -> Unit
 ) {
     val navController = rememberNavController()
 //    var currentRoute by remember {
@@ -65,7 +66,7 @@ fun Navigation(
                 navController = navController ,
                 startDestination = Screen.Auth,
                 modifier = Modifier.padding(paddingValues)
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp),
             ) {
 //                authGraph(navController){
 //                    viewModel.navBarVisible(it)
@@ -128,7 +129,7 @@ fun Navigation(
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ){
-                        Text("Community page")
+                        CommunityScreen()
                     }
                 }
 //                composable<Screen.Account> {
@@ -142,7 +143,11 @@ fun Navigation(
 //                        }
 //                    )
 //                }
-                accountGraph(navController){
+                accountGraph(
+                    navController,
+                    darkTheme = darkTheme,
+                    onThemeChanged = onThemeChanged
+                ) {
                     viewModel.navBarVisible(it)
                 }
 

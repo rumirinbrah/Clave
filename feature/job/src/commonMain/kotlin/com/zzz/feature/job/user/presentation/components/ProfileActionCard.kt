@@ -4,10 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.ImageComponent
+import com.zzz.core.ui.presentation.components.VerticalSpace
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import placementapp.feature.job.generated.resources.Recordify_logo
@@ -35,25 +38,28 @@ import placementapp.feature.job.generated.resources.quality_badge
 
 @Composable
 fun ProfileActionCard(
+    icon: DrawableResource,
+    title: String,
+    subtitle: String? = null,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    icon : DrawableResource,
-    actionText : String,
-    onClick : ()->Unit,
-    enabled : Boolean = true,
-    shape: Shape = MaterialTheme.shapes.large,
-    background : Color = MaterialTheme.colorScheme.surface,
-    onBackground : Color = MaterialTheme.colorScheme.onBackground,
-){
-    Row (
-        modifier
+    enabled: Boolean = true,
+    shape: Shape = RoundedCornerShape(22.dp),
+    background: Color = MaterialTheme.colorScheme.surface,
+    onBackground: Color = MaterialTheme.colorScheme.onSurface,
+    iconTint: Color = onBackground
+) {
+
+    Row(
+        modifier = modifier
             .fillMaxWidth()
             .dropShadow(
                 shape = shape,
                 shadow = Shadow(
-                    radius = 3.dp ,
-                    color = onBackground.copy(0.2f) ,
-                    spread = 2.dp ,
-                    offset = DpOffset(x = 2.dp , y = 2.dp)
+                    radius = 3.dp,
+                    spread = 2.dp,
+                    color = onBackground.copy(alpha = 0.2f),
+                    offset = DpOffset(2.dp, 2.dp)
                 )
             )
             .clip(shape)
@@ -62,36 +68,50 @@ fun ProfileActionCard(
                 enabled = enabled,
                 interactionSource = null,
                 indication = null,
-                onClick = {
-                    onClick()
-                }
+                onClick = onClick
             )
-            .padding(horizontal = 8.dp , vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
-        Row (
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+
+        Row(
+            modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
+
             Icon(
                 painter = painterResource(icon),
-                contentDescription = actionText,
-                modifier = Modifier.size(20.dp),
-                tint = onBackground
+                contentDescription = title,
+                modifier = Modifier.size(28.dp).padding(end = 6.dp),
+                tint = iconTint
             )
-            Text(
-                text = actionText,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = onBackground
-            )
+
+            Column {
+
+                Text(
+                    text = title,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = onBackground
+                )
+
+                subtitle?.let {
+                    VerticalSpace(2.dp)
+
+                    Text(
+                        text = it,
+                        fontSize = 12.sp,
+                        color = onBackground.copy(alpha = 0.65f)
+                    )
+                }
+            }
         }
+
         Icon(
             painter = painterResource(Res.drawable.outline_arrow_forward_ios_24),
-            contentDescription = actionText,
-            modifier = Modifier.size(15.dp),
-            tint = onBackground
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = onBackground.copy(alpha = 0.8f)
         )
     }
 }
