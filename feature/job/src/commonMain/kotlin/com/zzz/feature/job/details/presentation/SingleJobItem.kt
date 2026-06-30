@@ -1,6 +1,8 @@
 package com.zzz.feature.job.details.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +32,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zzz.core.ui.presentation.components.ImageComponent
+import com.zzz.core.ui.theme.CardDark
+import com.zzz.core.ui.theme.CardLight
+import androidx.compose.foundation.BorderStroke
+import com.zzz.core.ui.presentation.components.VerticalSpace
 import com.zzz.data.remote.domain.model.Job
 import com.zzz.data.remote.domain.model.formatted
 
@@ -41,7 +47,18 @@ fun SingleJobItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSystemInDarkTheme()) {
+                CardDark
+            } else {
+                CardLight
+            }
+        ),
         modifier = Modifier.fillMaxWidth(),
+        border = BorderStroke(
+            0.5.dp,
+            MaterialTheme.colorScheme.outline
+        )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
 
@@ -52,8 +69,8 @@ fun SingleJobItem(
                 Box(
                     modifier = Modifier
                         .size(40.dp)
-                        .background(Color.LightGray, RoundedCornerShape(8.dp))
-                ){
+                        .background(Color.Transparent, RoundedCornerShape(8.dp))
+                ) {
                     ImageComponent(
                         imageUrl = job.companyLogoUrl ?: "",
                         contentDescription = "",
@@ -71,7 +88,7 @@ fun SingleJobItem(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 job.companyName, fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.titleMedium
                             )
                             Text(
                                 job.role,
@@ -82,36 +99,40 @@ fun SingleJobItem(
 
                     }
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    VerticalSpace(4.dp)
 
                     InfoText("Job type", job.employmentType.formatted())
                     InfoText("Location", job.location)
                     InfoText("CTC", job.ctc)
 
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    Text(
-                        text = "Registration deadline: ${job.formattedDate}",
-                        color = Color.Red,
-                        fontSize = 13.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
+                    VerticalSpace(4.dp)
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+
+                        Text(
+                            text = "Deadline: ${job.formattedDate}",
+                            color = Color(0xFFFF6B6B),
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(1f)
+                        )
+
                         Button(
                             onClick = { onApplyClick(job.id) },
                             enabled = !job.isApplied,
-                            shape = RoundedCornerShape(20.dp),
+                            shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = if (job.isApplied) Color.LightGray else
-                                MaterialTheme.colorScheme.primary
+                                    MaterialTheme.colorScheme.primary
+                            ),
+                            contentPadding = PaddingValues(
+                                horizontal = 12.dp,
+                                vertical = 0.dp
                             )
                         ) {
-                            Text("Apply Now")
+                            Text(text = "Apply Now", style = MaterialTheme.typography.labelLarge)
                         }
                     }
                 }
@@ -144,6 +165,6 @@ fun InfoText(label: String, value: String) {
                 append(value)
             }
         },
-        modifier = Modifier.padding(bottom = 2.dp)
+        modifier = Modifier.padding(bottom = 1.dp)
     )
 }
