@@ -38,50 +38,51 @@ import placementapp.feature.job.generated.resources.gear
 
 @Composable
 fun JobHomePageRoot(
-    modifier: Modifier = Modifier,
-    onJobClick: (id: String) -> Unit,
-    viewAll : ()->Unit,
-    onNotifyClick : ()->Unit
-){
+    modifier: Modifier = Modifier ,
+    onJobClick: (id: String) -> Unit ,
+    viewAll: () -> Unit ,
+    onNotifyClick: () -> Unit
+) {
     val viewModel = koinViewModel<JobHomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     JobHomePage(
-        modifier,
-        state = state,
-        onJobClick = onJobClick,
-        viewAll = viewAll,
+        modifier ,
+        state = state ,
+        onJobClick = onJobClick ,
+        viewAll = viewAll ,
         onNotifyClick = onNotifyClick
     )
 }
+
 @Composable
 private fun JobHomePage(
-    modifier: Modifier = Modifier,
-    state : JobHomeState,
-    onJobClick : (id : String)->Unit,
-    viewAll : ()->Unit,
-    onNotifyClick : ()->Unit
-){
+    modifier: Modifier = Modifier ,
+    state: JobHomeState ,
+    onJobClick: (id: String) -> Unit ,
+    viewAll: () -> Unit ,
+    onNotifyClick: () -> Unit
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(bottom = 100.dp)
     ) {
-        Row (
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Row(
+            Modifier.fillMaxWidth() ,
+            horizontalArrangement = Arrangement.SpaceBetween ,
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-        ){
-            Row (
-                Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Row(
+                Modifier.weight(1f) ,
+                horizontalArrangement = Arrangement.spacedBy(8.dp) ,
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-            ){
+            ) {
                 ImageComponent(
-                    Modifier.clip(CircleShape),
-                    imageUrl = "https://img.freepik.com/premium-vector/tik-tok-logo_578229-290.jpg?semt=ais_hybrid&w=740&q=80",
-                    size = 40.dp,
+                    Modifier.clip(CircleShape) ,
+                    imageUrl = "https://img.freepik.com/premium-vector/tik-tok-logo_578229-290.jpg?semt=ais_hybrid&w=740&q=80" ,
+                    size = 40.dp ,
                 )
                 Text(
                     text = buildAnnotatedString {
@@ -89,16 +90,16 @@ private fun JobHomePage(
                             style = SpanStyle(
                                 fontSize = 14.sp
                             )
-                        ){
+                        ) {
                             append("Welcome back")
                         }
                         appendLine()
                         withStyle(
                             style = SpanStyle(
-                                fontSize = 18.sp,
+                                fontSize = 18.sp ,
                                 fontWeight = FontWeight.Bold
                             )
-                        ){
+                        ) {
                             append(state.name)
                         }
                     }
@@ -106,30 +107,32 @@ private fun JobHomePage(
             }
 
             CircularIconButton(
-                icon = Res.drawable.gear,
-                contentDescription = "Alerts",
-                onClick = {},
-                iconSize = 25.dp,
+                icon = Res.drawable.bell ,
+                contentDescription = "Alerts" ,
+                onClick = {
+                    onNotifyClick()
+                } ,
+                iconSize = 25.dp ,
                 contentPadding = 16.dp
             )
 
         }
         VerticalSpace(40.dp)
 
-            JobAnnouncementsCard(
-                items = state.announcements,
-                viewAll = viewAll
-            )
+        JobAnnouncementsCard(
+            items = state.announcements ,
+            viewAll = viewAll
+        )
 
         VerticalSpace(40.dp)
 
-            RecentJobsCard(
-                state = state,
-                onClick = onJobClick
-            )
+        RecentJobsCard(
+            state = state ,
+            onClick = onJobClick
+        )
 
-            VerticalSpace(40.dp)
+        VerticalSpace(40.dp)
 
-        }
     }
+
 }
