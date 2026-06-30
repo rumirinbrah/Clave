@@ -15,7 +15,7 @@ enum class JobTabType {
 
 val jobTabs = listOf(
     JobTab("Jobs", JobTabType.JOBS),
-    JobTab("My Applications", JobTabType.APPLICATIONS),
+    JobTab("Applications", JobTabType.APPLICATIONS),
     JobTab("Offers", JobTabType.OFFERS)
 )
 

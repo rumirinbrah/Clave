@@ -6,6 +6,7 @@ import com.zzz.core.ui.util.ClaveLogger.logD
 import com.zzz.core.ui.util.ClaveLogger.logE
 import com.zzz.core.ui.util.ClaveLogger.logI
 import com.zzz.core.util.domain.Result
+import com.zzz.data.remote.data.notification.NotificationSource
 import com.zzz.data.remote.data.prefs.RemoteDatastoreSource
 import com.zzz.data.remote.domain.job.JobSource
 import com.zzz.data.remote.domain.student.announcements.AnnouncementSource
@@ -21,6 +22,7 @@ class JobHomeViewModel(
     private val jobSource : JobSource,
     private val announcementSource: AnnouncementSource,
     private val prefs : RemoteDatastoreSource,
+    private val notificationSource: NotificationSource
 )  : ViewModel(){
 
     private val _state = MutableStateFlow(JobHomeState())
@@ -33,8 +35,31 @@ class JobHomeViewModel(
         getProfile()
         getAnnouncements()
         getFeedJobs()
+        getNotifCount()
     }
 
+    private fun getNotifCount(){
+        viewModelScope.launch {
+            val result = notificationSource.getNotifCount()
+            when(result){
+                is Result.Error -> {
+                    this@JobHomeViewModel.logE {
+                        "getNotifCount : ${result.error.toUIError()}"
+                    }
+                }
+                is Result.Success -> {
+                    this@JobHomeViewModel.logD {
+                        "getNotifCount : ${result.data}"
+                    }
+                    _state.update {
+                        it.copy(
+                            notifCount = result.data.toString()
+                        )
+                    }
+                }
+            }
+        }
+    }
     private fun getAnnouncements() {
         this.logD {
             "getAnnouncements : getting..."

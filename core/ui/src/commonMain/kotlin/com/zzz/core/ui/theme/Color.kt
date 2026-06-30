@@ -36,7 +36,7 @@ val OnSurfaceVariantLight = Color(0xFF475569)
 val OutlineLight = Color(0xFF94A3B8)
 val OutlineVariantLight = Color(0xFFCBD5E1)
 
-val CardLight = Color(0xFFF1F5F9)
+val CardLight = Color(0xFFDBE9F7)
 
 val PrimaryDark = Color(0xFFB7C5FF)
 val OnPrimaryDark = Color(0xFF10205C)
@@ -71,5 +71,5 @@ val OnSurfaceVariantDark = Color(0xFFCBD5E1)
 val OutlineDark = Color(0xFF64748B)
 val OutlineVariantDark = Color(0xFF334155)
 
-val CardDark = Color(0xFF1E293B)
+val CardDark = Color(0xFF2D3142)
 val cardShinyBlue = Color(0xFF6073F8)

@@ -30,4 +30,14 @@ class RemoteNotificationSource(
             }
         }
     }
+
+    override suspend fun getNotifCount(): Result<Long , NetworkError> {
+        return safeNetworkCall<ApiResponse<Long>> {
+
+            val url = constructUrl { "notifications/count" }
+
+            client.get(url)
+
+        }.unwrap()
+    }
 }
